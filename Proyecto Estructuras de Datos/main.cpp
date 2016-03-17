@@ -42,18 +42,14 @@ struct Formacion{
 }*listaFormacion;// puntero de formacion
 
 // estructuras de capacitacion 
-struct Capacitacion{
+struct Capacitacion{//lista simple
 	string nombre;
-	string lugar;
 	struct Capacitacion *sig;
-	Capacitacion(string nom , string lu){
-		nombre = lugar ;
-		lugar = lugar;
-		sig = NULL;
-		
+	Capacitacion(string  nom){
+		nombre = nom;
+		sig = NULL;	
 	}
 }*listaCapacitacion;// puntero capacitacion
-
 struct MiembrosComite{
 	string nombre ;
 	int identificador;
@@ -69,13 +65,13 @@ struct MiembrosComite{
 
 
 struct Programas{//Lista circular con insercion al inicio
-	string nombre;
+	string nombrePrograma;
 	string fecha;
 	string lugar;
 	string hora;
 	struct Programas *sig;
 	Programas(string nom , string fe, string lu, string ho){
-		nombre = nom;
+		nombrePrograma = nom;
 		fecha = fe;
 		lugar = lu;
 		hora = ho;
@@ -86,15 +82,13 @@ struct Programas{//Lista circular con insercion al inicio
 }*listaProgramas;// Puntero de Programas
 
 struct Infraestructura{//Lista doble con insercion al final
-	string nombre;
-	string ubicacion;
-	string tipoInfraestructura;
+	string administrada;
+	string compartida;
 	struct Infraestructura *sig;
 	struct Infraestructura *ant;
-	Infraestructura(string nom,  string ubi, string ti){
-		nombre = nom;
-		ubicacion = ubi;
-		tipoInfraestructura = ti;
+	Infraestructura(string adm,  string com){
+		administrada = adm;
+		compartida = com;
 		sig = NULL;
 		ant = NULL;
 		
@@ -103,11 +97,9 @@ struct Infraestructura{//Lista doble con insercion al final
 
 struct Convenios{
 	string nombre ;
-	string ubicacion ;
 	struct Convenios *sig;
-	Convenios(string nom , string ubi){
+	Convenios(string nom){
 		nombre = nom;
-		ubicacion = ubi;
 		sig = NULL;
 		
 	}
