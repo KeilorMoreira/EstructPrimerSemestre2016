@@ -8,10 +8,10 @@ using namespace std;
 struct Cantones{
 	string nombre;
 	string provincia;
-	struct curso *sig;
-	struct curso *ant;
-	Cantones(string n , string p){
-		nombre = n;
+	struct Cantones *sig;//Lista doble
+	struct Cantones *ant;
+	Cantones(string nom, string p){
+		nombre = nom;
 		provincia = p;
 		sig = NULL;
 		ant = NULL;
@@ -50,6 +50,8 @@ struct Capacitacion{//lista simple
 		sig = NULL;	
 	}
 }*listaCapacitacion;// puntero capacitacion
+
+
 struct MiembrosComite{
 	string nombre ;
 	int identificador;
@@ -107,6 +109,83 @@ struct Convenios{
 
 
 
+void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
+
+	if (listaCantones==NULL){
+        struct Cantones * nn = new Cantones(nombre,provincia);//aqui inserta los cantones
+		listaCantones = nn;
+		cout<<"Se agrego el Canton"<<endl;
+		return;
+	}
+    else{
+	struct Cantones * nn = new Cantones(nombre,provincia);
+
+	if (nombre< listaCantones->nombre)
+	{
+		nn->sig= listaCantones;
+		listaCantones->ant=nn;
+		listaCantones = nn;
+		cout<<"Se agrego el Canton"<<endl;
+	}
+	else
+	{
+		struct Cantones * temp1 = listaCantones;
+		struct Cantones * temp2;
+		while ( (temp1!=NULL) and (nombre> temp1->nombre) )	
+		{														
+			temp2 = temp1;
+			temp1 = temp1->sig;
+		}
+		if (temp1!=NULL)
+		{
+			nn->sig = temp1;
+			nn->ant = temp1->ant;
+			temp1->ant->sig = nn;
+			temp1->ant= nn;
+			cout<<"Se agrego el Canton"<<endl;
+		}
+		else
+		{
+			temp2->sig= nn;
+			nn->ant= temp2;
+			cout<<"Se agrego el Canton"<<endl;
+		}
+	}
+}
+
+}
+
+void datosCantones(){//funcion que pide los datos para agregar un canton y provincia
+	string nom;
+	string p;
+	cout<<"\nIngrese el nombre del canton: "<<endl;
+	cin>>nom;
+	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
+	cin>>p;
+	
+	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
+}
+
+
 int main(){
+	datosCantones();
+/*	insertarCantones("Sarapiqui","Heredia");
+	insertarCantones("Santo Domigo","Heredia");
+	insertarCantones("San Isidro","Heredia");
+	insertarCantones("Puerto Viejo","Heredia");
+	insertarCantones("Upala","Alajuela");
+	insertarCantones("Barva","Heredia");
+	insertarCantones("Santa Barbara","Heredia");
+	insertarCantones("San Carlos","Alajuela");
+	insertarCantones("San Ramon","Alajuela");
+	insertarCantones("Santa Barbara","Heredia");
+*/	
 	return 0;
 }
+
+
+
+
+
+
+
