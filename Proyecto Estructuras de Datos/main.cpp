@@ -1,5 +1,7 @@
 #include <iostream>
-#include <string.h>
+#include <string.h>//importa la libreria de string
+#include <stdlib.h>
+#include <cstring>
 
 
 using namespace std;
@@ -10,6 +12,7 @@ struct Cantones{
 	string provincia;
 	struct Cantones *sig;//Lista doble
 	struct Cantones *ant;
+	struct MiembrosComite *enlaceM;//enlazado con la estructura miembros del comite
 	Cantones(string nom, string p){
 		nombre = nom;
 		provincia = p;
@@ -68,7 +71,10 @@ struct MiembrosComite{
 }*listaMiembros;//Puntero miembros Comite
 
 
-struct Programas{//Lista circular con insercion al inicio
+
+
+
+struct Programas{//Lista circular con insercion el inicio
 	string nombrePrograma;
 	string fecha;
 	string lugar;
@@ -111,7 +117,7 @@ struct Convenios{
 
 
 
-void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
+void insertarCantones(string nombre, string provincia ){///Funcion que inserta cantones doblemente ordenado
 
 	if (listaCantones==NULL){
         struct Cantones * nn = new Cantones(nombre,provincia);//aqui inserta los cantones
@@ -173,11 +179,11 @@ void insertarPuestos(string nom , int id){//inserta al inicio de la lista simple
 	
 	nn->sig = listaPuestos;
 	listaPuestos = nn;
-	cout<<"\nPuesto agregado correctamente:";
+	cout<<"\nPuesto agregado correctamente\n";
 
 }
 
-void datosPuestos(){
+void datosPuestos(){//pide los datos al usuario de los puestos que desea 
 	string nom;
 	int id;
 	cout<<"\nNombre del puesto: "<<endl;
@@ -200,16 +206,103 @@ void imprimirPuestos(){//funcion para imprimri la lista de puestos
 }
 
 
+void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones 
+	struct Capacitacion * nn = new Capacitacion(nom);
+	
+	nn->sig = listaCapacitacion;
+	listaCapacitacion = nn;
+	cout<<"\n Capacitacion agregado correctamente\n";
+	
+
+}
+
+void datosCapacitacion(){// funcion que pide los datos de capacitacion
+	string nom;
+	cout<<"\nNombre de la Capacitacion\n";
+	cin>> nom;
+	
+	insertarCapacitacion(nom);
+}
 
 
-void menu(){
+void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
+	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
+	nn->sig = listaMiembros;
+	listaMiembros = nn;
+	cout<<"\n Miembro del comite agregado correctamente\n";
+}
+
+void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
+	string nom;
+	int Id;
+	cout<<"\nNombre del miembro del comite\n";
+	cin>>nom;
+	cout<<"\nIdentificador del miembro del comite\n";
+	cin>>Id;
+	
+	insertarMiembrosComite(nom,Id);
+}
+
+
+string nombrePrograma;
+	string fecha;
+	string lugar;
+	string hora;
+
+//Funcion que inserta los programas la lista circular al inicio
+struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){
+    struct Programas * nn = new Programas(nomp,fe,lu,ho);
+    if(Lista == NULL){
+        Lista = nn;
+        Lista->sig = Lista;//se hace circular
+
+    }
+    else{// se insertará al inicio de la lista circular
+
+        struct Programas *ultimo = Lista;
+        while(ultimo->sig!= Lista)
+            ultimo= ultimo->sig;
+
+        ultimo->sig = nn;
+        nn->sig = Lista;
+        Lista = nn;
+        {
+        	return Lista;//retorna la lista modificada, osea con un elemento más
+		}
+    }
+    
+    cout<<"\nSe agregado correctamente";
+}
+
+void datosProgramas(){
+	string nomp;
+	string fe;
+	string lu;
+	string ho;
+	cout<<"\nEscriba el nombre del programa\n";
+	cin>>nomp;
+	cout<<"\nFecha del programa\n";
+	cin>>fe;
+	cout<<"\nEscriba el nombre del lugar\n";
+	cin>>lu;
+	cout<<"\nHora del programa a realizar\n";
+	cin>>ho;
+	cout<<"\nSe agregado correctamente"<<endl;
+	
+    struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
+    }
+
+void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
 
-        cout<<"\n1. Insertar canton.  ";
-        cout<<"\n2. Insertar puestos.  ";
-        cout<<"\n3. Imprimir puestos.  ";
-        cout<<"\n6. Salir.  ";
+        cout<<"\n1. Insertar Canton.  ";
+        cout<<"\n2. Insertar Puestos.  ";
+        cout<<"\n3. Imprimir Puestos.  ";
+        cout<<"\n4  Insertar Capacitacion. ";
+        cout<<"\n5  Insertar Miembro del comite.";
+        cout<<"\n6  Insertar Programas.";
+        cout<<"\n7. Salir.  ";
 
         cin >> opcion;
 
@@ -221,16 +314,29 @@ void menu(){
         }
         else if(opcion == 3){
             imprimirPuestos();
+         }
+        else if(opcion ==4){
+        	datosCapacitacion();
+    }
+        else if(opcion ==5){
+        	datosMiembroComite();
+    }
+        else if(opcion ==6){
+        	datosProgramas();
+		}
+		}
 
         }
-    }
-}
 
 int main(){
 	menu();
 	datosCantones();
 	datosPuestos();
+	datosCapacitacion();
+	datosMiembroComite();
+	datosProgramas();
 	imprimirPuestos();
+	
 	
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domigo","Heredia");
@@ -245,7 +351,7 @@ int main(){
 	
 	
 		
-   insertarPuestos("Contador", 123);//datos predefinidos de puestos
+   insertarPuestos("Contador", 123);//datos predefinidos de puestos y su identificador
    insertarPuestos("Gerente", 124);
    insertarPuestos("Presidente", 125);
    insertarPuestos("Contadora", 126);
@@ -256,11 +362,8 @@ int main(){
    insertarPuestos("Tesorero", 323);
    insertarPuestos("Informatico", 122);
    
+   
 	return 0;
 }
-
-
-
-
 
 
