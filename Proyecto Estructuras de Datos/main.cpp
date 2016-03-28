@@ -97,8 +97,7 @@ struct Capacitaciones{//lista simple
 }*listaCapacitacion;// puntero capacitacion
 
 
-//   #################### ENLACES DE LAS ESTRUCTURAS ################# //
-
+//   #################### ESTRUCTURAS DE ENLACE ################# //
 
 //Enlace cantones - programas
 struct En_Programas{
@@ -120,6 +119,26 @@ struct En_Capacitaciones{
     struct Capacitaciones * enlace;
     struct En_Capacitaciones *sig;
 };
+
+// #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
+
+/*
+struct asignarPrograma(){
+
+};
+
+struct asignarConvenio(){
+
+};
+
+struct asignarInfraestructura(){
+
+};
+
+struct asignarCapacitacion(){
+
+};
+*/
 
 // ####################  ESTRUCTURA PRINCIPAL CANTONES #######################//
 /*
@@ -146,9 +165,7 @@ struct Cantones{
 
 }*listaCantones;//Primero de la estructura cantones
 
-
-
-// ######################   METODOS A APLICAR ######################## //
+// ######################   METODOS VARIOS ######################## //
 
 void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
 
@@ -156,7 +173,7 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
         struct Cantones * nn = new Cantones(nombre,provincia);//aqui inserta los cantones
 		listaCantones = nn;
 
-		cout<<"Se agrego el Canton"<<endl;
+		// cout<<"Se agrego el Canton"<<endl;
 		return;
 	}
     else{
@@ -167,7 +184,7 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 		nn->sig= listaCantones;
 		listaCantones->ant=nn;
 		listaCantones = nn;
-		cout<<"Se agrego el Canton"<<endl;
+		// cout<<"Se agrego el Canton"<<endl;
 	}
 	else
 	{
@@ -184,13 +201,13 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 			nn->ant = temp1->ant;
 			temp1->ant->sig = nn;
 			temp1->ant= nn;
-			cout<<"Se agrego el Canton"<<endl;
+			// cout<<"Se agrego el Canton"<<endl;
 		}
 		else
 		{
 			temp2->sig= nn;
 			nn->ant= temp2;
-			cout<<"Se agrego el Canton"<<endl;
+			// cout<<"Se agrego el Canton"<<endl;
 		}
 	}
 }
@@ -213,7 +230,7 @@ void insertarPuestos(string nom , int id){//inserta al inicio de la lista simple
 
 	nn->sig = listaPuestos;
 	listaPuestos = nn;
-	cout<<"\nPuesto agregado correctamente:";
+	// cout<<"\nPuesto agregado correctamente:";
 
 }
 
@@ -229,7 +246,6 @@ void datosPuestos(){
 
 }
 
-
 void imprimirPuestos(){//funcion para imprimri la lista de puestos
     struct Puestos * temp = listaPuestos;
     while(temp != NULL){
@@ -239,13 +255,13 @@ void imprimirPuestos(){//funcion para imprimri la lista de puestos
     cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
 }
 
-void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones 
+void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
-	
+
 	nn->sig = listaCapacitacion;
 	listaCapacitacion = nn;
 	cout<<"\n Capacitacion agregado correctamente\n";
-	
+
 
 }
 
@@ -253,10 +269,9 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
 	cout<<"\nNombre de la Capacitacion\n";
 	cin>> nom;
-	
+
 	insertarCapacitacion(nom);
 }
-
 
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
@@ -272,17 +287,9 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	cin>>nom;
 	cout<<"\nIdentificador del miembro del comite\n";
 	cin>>Id;
-	
+
 	insertarMiembrosComite(nom,Id);
 }
-
-//////////////////////////////  ????????????????           //////////
-string nombrePrograma;
-	string fecha;
-	string lugar;
-	string hora;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 //Funcion que inserta los programas la lista circular al inicio
 struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){
@@ -305,7 +312,7 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
         	return Lista;//retorna la lista modificada, osea con un elemento más
 		}
     }
-    
+
     cout<<"\nSe agregado correctamente";
 }
 
@@ -323,7 +330,7 @@ void datosProgramas(){
 	cout<<"\nHora del programa a realizar\n";
 	cin>>ho;
 	cout<<"\nSe agregado correctamente"<<endl;
-	
+
     struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
     }
 
@@ -350,29 +357,25 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         else if(opcion == 3){
             imprimirPuestos();
          }
-        else if(opcion ==4){
+        else if(opcion == 4){
         	datosCapacitacion();
-    }
-        else if(opcion ==5){
+        }
+        else if(opcion == 5){
         	datosMiembroComite();
-    }
-        else if(opcion ==6){
+        }
+        else if(opcion == 6){
         	datosProgramas();
 		}
+		else if(opcion == 7){
+            return ;
 		}
+    }
 
-        }
+}
 
 int main(){
-	menu();
-	datosCantones();
-	datosPuestos();
-	datosCapacitacion();
-	datosMiembroComite();
-	datosProgramas();
-	imprimirPuestos();
-	
-	
+
+    // ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domigo","Heredia");
 	insertarCantones("San Isidro","Heredia");
@@ -383,20 +386,21 @@ int main(){
 	insertarCantones("San Carlos","Alajuela");
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
-	
-	
-		
-   insertarPuestos("Contador", 123);//datos predefinidos de puestos y su identificador
-   insertarPuestos("Gerente", 124);
-   insertarPuestos("Presidente", 125);
-   insertarPuestos("Contadora", 126);
-   insertarPuestos("Visepresidente", 127);
-   insertarPuestos("Fiscal", 923);
-   insertarPuestos("Secretaria", 153);
-   insertarPuestos("Secretaria", 523);
-   insertarPuestos("Tesorero", 323);
-   insertarPuestos("Informatico", 122);
-   
-   
+	//
+    insertarPuestos("Contador", 123);//datos predefinidos de puestos y su identificador
+    insertarPuestos("Gerente", 124);
+    insertarPuestos("Presidente", 125);
+    insertarPuestos("Contadora", 126);
+    insertarPuestos("Visepresidente", 127);
+    insertarPuestos("Fiscal", 923);
+    insertarPuestos("Secretaria", 153);
+    insertarPuestos("Secretaria", 523);
+    insertarPuestos("Tesorero", 323);
+    insertarPuestos("Informatico", 122);
+    //
+
+
+    menu();
+
 	return 0;
 }
