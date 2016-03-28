@@ -1,28 +1,68 @@
 #include <iostream>
-#include <string.h>//importa la libreria de string
-#include <stdlib.h>
-#include <cstring>
+#include <string.h>
 
 
 using namespace std;
-// Aqui van las estructuras que vamos a trabajar
+// ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
-struct Cantones{
-	string nombre;
-	string provincia;
-	struct Cantones *sig;//Lista doble
-	struct Cantones *ant;
-	struct MiembrosComite *enlaceM;//enlazado con la estructura miembros del comite
-	Cantones(string nom, string p){
-		nombre = nom;
-		provincia = p;
+struct Programas{//Lista circular con insercion al inicio
+	string nombrePrograma;
+	string fecha;
+	string lugar;
+	string hora;
+	struct Programas *sig;
+	Programas(string nom , string fe, string lu, string ho){
+		nombrePrograma = nom;
+		fecha = fe;
+		lugar = lu;
+		hora = ho;
+		sig = NULL;
+
+	}
+
+}*listaProgramas;// Puntero de Programas
+
+struct Infraestructura{//Lista doble con insercion al final
+	string administrada;
+	string compartida;
+	struct Infraestructura *sig;
+	struct Infraestructura *ant;
+	Infraestructura(string adm,  string com){
+		administrada = adm;
+		compartida = com;
 		sig = NULL;
 		ant = NULL;
-		
-	}
-		
-}*listaCantones;//Puntero de la estructura cantones 
 
+	}
+}*listaInfraestructura;//Puntero de infraestructura
+
+struct Convenios{
+	string nombre ;
+	struct Convenios *sig;
+	Convenios(string nom){
+		nombre = nom;
+		sig = NULL;
+
+	}
+}*listaConvenios;
+
+struct MiembrosComite{
+	string nombre ;
+	int identificador;
+	struct MiembrosComite *sig;
+	MiembrosComite(string nom, int Id ){
+		nombre = nom;
+		identificador = Id;
+		sig = NULL;
+
+	}
+
+}*listaMiembros;//Puntero miembros Comite
+
+
+
+
+// #####   Estructuras que se relacionan con MiembrosComite ##### //
 
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
@@ -39,89 +79,83 @@ struct Puestos{//Lista simple insercion al inicio
 struct Formacion{
 	string nombre;
 	struct Formacion *sig;
-	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de formacion por medio de un enlace 
+	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de formacion por medio de un enlace
 	Formacion(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
 }*listaFormacion;// puntero de formacion
 
-// estructuras de capacitacion 
-struct Capacitacion{//lista simple
+// estructuras de capacitacion
+struct Capacitaciones{//lista simple
 	string nombre;
-	struct Capacitacion *sig;
-	Capacitacion(string  nom){
+	struct Capacitaciones *sig;
+	Capacitaciones(string  nom){
 		nombre = nom;
-		sig = NULL;	
+		sig = NULL;
 	}
 }*listaCapacitacion;// puntero capacitacion
 
 
-struct MiembrosComite{
-	string nombre ;
-	int identificador;
-	struct MiembrosComite *sig;
-	MiembrosComite(string nom, int Id ){
+//   #################### ENLACES DE LAS ESTRUCTURAS ################# //
+
+
+//Enlace cantones - programas
+struct En_Programas{
+    struct Programas *enlace;
+    struct En_Programas *sig;
+};
+// Enlace cantones - Infraestructura
+struct En_Infraestructura{
+    struct Infraestructura *enlace;
+    struct En_Infraestructura *sig;
+};
+//Enlace cantones - convenios
+struct En_Convenios{
+    struct Convenios *enlace;
+    struct En_Convenios *sig;
+};
+// Enlace miembrosComite - Capacitaciones
+struct En_Capacitaciones{
+    struct Capacitaciones * enlace;
+    struct En_Capacitaciones *sig;
+};
+
+// ####################  ESTRUCTURA PRINCIPAL CANTONES #######################//
+/*
+
+Debido a que la estructura Cantones esta se relaciona con todas las demas estructuras
+se decidio dejarla entre sus respectivas estructuras tipo enlace y los metodos generales relacionados.
+
+*/
+struct Cantones{
+	string nombre;
+	string provincia;
+	struct Cantones *ant, *sig;           //Punteros de lista doble
+	struct En_Programas *En_Pro;          //Enlaces a Programas
+	struct En_Infraestructura *En_Infra;  //Enlaces a Infraestructura
+	struct En_Convenios *En_Conv;         //Enlaces a Convenios
+
+	Cantones(string nom, string p){ // Constructor
 		nombre = nom;
-		identificador = Id;
-		sig = NULL;
-		
+		provincia = p;
+		sig = NULL; // Inicializador puntero
+		ant = NULL; // Inicializador puntero
+
 	}
-	
-}*listaMiembros;//Puntero miembros Comite
+
+}*listaCantones;//Primero de la estructura cantones
 
 
 
+// ######################   METODOS A APLICAR ######################## //
 
-
-struct Programas{//Lista circular con insercion el inicio
-	string nombrePrograma;
-	string fecha;
-	string lugar;
-	string hora;
-	struct Programas *sig;
-	Programas(string nom , string fe, string lu, string ho){
-		nombrePrograma = nom;
-		fecha = fe;
-		lugar = lu;
-		hora = ho;
-		sig = NULL;
-		
-	}
-	
-}*listaProgramas;// Puntero de Programas
-
-struct Infraestructura{//Lista doble con insercion al final
-	string administrada;
-	string compartida;
-	struct Infraestructura *sig;
-	struct Infraestructura *ant;
-	Infraestructura(string adm,  string com){
-		administrada = adm;
-		compartida = com;
-		sig = NULL;
-		ant = NULL;
-		
-	}
-}*listaInfraestructura;//Puntero de infraestructura
-
-struct Convenios{
-	string nombre ;
-	struct Convenios *sig;
-	Convenios(string nom){
-		nombre = nom;
-		sig = NULL;
-		
-	}
-}*listaConvenios;
-
-
-
-void insertarCantones(string nombre, string provincia ){///Funcion que inserta cantones doblemente ordenado
+void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
 
 	if (listaCantones==NULL){
         struct Cantones * nn = new Cantones(nombre,provincia);//aqui inserta los cantones
 		listaCantones = nn;
+
 		cout<<"Se agrego el Canton"<<endl;
 		return;
 	}
@@ -139,8 +173,8 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta c
 	{
 		struct Cantones * temp1 = listaCantones;
 		struct Cantones * temp2;
-		while ( (temp1!=NULL) and (nombre> temp1->nombre) )	
-		{														
+		while ( (temp1!=NULL) and (nombre> temp1->nombre) )
+		{
 			temp2 = temp1;
 			temp1 = temp1->sig;
 		}
@@ -170,27 +204,27 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	cin>>nom;
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
 	cin>>p;
-	
+
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
 
 void insertarPuestos(string nom , int id){//inserta al inicio de la lista simple
 	struct Puestos * nn = new Puestos(nom, id);
-	
+
 	nn->sig = listaPuestos;
 	listaPuestos = nn;
-	cout<<"\nPuesto agregado correctamente\n";
+	cout<<"\nPuesto agregado correctamente:";
 
 }
 
-void datosPuestos(){//pide los datos al usuario de los puestos que desea 
+void datosPuestos(){
 	string nom;
 	int id;
 	cout<<"\nNombre del puesto: "<<endl;
 	cin>>nom;
 	cout<<"\nIdentificador del puesto: "<<endl;
 	cin>>id;
-	
+
 	insertarPuestos(nom, id);
 
 }
@@ -205,9 +239,8 @@ void imprimirPuestos(){//funcion para imprimri la lista de puestos
     cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
 }
 
-
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones 
-	struct Capacitacion * nn = new Capacitacion(nom);
+	struct Capacitaciones * nn = new Capacitaciones(nom);
 	
 	nn->sig = listaCapacitacion;
 	listaCapacitacion = nn;
@@ -243,11 +276,13 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	insertarMiembrosComite(nom,Id);
 }
 
-
+//////////////////////////////  ????????????????           //////////
 string nombrePrograma;
 	string fecha;
 	string lugar;
 	string hora;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 //Funcion que inserta los programas la lista circular al inicio
 struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){
