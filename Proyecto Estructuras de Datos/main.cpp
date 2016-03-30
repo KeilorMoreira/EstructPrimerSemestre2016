@@ -327,7 +327,7 @@ void datosFormacion(){
 	cout<<"\n Nombre de la formacion\n";
 	cin>>nom;
 	cout<<"\Formacion agregada correctamente\n";
-	
+
 	insertarFormacion(nom);
 }
 
@@ -416,11 +416,22 @@ void datosProgramas(){
 void imprimirProgramas(){
     struct Programas * temp = listaProgramas;
     for(;temp != NULL; temp = listaProgramas->sig){
-        cout<<temp->nombre<<"  "<<temp->Id<<endl;
-        cout<<temp->nombre<<"  "<<temp->Id<<endl;
+        cout<<temp->nombrePrograma<<"  "<<temp->Id<<endl;
+        cout<<temp->fecha<<endl;
+        cout<<temp->lugar<<endl;
+        cout<<temp->hora<<endl;
     }
 
 }
+
+string nombrePrograma;
+	string fecha;
+	string lugar;
+	string hora;
+
+
+
+
 
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
