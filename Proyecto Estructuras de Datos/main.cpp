@@ -1,9 +1,23 @@
 #include <iostream>
 #include <string.h>
-
+#include<stdio.h>
+#include<sstream>
+#include <cstdlib>
 
 using namespace std;
 // ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
+
+
+//Prototipos para validar
+struct Puestos*buscarPuestos(string);
+
+
+
+
+
+
+
+
 
 struct Programas{//Lista circular con insercion al inicio
 	string nombrePrograma;
@@ -226,14 +240,33 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 }
 
 void insertarPuestos(string nom , int id){//inserta al inicio de la lista simple
-	struct Puestos * nn = new Puestos(nom, id);
-
-	nn->sig = listaPuestos;
-	listaPuestos = nn;
-	// cout<<"\nPuesto agregado correctamente:";
-
+    struct Puestos*buscador=buscarPuestos(nom);
+    if(buscador!=NULL)
+        cout<<"\nEse puesto ya existe\n";
+    else{
+        struct Puestos*nuevoPuesto=new Puestos(nom,id);
+        nuevoPuesto->sig=listaPuestos;
+        listaPuestos=nuevoPuesto;
+        cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
+    }
 }
-
+	// cout<<"\nPuesto agregado correctamente:";
+struct Puestos *buscarPuestos(string nom){
+    if(listaPuestos==NULL){
+        return NULL;
+    }
+    else{
+        struct Puestos*temp=listaPuestos;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+}
+       
 void datosPuestos(){
 	string nom;
 	int id;
