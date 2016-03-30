@@ -5,8 +5,6 @@
 #include <cstdlib>
 
 using namespace std;
-// ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
-
 
 //Prototipos para validar
 struct Puestos*buscarPuestos(string);
@@ -14,12 +12,7 @@ struct Formacion*buscarFormacion(string);
 
 
 
-
-
-
-
-
-
+// ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
 struct Programas{//Lista circular con insercion al inicio
 	string nombrePrograma;
@@ -74,9 +67,6 @@ struct MiembrosComite{
 	}
 
 }*listaMiembros;//Puntero miembros Comite
-
-
-
 
 // #####   Estructuras que se relacionan con MiembrosComite ##### //
 
@@ -141,7 +131,11 @@ struct En_Capacitaciones{
 /*
 struct asignarPrograma(){
 
+
+
+
 };
+
 
 struct asignarConvenio(){
 
@@ -268,7 +262,7 @@ struct Puestos *buscarPuestos(string nom){
     }
     return NULL;
 }
-       
+
 void datosPuestos(){
 	string nom;
 	int id;
@@ -419,6 +413,15 @@ void datosProgramas(){
     struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
     }
 
+void imprimirProgramas(){
+    struct Programas * temp = listaProgramas;
+    for(;temp != NULL; temp = listaProgramas->sig){
+        cout<<temp->nombre<<"  "<<temp->Id<<endl;
+        cout<<temp->nombre<<"  "<<temp->Id<<endl;
+    }
+
+}
+
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
@@ -476,6 +479,14 @@ int main(){
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
 	//
+
+	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
+	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
+	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
+
+
+	//
+
     insertarPuestos("Contador", 123);//datos predefinidos de puestos y su identificador
     insertarPuestos("Gerente", 124);
     insertarPuestos("Presidente", 125);
