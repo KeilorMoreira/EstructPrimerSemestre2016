@@ -227,9 +227,9 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	string nom;
 	string p;
 	cout<<"\nIngrese el nombre del canton: "<<endl;
-	cin>>nom;
+	getline(cin,nom);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
-	cin>>p;
+	getline(cin,p);
 
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
@@ -258,11 +258,11 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
         }
     }
     cout<<"------------ULTIMA LINEA-----------------";
-}	
-	
-	
-	
-	
+}
+
+
+
+
 
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
@@ -284,7 +284,7 @@ void datosPuestos(){
 	string nom;
 	int id;
 	cout<<"\nNombre del puesto: "<<endl;
-	cin>>nom;
+	getline(cin,nom);
 
 	insertarPuestos(nom);
 
@@ -360,9 +360,9 @@ struct Formacion*buscarFormacion(string n){
 void datosFormacion(){
 	string nom;
 	cout<<"\n Nombre de la formacion\n";
-	cin>>nom;
+	getline(cin,nom);
 	cout<<"\nFormacion agregada correctamente\n";
-	
+
 
 
 	insertarFormacion(nom);
@@ -435,16 +435,16 @@ void datosProgramas(){
 	string lu;
 	string ho;
 	cout<<"\nEscriba el nombre del programa\n";
-	cin>>nomp;
+	getline(cin,nomp);
 	cout<<"\nFecha del programa\n";
-	cin>>fe;
+	getline(cin,fe);
 	cout<<"\nEscriba el nombre del lugar\n";
-	cin>>lu;
+	getline(cin,lu);
 	cout<<"\nHora del programa a realizar\n";
-	cin>>ho;
+	getline(cin,ho);
 	cout<<"\nSe agregado correctamente"<<endl;
 
-    struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
+    listaProgramas = insertar(nomp , fe, lu , ho,listaProgramas);
     }
 
 void imprimirProgramas(){
@@ -482,7 +482,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n6  Insertar Programas.";
         cout<<"\n7  imprimir Programas.";
         cout<<"\n8  Insertar formacion.";
-        cout<<"\n8. Salir.  ";
+        cout<<"\n-1. Salir.  ";
 
         cin >> opcion;
 
@@ -510,9 +510,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 		else if(opcion ==8){
 			datosFormacion();
 	    }
-		else if(opcion == 8){
-		}
-		else if(opcion == 9){
+		else if(opcion == -1){
             return ;
 		}
     }
@@ -553,7 +551,7 @@ cargarDatos(){
 
 	//
 
-    
+
     //
     insertarFormacion("Programa");
     insertarFormacion("Doctorado");
@@ -567,10 +565,10 @@ cargarDatos(){
     insertarFormacion("Colegio");
     insertarFormacion("Programa 10");
     imprimirFormacion(listaFormacion);
-    
-    
-    
-	
+
+
+
+
 }
 
 int main(){
