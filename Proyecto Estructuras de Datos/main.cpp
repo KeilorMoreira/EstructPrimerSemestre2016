@@ -275,7 +275,7 @@ void datosPuestos(){
 
 }
 
-void imprimirPuestos(){//funcion para imprimri la lista de puestos
+void imprimirPuestos(){//funcion para imprimir la lista de puestos
     struct Puestos * temp = listaPuestos;
     while(temp != NULL){
         cout<<temp->nombre<<"  "<<temp->Id<<endl;
@@ -330,10 +330,6 @@ void datosFormacion(){
 
 	insertarFormacion(nom);
 }
-
-
-
-
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
 
@@ -380,12 +376,13 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
     }
     else{// se insertará al inicio de la lista circular
 
-        struct Programas *ultimo = Lista;
-        while(ultimo->sig!= Lista)
-            ultimo= ultimo->sig;
+        struct Programas *temp = Lista;
+        while(temp->sig!= Lista)
+            temp= temp->sig;
 
-        ultimo->sig = nn;
         nn->sig = Lista;
+        temp->sig = nn;
+
         Lista = nn;
         {
         	return Lista;//retorna la lista modificada, osea con un elemento más
@@ -414,24 +411,27 @@ void datosProgramas(){
     }
 
 void imprimirProgramas(){
-    struct Programas * temp = listaProgramas;
-    for(;temp != NULL; temp = listaProgramas->sig){
-        cout<<temp->nombrePrograma<<"  "<<temp->Id<<endl;
+    struct Programas * temp = listaProgramas; //Se establece un nodo temporal igual al primer nodo
+    for(;temp!=NULL; temp = temp->sig){ // Se encicla el for para que recorra la lista.
+        cout<<temp->nombrePrograma<<endl;
         cout<<temp->fecha<<endl;
         cout<<temp->lugar<<endl;
         cout<<temp->hora<<endl;
+        if(temp->sig == listaProgramas) // Punto de parada cuando el nodo siguiente sea igual al primero.
+            return;
     }
 
+
+
+
+
+
+
+
+
+
+
 }
-
-string nombrePrograma;
-	string fecha;
-	string lugar;
-	string hora;
-
-
-
-
 
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
@@ -443,7 +443,8 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n4  Insertar Capacitacion. ";
         cout<<"\n5  Insertar Miembro del comite.";
         cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  Insertar formacion.";
+        cout<<"\n7  imprimir Programas.";
+        cout<<"\n8  Insertar formacion.";
         cout<<"\n8. Salir.  ";
 
         cin >> opcion;
@@ -467,9 +468,12 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         	datosProgramas();
 		}
 		else if(opcion ==7){
+            imprimirProgramas();
+		}
+		else if(opcion ==8){
 			datosFormacion();
 		}
-		else if(opcion == 8){
+		else if(opcion == 9){
             return ;
 		}
     }
