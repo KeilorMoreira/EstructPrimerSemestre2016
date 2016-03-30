@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//Prototipos para validar
+//Prototipos
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 
@@ -68,7 +68,7 @@ struct MiembrosComite{
 
 }*listaMiembros;//Puntero miembros Comite
 
-// #####   Estructuras que se relacionan con MiembrosComite ##### //
+// ##   Estructuras que se relacionan con MiembrosComite ## //
 
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
@@ -473,7 +473,6 @@ void imprimirProgramas(){
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
-
         cout<<"\n1. Insertar Canton.  ";
         cout<<"\n2. Insertar Puestos.  ";
         cout<<"\n3. Imprimir Puestos.  ";
@@ -514,14 +513,13 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
             return ;
 		}
     }
-
 }
 
 
 cargarDatos(){
 	// ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
-	insertarCantones("Santo Domigo","Heredia");
+	insertarCantones("Santo Domingo","Heredia");
 	insertarCantones("San Isidro","Heredia");
 	insertarCantones("Puerto Viejo","Heredia");
 	insertarCantones("Upala","Alajuela");
@@ -530,6 +528,7 @@ cargarDatos(){
 	insertarCantones("San Carlos","Alajuela");
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
+
 	//
     insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
     insertarPuestos("Gerente");
@@ -541,17 +540,12 @@ cargarDatos(){
     insertarPuestos("Secretaria");
     insertarPuestos("Tesorero");
     insertarPuestos("Informatico");
-    imprimirPuestos(listaPuestos);
+    //imprimirPuestos(listaPuestos);
 
-
+    //
 	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
 	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
 	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
-
-
-	//
-
-
     //
     insertarFormacion("Programa");
     insertarFormacion("Doctorado");
@@ -564,11 +558,7 @@ cargarDatos(){
     insertarFormacion("Universetaria");
     insertarFormacion("Colegio");
     insertarFormacion("Programa 10");
-    imprimirFormacion(listaFormacion);
-
-
-
-
+    //imprimirFormacion(listaFormacion);
 }
 
 int main(){
