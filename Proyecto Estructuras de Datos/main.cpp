@@ -85,9 +85,8 @@ struct Puestos{//Lista simple insercion al inicio
 	int Id;
 	struct Puestos *sig;
 	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
-	Puestos(string nom, int id){
+	Puestos(string nom){
 		nombre = nom;
-		Id = id;
 		sig = NULL;
 	}
 }*listaPuestos;// Puntero de puestos
@@ -241,18 +240,36 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
 
-void insertarPuestos(string nom , int id){//inserta al inicio de la lista simple
+void insertarPuestos(string nom){//inserta al inicio de la lista simple
     struct Puestos*buscador=buscarPuestos(nom);
     if(buscador!=NULL)
         cout<<"\nEse puesto ya existe\n";
     else{
-        struct Puestos*nuevoPuesto=new Puestos(nom,id);
+        struct Puestos*nuevoPuesto=new Puestos(nom);
         nuevoPuesto->sig=listaPuestos;
         listaPuestos=nuevoPuesto;
         cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
     }
 }
 	// cout<<"\nPuesto agregado correctamente:";
+void imprimirPuestos(struct Puestos*primero){//funcion que imprime
+    struct Puestos*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Puestos\n";
+    else{
+        cout<<"Nombre\t\tID\t\t\t"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<"\t\t"<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}	
+	
+	
+	
+	
+
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
         return NULL;
@@ -274,17 +291,15 @@ void datosPuestos(){
 	int id;
 	cout<<"\nNombre del puesto: "<<endl;
 	cin>>nom;
-	cout<<"\nIdentificador del puesto: "<<endl;
-	cin>>id;
 
-	insertarPuestos(nom, id);
+	insertarPuestos(nom);
 
 }
 
 void imprimirPuestos(){//funcion para imprimri la lista de puestos
     struct Puestos * temp = listaPuestos;
     while(temp != NULL){
-        cout<<temp->nombre<<"  "<<temp->Id<<endl;
+        cout<<temp->nombre<<"  "<<endl;
         temp = temp->sig;
     }
     cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
@@ -312,8 +327,28 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
     }
 }
 
+
+void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
+    struct Formacion*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Formaciones\n";
+    else{//imprime los datos de cada formacion
+        cout<<"\nNombre\n"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}
+
+
+
+
+
+
 struct Formacion*buscarFormacion(string n){
-    if(listaFormacion==NULL){//si no hay circuitos
+    if(listaFormacion==NULL){//si no hay formacion
         return NULL;
     }
     else{
@@ -325,14 +360,14 @@ struct Formacion*buscarFormacion(string n){
             temp=temp->sig;
         }
     }
-    return NULL;//no encontro el circuito
+    return NULL;//no encontro la formacion
 }
 
 void datosFormacion(){
 	string nom;
 	cout<<"\n Nombre de la formacion\n";
 	cin>>nom;
-	cout<<"\Formacion agregada correctamente\n";
+	cout<<"\nFormacion agregada correctamente\n";
 	
 	insertarFormacion(nom);
 }
@@ -454,7 +489,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 		}
 		else if(opcion ==7){
 			datosFormacion();
-		}
+	    }
 		else if(opcion == 8){
             return ;
 		}
@@ -462,9 +497,9 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 
 }
 
-int main(){
 
-    // ########### Datos precargados ################ //
+cargarDatos(){
+	// ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domigo","Heredia");
 	insertarCantones("San Isidro","Heredia");
@@ -476,21 +511,39 @@ int main(){
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
 	//
-    insertarPuestos("Contador", 123);//datos predefinidos de puestos y su identificador
-    insertarPuestos("Gerente", 124);
-    insertarPuestos("Presidente", 125);
-    insertarPuestos("Contadora", 126);
-    insertarPuestos("Visepresidente", 127);
-    insertarPuestos("Fiscal", 923);
-    insertarPuestos("Secretaria", 153);
-    insertarPuestos("Secretaria", 523);
-    insertarPuestos("Tesorero", 323);
-    insertarPuestos("Informatico", 122);
+    insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
+    insertarPuestos("Gerente");
+    insertarPuestos("Presidente");
+    insertarPuestos("Contadora");
+    insertarPuestos("Visepresidente");
+    insertarPuestos("Fiscal");
+    insertarPuestos("Secretaria");
+    insertarPuestos("Secretaria");
+    insertarPuestos("Tesorero");
+    insertarPuestos("Informatico");
+    imprimirPuestos(listaPuestos);
     //
+    insertarFormacion("Programa");
+    insertarFormacion("Doctorado");
+    insertarFormacion("Maestria");
+    insertarFormacion("Segundaria");
+    insertarFormacion("Kinder");
+    insertarFormacion("Telematica");
+    insertarFormacion("Licensiatura");
+    insertarFormacion("Bachiderato");
+    insertarFormacion("Universetaria");
+    insertarFormacion("Colegio");
+    insertarFormacion("Programa 10");
+    imprimirFormacion(listaFormacion);
+    
+    
+    
+	
+}
 
-
-
+int main(){
+	cargarDatos();
     menu();
-
+    cout<<"\n\n\n\nFIN";
 	return 0;
 }
