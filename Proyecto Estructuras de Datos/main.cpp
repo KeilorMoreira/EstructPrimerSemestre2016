@@ -10,6 +10,8 @@ using namespace std;
 
 //Prototipos para validar
 struct Puestos*buscarPuestos(string);
+struct Formacion*buscarFormacion(string);
+
 
 
 
@@ -288,6 +290,56 @@ void imprimirPuestos(){//funcion para imprimri la lista de puestos
     cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
 }
 
+
+void insertarFormacion(string n){//Insercion al final de una lista simple
+        struct Formacion*buscador=buscarFormacion(n);
+    if(buscador!=NULL)
+        cout<<"\nEsa formacion ya existe\n";
+    else{
+        struct Formacion*nuevoFormacion=new Formacion(n);
+        if(listaFormacion==NULL){
+            nuevoFormacion->sig=listaFormacion;
+            listaFormacion=nuevoFormacion;
+        }
+        else{
+            struct Formacion*temp=listaFormacion;
+            while(temp->sig!=NULL){
+                temp=temp->sig;
+            }
+            temp->sig=nuevoFormacion;
+            cout<<"\n\nLa formacion ha sido insertado";
+        }
+    }
+}
+
+struct Formacion*buscarFormacion(string n){
+    if(listaFormacion==NULL){//si no hay circuitos
+        return NULL;
+    }
+    else{
+        struct Formacion*temp=listaFormacion;
+        while(temp!=NULL){
+            if(temp->nombre==n){
+                return temp;//retorna esa formacion
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;//no encontro el circuito
+}
+
+void datosFormacion(){
+	string nom;
+	cout<<"\n Nombre de la formacion\n";
+	cin>>nom;
+	cout<<"\Formacion agregada correctamente\n";
+	
+	insertarFormacion(nom);
+}
+
+
+
+
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
 
@@ -377,7 +429,8 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n4  Insertar Capacitacion. ";
         cout<<"\n5  Insertar Miembro del comite.";
         cout<<"\n6  Insertar Programas.";
-        cout<<"\n7. Salir.  ";
+        cout<<"\n7  Insertar formacion.";
+        cout<<"\n8. Salir.  ";
 
         cin >> opcion;
 
@@ -399,7 +452,10 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         else if(opcion == 6){
         	datosProgramas();
 		}
-		else if(opcion == 7){
+		else if(opcion ==7){
+			datosFormacion();
+		}
+		else if(opcion == 8){
             return ;
 		}
     }
