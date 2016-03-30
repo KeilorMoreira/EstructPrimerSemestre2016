@@ -129,9 +129,7 @@ struct En_Capacitaciones{
 
 /*
 struct asignarPrograma(){
-
-
-
+    struct Programas *
 
 };
 
@@ -151,10 +149,8 @@ struct asignarCapacitacion(){
 
 // ####################  ESTRUCTURA PRINCIPAL CANTONES #######################//
 /*
-
 Debido a que la estructura Cantones esta se relaciona con todas las demas estructuras
 se decidio dejarla entre sus respectivas estructuras tipo enlace y los metodos generales relacionados.
-
 */
 struct Cantones{
 	string nombre;
@@ -174,8 +170,9 @@ struct Cantones{
 
 }*listaCantones;//Primero de la estructura cantones
 
-// ######################   METODOS VARIOS ######################## //
+// #############################   METODOS VARIOS ############################ //
 
+//  --- Cantones --- //
 void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
 
 	if (listaCantones==NULL){
@@ -245,7 +242,9 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
         cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
     }
 }
-	// cout<<"\nPuesto agregado correctamente:";
+
+
+//  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     struct Puestos*temp=primero;
     if(temp==NULL)
@@ -259,10 +258,6 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
-
-
-
-
 
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
@@ -300,6 +295,7 @@ void imprimirPuestos(){//funcion para imprimir la lista de puestos
 }
 
 
+//  --- Formacion Profesional --- //
 void insertarFormacion(string n){//Insercion al final de una lista simple
         struct Formacion*buscador=buscarFormacion(n);
     if(buscador!=NULL)
@@ -321,7 +317,6 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
     }
 }
 
-
 void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     struct Formacion*temp=primero;
     if(temp==NULL)
@@ -335,11 +330,6 @@ void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
-
-
-
-
-
 
 struct Formacion*buscarFormacion(string n){
     if(listaFormacion==NULL){//si no hay formacion
@@ -367,6 +357,9 @@ void datosFormacion(){
 
 	insertarFormacion(nom);
 }
+
+
+//  --- Capacitaciones --- //
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
 
@@ -385,6 +378,8 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	insertarCapacitacion(nom);
 }
 
+
+//  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
 	nn->sig = listaMiembros;
@@ -403,8 +398,10 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	insertarMiembrosComite(nom,Id);
 }
 
-//Funcion que inserta los programas la lista circular al inicio
-struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){
+
+//  --- Programas --- //
+
+struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(nomp,fe,lu,ho);
     if(Lista == NULL){
         Lista = nn;
@@ -469,6 +466,9 @@ void imprimirProgramas(){
 
 
 }
+
+
+
 
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
