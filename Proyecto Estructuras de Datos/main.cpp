@@ -239,7 +239,7 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
         struct Puestos*nuevoPuesto=new Puestos(nom);
         nuevoPuesto->sig=listaPuestos;
         listaPuestos=nuevoPuesto;
-        cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
+        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
     }
 }
 
@@ -312,7 +312,7 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
                 temp=temp->sig;
             }
             temp->sig=nuevoFormacion;
-            cout<<"\n\nLa formacion ha sido insertado";
+            //cout<<"\n\nLa formacion ha sido insertado";
         }
     }
 }
@@ -423,7 +423,7 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
 		}
     }
 
-    cout<<"\nSe agregado correctamente";
+    //cout<<"\nSe agregado correctamente";
 }
 
 void datosProgramas(){
@@ -536,7 +536,6 @@ cargarDatos(){
     insertarPuestos("Contadora");
     insertarPuestos("Visepresidente");
     insertarPuestos("Fiscal");
-    insertarPuestos("Secretaria");
     insertarPuestos("Secretaria");
     insertarPuestos("Tesorero");
     insertarPuestos("Informatico");
