@@ -5,8 +5,6 @@
 #include <cstdlib>
 
 using namespace std;
-// ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
-
 
 //Prototipos para validar
 struct Puestos*buscarPuestos(string);
@@ -14,12 +12,7 @@ struct Formacion*buscarFormacion(string);
 
 
 
-
-
-
-
-
-
+// ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
 struct Programas{//Lista circular con insercion al inicio
 	string nombrePrograma;
@@ -74,9 +67,6 @@ struct MiembrosComite{
 	}
 
 }*listaMiembros;//Puntero miembros Comite
-
-
-
 
 // #####   Estructuras que se relacionan con MiembrosComite ##### //
 
@@ -140,7 +130,11 @@ struct En_Capacitaciones{
 /*
 struct asignarPrograma(){
 
+
+
+
 };
+
 
 struct asignarConvenio(){
 
@@ -285,7 +279,7 @@ struct Puestos *buscarPuestos(string nom){
     }
     return NULL;
 }
-       
+
 void datosPuestos(){
 	string nom;
 	int id;
@@ -296,7 +290,7 @@ void datosPuestos(){
 
 }
 
-void imprimirPuestos(){//funcion para imprimri la lista de puestos
+void imprimirPuestos(){//funcion para imprimir la lista de puestos
     struct Puestos * temp = listaPuestos;
     while(temp != NULL){
         cout<<temp->nombre<<"  "<<endl;
@@ -369,12 +363,10 @@ void datosFormacion(){
 	cin>>nom;
 	cout<<"\nFormacion agregada correctamente\n";
 	
+
+
 	insertarFormacion(nom);
 }
-
-
-
-
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
 
@@ -421,12 +413,13 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
     }
     else{// se insertará al inicio de la lista circular
 
-        struct Programas *ultimo = Lista;
-        while(ultimo->sig!= Lista)
-            ultimo= ultimo->sig;
+        struct Programas *temp = Lista;
+        while(temp->sig!= Lista)
+            temp= temp->sig;
 
-        ultimo->sig = nn;
         nn->sig = Lista;
+        temp->sig = nn;
+
         Lista = nn;
         {
         	return Lista;//retorna la lista modificada, osea con un elemento más
@@ -454,6 +447,29 @@ void datosProgramas(){
     struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
     }
 
+void imprimirProgramas(){
+    struct Programas * temp = listaProgramas; //Se establece un nodo temporal igual al primer nodo
+    for(;temp!=NULL; temp = temp->sig){ // Se encicla el for para que recorra la lista.
+        cout<<temp->nombrePrograma<<endl;
+        cout<<temp->fecha<<endl;
+        cout<<temp->lugar<<endl;
+        cout<<temp->hora<<endl;
+        if(temp->sig == listaProgramas) // Punto de parada cuando el nodo siguiente sea igual al primero.
+            return;
+    }
+
+
+
+
+
+
+
+
+
+
+
+}
+
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
@@ -464,7 +480,8 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n4  Insertar Capacitacion. ";
         cout<<"\n5  Insertar Miembro del comite.";
         cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  Insertar formacion.";
+        cout<<"\n7  imprimir Programas.";
+        cout<<"\n8  Insertar formacion.";
         cout<<"\n8. Salir.  ";
 
         cin >> opcion;
@@ -488,9 +505,14 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         	datosProgramas();
 		}
 		else if(opcion ==7){
+            imprimirProgramas();
+		}
+		else if(opcion ==8){
 			datosFormacion();
 	    }
 		else if(opcion == 8){
+		}
+		else if(opcion == 9){
             return ;
 		}
     }
@@ -522,6 +544,16 @@ cargarDatos(){
     insertarPuestos("Tesorero");
     insertarPuestos("Informatico");
     imprimirPuestos(listaPuestos);
+
+
+	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
+	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
+	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
+
+
+	//
+
+    
     //
     insertarFormacion("Programa");
     insertarFormacion("Doctorado");
