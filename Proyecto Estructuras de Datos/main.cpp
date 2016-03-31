@@ -224,8 +224,10 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 void datosCantones(){//funcion que pide los datos para agregar un canton y provincia
 	string nom;
 	string p;
-	cout<<"\nIngrese el nombre del canton: "<<endl;
+	fflush(stdin);
+	cout<<"Ingrese el nombre del canton: ";
 	getline(cin,nom);
+	fflush(stdin);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
 	getline(cin,p);
 
@@ -255,6 +257,7 @@ struct Cantones *buscarCanton (string nombre){
     }while(temp != listaCantones); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
     return NULL; // en caso de no coincidir ningun nodo, retorna NULL
 };
+
 
 //  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
@@ -593,7 +596,6 @@ void cargarDatos(){
     insertarFormacion("Bachiderato");
     insertarFormacion("Universetaria");
     insertarFormacion("Colegio");
-    insertarFormacion("Programa");
     //imprimirFormacion(listaFormacion);
 }
 
@@ -640,7 +642,10 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 			datosFormacion();
 	    }
 		else if(opcion == 9){
-			cargarDatos();
+            insertarConvenios("CCSS");
+            insertarConvenios("INA");
+            insertarConvenios("TEC");
+            imprimirConvenios(listaConvenios);
 		}
 		else if(opcion == 10){
 			datosConvenios();
