@@ -38,11 +38,12 @@ struct Programas{//Lista circular con insercion al inicio
 }*listaProgramas;// Puntero de Programas
 
 struct Infraestructura{//Lista doble con insercion al final
+    string nombre;
 	string administrada;
 	string compartida;
-	struct Infraestructura *sig;
-	struct Infraestructura *ant;
-	Infraestructura(string adm,  string com){
+	struct Infraestructura *ant,sig;
+	struct Infraestructura *En_Infra; // Nodo de enlace
+	Infraestructura(string nombre, string adm,  string com){
 		administrada = adm;
 		compartida = com;
 		sig = NULL;
@@ -115,6 +116,8 @@ struct En_Programas{
 };
 // Enlace cantones - Infraestructura
 struct En_Infraestructura{
+    //string nombre;
+    //string ubicacion;
     struct Infraestructura *enlace;
     struct En_Infraestructura *sig;
 };
@@ -132,6 +135,18 @@ struct En_Capacitaciones{
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
+struct insertarInfraestructura(string nombrCant,string nombrInfra){
+    struct Canton *tempCant = buscarCanton(nombrCant);
+    struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
+    if((tempCant != NULL) && (tempInf != NULL)){
+        struct En_Infraestructura *nn = new En_Infraestructura();
+        nn->enlace = tempCant; // Nodo de enlace dentro de nn de tipo En_Infraestructura(sublista) se relaciona al nodo de canton correspondiente.
+        nn->sig = tempInf->En_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo En_Infraestructura (sig).
+        tempInf->En_Infra = nn; // se corre el primero de En_Infraestructura (sublista)
+    }
+    return;
+};
+
 /*
 struct asignarPrograma(){
     struct Programas *
@@ -140,10 +155,6 @@ struct asignarPrograma(){
 
 
 struct asignarConvenio(){
-
-};
-
-struct asignarInfraestructura(){
 
 };
 
@@ -639,11 +650,26 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 }
 
 struct MiembrosComite *buscarMiembro(int ID){
-    struct MiembrosComite * temp = listaMiembros;
+    if(listaMiembros==NULL){
+        return NULL;
+    }
+    else{
+        struct MiembrosComite*temp=listaMiembros;
+        while(temp!=NULL){
+            if(temp->identificador==ID){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
 
 };
 
 //  --- Programas --- //
+
+struct Programas *buscarPrograma()
+
 struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(nomp,fe,lu,ho);
     if(Lista == NULL){
@@ -705,6 +731,23 @@ void imprimirProgramas(){
 }
 */
 
+//  --- Infraestructuras --- //
+
+
+
+struct Infraestructura *buscarInfraestructura(string nomb){
+    if(listaConvenios==NULL){
+        return NULL;
+    }
+    struct Infraestructura* temp = listaInfraestructura;
+    do{
+        if(temp->nombre == nomb)
+            return temp;
+        temp = temp->sig;
+    }while(temp != NULL);
+    return NULL;
+};
+
 
 
 
@@ -753,6 +796,11 @@ void cargarDatos(){
     insertarFormacion("Colegio");
     //imprimirFormacion(listaFormacion);
 }
+
+
+
+
+
 
 
 
