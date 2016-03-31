@@ -7,6 +7,7 @@
 using namespace std;
 
 //Prototipos
+struct Cantones*buscarCanton(string);
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 struct Capacitaciones*buscarCapacitaciones(string);
@@ -71,7 +72,6 @@ struct MiembrosComite{
 }*listaMiembros;//Puntero miembros Comite
 
 // ##   Estructuras que se relacionan con MiembrosComite ## //
-
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
 	struct Puestos *sig;
@@ -244,6 +244,17 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
     }
 }
 
+struct Cantones *buscarCanton (string nombre){
+    struct Cantones *temp = listaCantones; // nodo temporal tipo Cantones
+    if(temp == NULL)
+        return NULL;
+    do{
+        if (temp->nombre == nombre) //si el atributo nombre del nodo es igual a variable nombre.
+            return temp; // retorno nodo
+        temp = temp->sig; //avanzo al siguiente nodo
+    }while(temp != listaCantones); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
+    return NULL; // en caso de no coincidir ningun nodo, retorna NULL
+};
 
 //  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
@@ -362,7 +373,6 @@ void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la list
     }
 }
 
-
 void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
     struct Capacitaciones*temp=primero;
     if(temp==NULL)
@@ -393,7 +403,6 @@ struct Capacitaciones *buscarCapacitaciones(string nom){
     return NULL;
 }
 
-
 void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
 	cout<<"\nNombre de la Capacitacion\n";
@@ -402,6 +411,7 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	insertarCapacitacion(nom);
 }
 
+<<<<<<< HEAD
 
 void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
    struct Convenios*buscador=buscarConvenios(nom);
@@ -455,6 +465,8 @@ void datosConvenios(){
 
 
 
+=======
+>>>>>>> origin/master
 //  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
@@ -474,9 +486,12 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	insertarMiembrosComite(nom,Id);
 }
 
+struct MiembrosComite *buscarMiembro(int ID){
+    struct MiembrosComite * temp = listaMiembros;
+
+};
 
 //  --- Programas --- //
-
 struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(nomp,fe,lu,ho);
     if(Lista == NULL){
