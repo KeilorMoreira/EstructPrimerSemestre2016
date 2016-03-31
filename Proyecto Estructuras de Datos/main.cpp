@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
+#include <windows.h>
 
 using namespace std;
 
@@ -15,16 +16,18 @@ struct Convenios*buscarConvenios(string);
 
 
 
+
+
 // ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
 struct Programas{//Lista circular con insercion al inicio
-	string nombrePrograma;
+	string nombre;
 	string fecha;
 	string lugar;
 	string hora;
 	struct Programas *sig;
 	Programas(string nom , string fe, string lu, string ho){
-		nombrePrograma = nom;
+		nombre = nom;
 		fecha = fe;
 		lugar = lu;
 		hora = ho;
@@ -75,14 +78,14 @@ struct MiembrosComite{
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
 	struct Puestos *sig;
-	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
+	struct miembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
 	Puestos(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
 }*listaPuestos;// Puntero de puestos
 
-struct Formacion{
+struct Formacion{ // Lista simple
 	string nombre;
 	struct Formacion *sig;
 	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de formacion por medio de un enlace
@@ -100,7 +103,7 @@ struct Capacitaciones{//lista simple
 		nombre = nom;
 		sig = NULL;
 	}
-}*listaCapacitacion;// puntero capacitacion
+}*listaCapacitaciones;// puntero capacitacion
 
 
 //   #################### ESTRUCTURAS DE ENLACE ################# //
@@ -125,6 +128,7 @@ struct En_Capacitaciones{
     struct Capacitaciones * enlace;
     struct En_Capacitaciones *sig;
 };
+
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
@@ -170,6 +174,135 @@ struct Cantones{
 	}
 
 }*listaCantones;//Primero de la estructura cantones
+
+// ############ ESTRUCTURA IMPRIMIR ########### //
+void imprimir(string lista){
+
+    if(lista == "cant"){ // Cantones, lista doble.
+        struct Cantones *temp = listaCantones;
+        if (temp == NULL){
+
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        system("cls");
+        cout<<"\n~~~~~~~~~~~~~~~~  CANTONES ~~~~~~~~~~~~~~~~"<<endl;
+        while(temp != NULL){
+
+                cout<<"Nombre:   \t"<<temp->nombre<<endl;
+                cout<<"Provincia:\t"<<temp->provincia<<endl<<endl;
+                temp= temp->sig;
+                }
+        cout<<"~~~~~~~~~~~~~~~~      UL     ~~~~~~~~~~~~~~~~"<<endl;
+        system("pause");
+        return;
+    }
+
+    else if(lista == "prog"){ // Programas, lista circular.
+        struct Programas *temp = listaProgramas;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        do{
+            if(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"Fecha: "<<temp->fecha<<endl;
+                cout<<"Lugar: "<<temp->lugar<<endl;
+                cout<<"Hora: "<<temp->hora<<endl;
+                temp = temp->sig;
+            }
+        }while(temp != listaProgramas);
+        return;
+    }
+
+    else if(lista == "infr"){ // Infraestructuras, lista doble.
+        struct Infraestructura *temp = listaInfraestructura;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Administrada: "<<temp->administrada<<endl;
+                cout<<"Compartida: "<<temp->compartida<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+
+    }
+
+    else if(lista == "conv"){ // Convenios, lista simple.
+        struct Convenios *temp = listaConvenios;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "miem"){ // MiembrosComite, lista simple.
+        struct MiembrosComite *temp = listaMiembros;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"ID: "<<temp->identificador<<endl;
+                temp= temp->sig;
+                }
+        return;
+    }
+
+    else if(lista == "pues"){ // Puestos, lista simple.
+        struct Puestos *temp = listaPuestos;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "form"){ // Formacion, lista simple.
+        struct Formacion *temp = listaFormacion;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "capa"){ // Capacitaciones
+        struct Capacitaciones *temp = listaCapacitaciones;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia";
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+}
 
 // #############################   METODOS VARIOS ############################ //
 
@@ -245,6 +378,7 @@ struct Cantones *buscarCanton (string nombre){
     return NULL; // en caso de no coincidir ningun nodo, retorna NULL
 };
 
+/*
 void imprimirCantones(){
         struct Cantones *temp = listaCantones;
         if (temp == NULL){
@@ -258,8 +392,10 @@ void imprimirCantones(){
         }
         return;
 }
+*/
 
 //  --- Puestos --- //
+/*
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     struct Puestos*temp=primero;
     if(temp==NULL)
@@ -273,6 +409,7 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+*/
 
 void insertarPuestos(string nom){//inserta al inicio de la lista simple
     struct Puestos*buscador=buscarPuestos(nom);
@@ -334,6 +471,7 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
     }
 }
 
+/*
 void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     struct Formacion*temp=primero;
     if(temp==NULL)
@@ -347,6 +485,7 @@ void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+*/
 
 struct Formacion*buscarFormacion(string n){
     if(listaFormacion==NULL){//si no hay formacion
@@ -382,12 +521,13 @@ void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la list
    if(buscador!=NULL)
    cout<<"\nEsa capacitacion ya existe\n";//Valida si hay datos repetidos
     else{
-	struct Capacitaciones*nuevoCapacitacion=new Capacitaciones(nom);
-	nuevoCapacitacion->sig=listaCapacitacion;
-	listaCapacitacion=nuevoCapacitacion;
+	struct Capacitaciones*nuevoCapacitaciones=new Capacitaciones(nom);
+	nuevoCapacitaciones->sig=listaCapacitaciones;
+	listaCapacitaciones=nuevoCapacitaciones;
     }
 }
 
+/*
 void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
     struct Capacitaciones*temp=primero;
     if(temp==NULL)
@@ -401,13 +541,14 @@ void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+*/
 
 struct Capacitaciones *buscarCapacitaciones(string nom){
-    if(listaCapacitacion==NULL){
+    if(listaCapacitaciones==NULL){
         return NULL;
     }
     else{
-        struct Capacitaciones*temp=listaCapacitacion;
+        struct Capacitaciones*temp=listaCapacitaciones;
         while(temp!=NULL){
             if(temp->nombre==nom){
                 return temp;
@@ -437,6 +578,7 @@ void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista s
     }
 }
 
+/*
 void imprimirConvenios(struct Convenios*primero){//funcion que imprime los convenios
     struct Convenios*temp=primero;
     if(temp==NULL)
@@ -450,6 +592,7 @@ void imprimirConvenios(struct Convenios*primero){//funcion que imprime los conve
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+*/
 
 struct Convenios *buscarConvenios(string nom){
     if(listaConvenios==NULL){
@@ -548,6 +691,7 @@ void datosProgramas(){
     listaProgramas = insertar(nomp , fe, lu , ho,listaProgramas);
     }
 
+/*
 void imprimirProgramas(){
     struct Programas * temp = listaProgramas; //Se establece un nodo temporal igual al primer nodo
     for(;temp!=NULL; temp = temp->sig){ // Se encicla el for para que recorra la lista.
@@ -558,10 +702,8 @@ void imprimirProgramas(){
         if(temp->sig == listaProgramas) // Punto de parada cuando el nodo siguiente sea igual al primero.
             return;
     }
-
-
 }
-
+*/
 
 
 
@@ -580,7 +722,7 @@ void cargarDatos(){
 	insertarCantones("San Carlos","Alajuela");
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
-	imprimirCantones();
+	imprimir("cant");
 
 	//
     insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
@@ -649,7 +791,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         	datosProgramas();
 		}
 		else if(opcion ==7){
-            imprimirProgramas();
+            //imprimirProgramas();
 		}
 		else if(opcion ==8){
 			datosFormacion();
@@ -658,10 +800,11 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
             insertarConvenios("CCSS");
             insertarConvenios("INA");
             insertarConvenios("TEC");
-            imprimirConvenios(listaConvenios);
+            //imprimirConvenios(listaConvenios);
 		}
 		else if(opcion == 10){
 			cargarDatos();
+			system("cls");
 		}
 		else if(opcion == 11){
             return ;
