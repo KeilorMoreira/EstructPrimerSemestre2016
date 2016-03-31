@@ -7,6 +7,7 @@
 using namespace std;
 
 //Prototipos
+struct Cantones*buscarCanton(string);
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 struct Capacitaciones*buscarCapacitaciones(string);
@@ -371,7 +372,6 @@ void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la list
     }
 }
 
-
 void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
     struct Capacitaciones*temp=primero;
     if(temp==NULL)
@@ -402,7 +402,6 @@ struct Capacitaciones *buscarCapacitaciones(string nom){
     return NULL;
 }
 
-
 void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
 	cout<<"\nNombre de la Capacitacion\n";
@@ -430,9 +429,12 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	insertarMiembrosComite(nom,Id);
 }
 
+struct MiembrosComite *buscarMiembro(int ID){
+    struct MiembrosComite * temp = listaMiembros;
+
+};
 
 //  --- Programas --- //
-
 struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(nomp,fe,lu,ho);
     if(Lista == NULL){
