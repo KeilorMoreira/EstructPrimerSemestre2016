@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//Prototipos para validar
+//Prototipos
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 
@@ -68,7 +68,7 @@ struct MiembrosComite{
 
 }*listaMiembros;//Puntero miembros Comite
 
-// #####   Estructuras que se relacionan con MiembrosComite ##### //
+// ##   Estructuras que se relacionan con MiembrosComite ## //
 
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
@@ -128,9 +128,7 @@ struct En_Capacitaciones{
 
 /*
 struct asignarPrograma(){
-
-
-
+    struct Programas *
 
 };
 
@@ -150,10 +148,8 @@ struct asignarCapacitacion(){
 
 // ####################  ESTRUCTURA PRINCIPAL CANTONES #######################//
 /*
-
 Debido a que la estructura Cantones esta se relaciona con todas las demas estructuras
 se decidio dejarla entre sus respectivas estructuras tipo enlace y los metodos generales relacionados.
-
 */
 struct Cantones{
 	string nombre;
@@ -173,8 +169,9 @@ struct Cantones{
 
 }*listaCantones;//Primero de la estructura cantones
 
-// ######################   METODOS VARIOS ######################## //
+// #############################   METODOS VARIOS ############################ //
 
+//  --- Cantones --- //
 void insertarCantones(string nombre, string provincia ){///Funcion que inserta doblemente ordenado en la lista
 
 	if (listaCantones==NULL){
@@ -226,9 +223,9 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	string nom;
 	string p;
 	cout<<"\nIngrese el nombre del canton: "<<endl;
-	cin>>nom;
+	getline(cin,nom);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
-	cin>>p;
+	getline(cin,p);
 
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
@@ -241,10 +238,12 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
         struct Puestos*nuevoPuesto=new Puestos(nom);
         nuevoPuesto->sig=listaPuestos;
         listaPuestos=nuevoPuesto;
-        cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
+        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
     }
 }
-	// cout<<"\nPuesto agregado correctamente:";
+
+
+//  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     struct Puestos*temp=primero;
     if(temp==NULL)
@@ -258,10 +257,13 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> origin/master
 
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
@@ -282,7 +284,7 @@ struct Puestos *buscarPuestos(string nom){
 void datosPuestos(){
 	string nom;
 	cout<<"\nNombre del puesto: "<<endl;
-	cin>>nom;
+	getline(cin,nom);
 
 	insertarPuestos(nom);
 
@@ -298,6 +300,7 @@ void imprimirPuestos(){//funcion para imprimir la lista de puestos
 }
 
 
+//  --- Formacion Profesional --- //
 void insertarFormacion(string n){//Insercion al final de una lista simple
         struct Formacion*buscador=buscarFormacion(n);
     if(buscador!=NULL)
@@ -314,11 +317,10 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
                 temp=temp->sig;
             }
             temp->sig=nuevoFormacion;
-            cout<<"\n\nLa formacion ha sido insertado";
+            //cout<<"\n\nLa formacion ha sido insertado";
         }
     }
 }
-
 
 void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     struct Formacion*temp=primero;
@@ -333,11 +335,6 @@ void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
-
-
-
-
-
 
 struct Formacion*buscarFormacion(string n){
     if(listaFormacion==NULL){//si no hay formacion
@@ -358,13 +355,16 @@ struct Formacion*buscarFormacion(string n){
 void datosFormacion(){
 	string nom;
 	cout<<"\n Nombre de la formacion\n";
-	cin>>nom;
+	getline(cin,nom);
 	cout<<"\nFormacion agregada correctamente\n";
 
 
 
 	insertarFormacion(nom);
 }
+
+
+//  --- Capacitaciones --- //
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
 	struct Capacitaciones * nn = new Capacitaciones(nom);
 
@@ -383,6 +383,8 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	insertarCapacitacion(nom);
 }
 
+
+//  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
 	nn->sig = listaMiembros;
@@ -401,8 +403,10 @@ void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	insertarMiembrosComite(nom,Id);
 }
 
-//Funcion que inserta los programas la lista circular al inicio
-struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){
+
+//  --- Programas --- //
+
+struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(nomp,fe,lu,ho);
     if(Lista == NULL){
         Lista = nn;
@@ -424,10 +428,14 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
 		}
     }
 
+<<<<<<< HEAD
     cout<<"\nSe agregado correctamente";
     {
 
 }
+=======
+    //cout<<"\nSe agregado correctamente";
+>>>>>>> origin/master
 }
 
 void datosProgramas(){
@@ -436,16 +444,16 @@ void datosProgramas(){
 	string lu;
 	string ho;
 	cout<<"\nEscriba el nombre del programa\n";
-	cin>>nomp;
+	getline(cin,nomp);
 	cout<<"\nFecha del programa\n";
-	cin>>fe;
+	getline(cin,fe);
 	cout<<"\nEscriba el nombre del lugar\n";
-	cin>>lu;
+	getline(cin,lu);
 	cout<<"\nHora del programa a realizar\n";
-	cin>>ho;
+	getline(cin,ho);
 	cout<<"\nSe agregado correctamente"<<endl;
 
-    struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista);
+    listaProgramas = insertar(nomp , fe, lu , ho,listaProgramas);
     }
 
 void imprimirProgramas(){
@@ -517,11 +525,14 @@ void cargarDatos(){
 
 
 
+<<<<<<< HEAD
 }
+=======
+
+>>>>>>> origin/master
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
-
         cout<<"\n1. Insertar Canton.  ";
         cout<<"\n2. Insertar Puestos.  ";
         cout<<"\n3. Imprimir Puestos.  ";
@@ -530,8 +541,12 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n6  Insertar Programas.";
         cout<<"\n7  imprimir Programas.";
         cout<<"\n8  Insertar formacion.";
+<<<<<<< HEAD
         cout<<"\n9  CargarDatos.";
         cout<<"\n10. Salir.  ";
+=======
+        cout<<"\n-1. Salir.  ";
+>>>>>>> origin/master
 
         cin >> opcion;
 
@@ -559,16 +574,67 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 		else if(opcion ==8){
 			datosFormacion();
 	    }
+<<<<<<< HEAD
 		else if(opcion == 9){
 			cargarDatos();
 		}
 		else if(opcion == 10){
+=======
+		else if(opcion == -1){
+>>>>>>> origin/master
             return ;
 		}
     }
-
 }
 
+<<<<<<< HEAD
+=======
+
+cargarDatos(){
+	// ########### Datos precargados ################ //
+	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
+	insertarCantones("Santo Domingo","Heredia");
+	insertarCantones("San Isidro","Heredia");
+	insertarCantones("Puerto Viejo","Heredia");
+	insertarCantones("Upala","Alajuela");
+	insertarCantones("Barva","Heredia");
+	insertarCantones("Santa Barbara","Heredia");
+	insertarCantones("San Carlos","Alajuela");
+	insertarCantones("San Ramon","Alajuela");
+	insertarCantones("Santa Barbara","Heredia");
+
+	//
+    insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
+    insertarPuestos("Gerente");
+    insertarPuestos("Presidente");
+    insertarPuestos("Contadora");
+    insertarPuestos("Visepresidente");
+    insertarPuestos("Fiscal");
+    insertarPuestos("Secretaria");
+    insertarPuestos("Tesorero");
+    insertarPuestos("Informatico");
+    //imprimirPuestos(listaPuestos);
+
+    //
+	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
+	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
+	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
+    //
+    insertarFormacion("Programa");
+    insertarFormacion("Doctorado");
+    insertarFormacion("Maestria");
+    insertarFormacion("Segundaria");
+    insertarFormacion("Kinder");
+    insertarFormacion("Telematica");
+    insertarFormacion("Licensiatura");
+    insertarFormacion("Bachiderato");
+    insertarFormacion("Universetaria");
+    insertarFormacion("Colegio");
+    insertarFormacion("Programa 10");
+    //imprimirFormacion(listaFormacion);
+}
+
+>>>>>>> origin/master
 int main(){
 	//cargarDatos();
     menu();

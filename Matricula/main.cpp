@@ -56,12 +56,12 @@ struct Curso * buscarC(string sigla)
 struct Curso *tempC =primeroC;
 if(tempC==NULL)
       return NULL;
-      do {
-          if(tempC->sigla==sigla)
-              return tempC;
-          tempC = tempC->sig;
-      } while( tempC!=primeroC);
-
+do {
+    if(tempC->sigla==sigla)
+        return tempC;
+    tempC = tempC->sig;
+    }
+while( tempC!=primeroC);
 return NULL;
 }
 
