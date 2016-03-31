@@ -7,8 +7,8 @@
 using namespace std;
 
 //Prototipos
-struct Puestos*buscarPuestos(string);
-struct Formacion*buscarFormacion(string);
+struct Puestos *buscarPuestos(string);
+struct Formacion *buscarFormacion(string);
 
 
 
