@@ -41,7 +41,7 @@ struct Infraestructura{//Lista doble con insercion al final
     string nombre;
 	string administrada;
 	string compartida;
-	struct Infraestructura *ant,sig;
+	struct Infraestructura *ant, *sig;
 	struct Infraestructura *En_Infra; // Nodo de enlace
 	Infraestructura(string nombre, string adm,  string com){
 		administrada = adm;
@@ -135,7 +135,7 @@ struct En_Capacitaciones{
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
-struct insertarInfraestructura(string nombrCant,string nombrInfra){
+struct insertarInfraestructura (string nombrCant,string nombrInfra){
     struct Canton *tempCant = buscarCanton(nombrCant);
     struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
     if((tempCant != NULL) && (tempInf != NULL)){
@@ -144,7 +144,6 @@ struct insertarInfraestructura(string nombrCant,string nombrInfra){
         nn->sig = tempInf->En_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo En_Infraestructura (sig).
         tempInf->En_Infra = nn; // se corre el primero de En_Infraestructura (sublista)
     }
-    return;
 };
 
 /*
