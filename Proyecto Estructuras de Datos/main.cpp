@@ -245,6 +245,19 @@ struct Cantones *buscarCanton (string nombre){
     return NULL; // en caso de no coincidir ningun nodo, retorna NULL
 };
 
+void imprimirCantones(){
+        struct Cantones *temp = listaCantones;
+        if (temp == NULL){
+            cout<<"La lista de cantones se encuentra vacia";
+            return;
+        }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"Provincia: "<<temp->provincia<<endl;
+                temp= temp->sig;
+        }
+        return;
+}
 
 //  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
@@ -567,6 +580,7 @@ void cargarDatos(){
 	insertarCantones("San Carlos","Alajuela");
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
+	imprimirCantones();
 
 	//
     insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
@@ -647,7 +661,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
             imprimirConvenios(listaConvenios);
 		}
 		else if(opcion == 10){
-			datosConvenios();
+			cargarDatos();
 		}
 		else if(opcion == 11){
             return ;
