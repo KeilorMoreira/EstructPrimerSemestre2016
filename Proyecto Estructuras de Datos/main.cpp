@@ -72,7 +72,6 @@ struct MiembrosComite{
 
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
-	int Id;
 	struct Puestos *sig;
 	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
 	Puestos(string nom){
@@ -258,11 +257,11 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
         }
     }
     cout<<"------------ULTIMA LINEA-----------------";
-}	
-	
-	
-	
-	
+}
+
+
+
+
 
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
@@ -282,7 +281,6 @@ struct Puestos *buscarPuestos(string nom){
 
 void datosPuestos(){
 	string nom;
-	int id;
 	cout<<"\nNombre del puesto: "<<endl;
 	cin>>nom;
 
@@ -362,7 +360,7 @@ void datosFormacion(){
 	cout<<"\n Nombre de la formacion\n";
 	cin>>nom;
 	cout<<"\nFormacion agregada correctamente\n";
-	
+
 
 
 	insertarFormacion(nom);
@@ -427,6 +425,9 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
     }
 
     cout<<"\nSe agregado correctamente";
+    {
+
+}
 }
 
 void datosProgramas(){
@@ -459,68 +460,13 @@ void imprimirProgramas(){
     }
 
 
-
-
-
-
-
-
-
-
-
-}
-
-void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
-    int opcion = 0;
-    while(true){
-
-        cout<<"\n1. Insertar Canton.  ";
-        cout<<"\n2. Insertar Puestos.  ";
-        cout<<"\n3. Imprimir Puestos.  ";
-        cout<<"\n4  Insertar Capacitacion. ";
-        cout<<"\n5  Insertar Miembro del comite.";
-        cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  imprimir Programas.";
-        cout<<"\n8  Insertar formacion.";
-        cout<<"\n8. Salir.  ";
-
-        cin >> opcion;
-
-        if(opcion == 1){
-            datosCantones();
-        }
-        else if(opcion == 2){
-            datosPuestos();
-        }
-        else if(opcion == 3){
-            imprimirPuestos();
-         }
-        else if(opcion == 4){
-        	datosCapacitacion();
-        }
-        else if(opcion == 5){
-        	datosMiembroComite();
-        }
-        else if(opcion == 6){
-        	datosProgramas();
-		}
-		else if(opcion ==7){
-            imprimirProgramas();
-		}
-		else if(opcion ==8){
-			datosFormacion();
-	    }
-		else if(opcion == 8){
-		}
-		else if(opcion == 9){
-            return ;
-		}
-    }
-
 }
 
 
-cargarDatos(){
+
+
+
+void cargarDatos(){
 	// ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domigo","Heredia");
@@ -553,7 +499,7 @@ cargarDatos(){
 
 	//
 
-    
+
     //
     insertarFormacion("Programa");
     insertarFormacion("Doctorado");
@@ -567,15 +513,64 @@ cargarDatos(){
     insertarFormacion("Colegio");
     insertarFormacion("Programa 10");
     imprimirFormacion(listaFormacion);
-    
-    
-    
-	
+
+
+
+
+}
+void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
+    int opcion = 0;
+    while(true){
+
+        cout<<"\n1. Insertar Canton.  ";
+        cout<<"\n2. Insertar Puestos.  ";
+        cout<<"\n3. Imprimir Puestos.  ";
+        cout<<"\n4  Insertar Capacitacion. ";
+        cout<<"\n5  Insertar Miembro del comite.";
+        cout<<"\n6  Insertar Programas.";
+        cout<<"\n7  imprimir Programas.";
+        cout<<"\n8  Insertar formacion.";
+        cout<<"\n9  CargarDatos.";
+        cout<<"\n10. Salir.  ";
+
+        cin >> opcion;
+
+        if(opcion == 1){
+            datosCantones();
+        }
+        else if(opcion == 2){
+            datosPuestos();
+        }
+        else if(opcion == 3){
+            imprimirPuestos();
+         }
+        else if(opcion == 4){
+        	datosCapacitacion();
+        }
+        else if(opcion == 5){
+        	datosMiembroComite();
+        }
+        else if(opcion == 6){
+        	datosProgramas();
+		}
+		else if(opcion ==7){
+            imprimirProgramas();
+		}
+		else if(opcion ==8){
+			datosFormacion();
+	    }
+		else if(opcion == 9){
+			cargarDatos();
+		}
+		else if(opcion == 10){
+            return ;
+		}
+    }
+
 }
 
 int main(){
-	cargarDatos();
+	//cargarDatos();
     menu();
-    cout<<"\n\n\n\nFIN";
 	return 0;
 }
