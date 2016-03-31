@@ -9,6 +9,7 @@ using namespace std;
 //Prototipos
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
+struct Capacitaciones*buscarCapacitaciones(string);
 
 
 
@@ -257,13 +258,6 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
-<<<<<<< HEAD
-
-
-
-
-=======
->>>>>>> origin/master
 
 struct Puestos *buscarPuestos(string nom){
     if(listaPuestos==NULL){
@@ -284,21 +278,12 @@ struct Puestos *buscarPuestos(string nom){
 void datosPuestos(){
 	string nom;
 	cout<<"\nNombre del puesto: "<<endl;
-	getline(cin,nom);
+	cin>>nom;
+	cout<<"Puesto agregado\n";
 
 	insertarPuestos(nom);
 
 }
-
-void imprimirPuestos(){//funcion para imprimir la lista de puestos
-    struct Puestos * temp = listaPuestos;
-    while(temp != NULL){
-        cout<<temp->nombre<<"  "<<endl;
-        temp = temp->sig;
-    }
-    cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
-}
-
 
 //  --- Formacion Profesional --- //
 void insertarFormacion(string n){//Insercion al final de una lista simple
@@ -355,7 +340,7 @@ struct Formacion*buscarFormacion(string n){
 void datosFormacion(){
 	string nom;
 	cout<<"\n Nombre de la formacion\n";
-	getline(cin,nom);
+	cin>>nom;
 	cout<<"\nFormacion agregada correctamente\n";
 
 
@@ -366,14 +351,47 @@ void datosFormacion(){
 
 //  --- Capacitaciones --- //
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
-	struct Capacitaciones * nn = new Capacitaciones(nom);
-
-	nn->sig = listaCapacitacion;
-	listaCapacitacion = nn;
-	cout<<"\n Capacitacion agregado correctamente\n";
-
-
+   struct Capacitaciones*buscador=buscarCapacitaciones(nom);
+   if(buscador!=NULL)
+   cout<<"\nEsa capacitacion ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Capacitaciones*nuevoCapacitacion=new Capacitaciones(nom);
+	nuevoCapacitacion->sig=listaCapacitacion;
+	listaCapacitacion=nuevoCapacitacion;
+    }
 }
+
+
+void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
+    struct Capacitaciones*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Capacitaciones\n";
+    else{
+        cout<<"Nombre\t\tID\t\t\t"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<"\t\t"<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}
+
+struct Capacitaciones *buscarCapacitaciones(string nom){
+    if(listaCapacitacion==NULL){
+        return NULL;
+    }
+    else{
+        struct Capacitaciones*temp=listaCapacitacion;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+}
+
 
 void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
@@ -428,14 +446,11 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
 		}
     }
 
-<<<<<<< HEAD
     cout<<"\nSe agregado correctamente";
     {
 
 }
-=======
-    //cout<<"\nSe agregado correctamente";
->>>>>>> origin/master
+
 }
 
 void datosProgramas(){
@@ -474,123 +489,9 @@ void imprimirProgramas(){
 
 
 
+
+
 void cargarDatos(){
-	// ########### Datos precargados ################ //
-	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
-	insertarCantones("Santo Domigo","Heredia");
-	insertarCantones("San Isidro","Heredia");
-	insertarCantones("Puerto Viejo","Heredia");
-	insertarCantones("Upala","Alajuela");
-	insertarCantones("Barva","Heredia");
-	insertarCantones("Santa Barbara","Heredia");
-	insertarCantones("San Carlos","Alajuela");
-	insertarCantones("San Ramon","Alajuela");
-	insertarCantones("Santa Barbara","Heredia");
-	//
-    insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
-    insertarPuestos("Gerente");
-    insertarPuestos("Presidente");
-    insertarPuestos("Contadora");
-    insertarPuestos("Visepresidente");
-    insertarPuestos("Fiscal");
-    insertarPuestos("Secretaria");
-    insertarPuestos("Secretaria");
-    insertarPuestos("Tesorero");
-    insertarPuestos("Informatico");
-    imprimirPuestos(listaPuestos);
-
-
-	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
-	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
-	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
-
-
-	//
-
-
-    //
-    insertarFormacion("Programa");
-    insertarFormacion("Doctorado");
-    insertarFormacion("Maestria");
-    insertarFormacion("Segundaria");
-    insertarFormacion("Kinder");
-    insertarFormacion("Telematica");
-    insertarFormacion("Licensiatura");
-    insertarFormacion("Bachiderato");
-    insertarFormacion("Universetaria");
-    insertarFormacion("Colegio");
-    insertarFormacion("Programa 10");
-    imprimirFormacion(listaFormacion);
-
-
-
-
-<<<<<<< HEAD
-}
-=======
-
->>>>>>> origin/master
-void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
-    int opcion = 0;
-    while(true){
-        cout<<"\n1. Insertar Canton.  ";
-        cout<<"\n2. Insertar Puestos.  ";
-        cout<<"\n3. Imprimir Puestos.  ";
-        cout<<"\n4  Insertar Capacitacion. ";
-        cout<<"\n5  Insertar Miembro del comite.";
-        cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  imprimir Programas.";
-        cout<<"\n8  Insertar formacion.";
-<<<<<<< HEAD
-        cout<<"\n9  CargarDatos.";
-        cout<<"\n10. Salir.  ";
-=======
-        cout<<"\n-1. Salir.  ";
->>>>>>> origin/master
-
-        cin >> opcion;
-
-        if(opcion == 1){
-            datosCantones();
-        }
-        else if(opcion == 2){
-            datosPuestos();
-        }
-        else if(opcion == 3){
-            imprimirPuestos();
-         }
-        else if(opcion == 4){
-        	datosCapacitacion();
-        }
-        else if(opcion == 5){
-        	datosMiembroComite();
-        }
-        else if(opcion == 6){
-        	datosProgramas();
-		}
-		else if(opcion ==7){
-            imprimirProgramas();
-		}
-		else if(opcion ==8){
-			datosFormacion();
-	    }
-<<<<<<< HEAD
-		else if(opcion == 9){
-			cargarDatos();
-		}
-		else if(opcion == 10){
-=======
-		else if(opcion == -1){
->>>>>>> origin/master
-            return ;
-		}
-    }
-}
-
-<<<<<<< HEAD
-=======
-
-cargarDatos(){
 	// ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domingo","Heredia");
@@ -630,11 +531,63 @@ cargarDatos(){
     insertarFormacion("Bachiderato");
     insertarFormacion("Universetaria");
     insertarFormacion("Colegio");
-    insertarFormacion("Programa 10");
+    insertarFormacion("Programa");
     //imprimirFormacion(listaFormacion);
 }
 
->>>>>>> origin/master
+
+
+void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
+    int opcion = 0;
+    while(true){
+        cout<<"\n1. Insertar Canton.  ";
+        cout<<"\n2. Insertar Puestos.  ";
+        cout<<"\n3. Imprimir Puestos.  ";
+        cout<<"\n4  Insertar Capacitacion. ";
+        cout<<"\n5  Insertar Miembro del comite.";
+        cout<<"\n6  Insertar Programas.";
+        cout<<"\n7  imprimir Programas.";
+        cout<<"\n8  Insertar formacion.";
+        cout<<"\n9  CargarDatos.";
+        cout<<"\n10 Salir.  ";
+        cin >> opcion;
+
+        if(opcion == 1){
+            datosCantones();
+        }
+        else if(opcion == 2){
+            datosPuestos();
+        }
+        else if(opcion == 3){
+            //imprimirPuestos();
+         }
+        else if(opcion == 4){
+        	datosCapacitacion();
+        }
+        else if(opcion == 5){
+        	datosMiembroComite();
+        }
+        else if(opcion == 6){
+        	datosProgramas();
+		}
+		else if(opcion ==7){
+            imprimirProgramas();
+		}
+		else if(opcion ==8){
+			datosFormacion();
+	    }
+		else if(opcion == 9){
+			cargarDatos();
+		}
+		else if(opcion == 10){
+            return ;
+		}
+    }
+}
+
+
+
+
 int main(){
 	//cargarDatos();
     menu();
