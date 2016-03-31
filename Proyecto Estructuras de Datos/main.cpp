@@ -448,6 +448,7 @@ void datosConvenios(){
 	string nom;
 	cout<<"\nEscriba el nombre del convenio\n";
 	cin>>nom;
+	cout<<"\nSe agregado correctamente\n";
 	
 	insertarConvenios(nom);
 }
@@ -601,6 +602,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n7  imprimir Programas.";
         cout<<"\n8  Insertar formacion.";
         cout<<"\n9  Insertar convenios.";
+        cout<<"\n10 CargarDatos.";
         cout<<"\n11 Salir.  ";
         cin >> opcion;
 
@@ -634,6 +636,7 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 		else if(opcion == 10){
 			datosConvenios();
 		}
+		else if(opcion == 11){
             return ;
 		}
     }
