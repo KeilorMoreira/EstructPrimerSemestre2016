@@ -70,7 +70,6 @@ struct MiembrosComite{
 }*listaMiembros;//Puntero miembros Comite
 
 // ##   Estructuras que se relacionan con MiembrosComite ## //
-
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
 	struct Puestos *sig;
@@ -243,6 +242,17 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
     }
 }
 
+struct Cantones *buscarCanton (string nombre){
+    struct Cantones *temp = listaCantones; // nodo temporal tipo Cantones
+    if(temp == NULL)
+        return NULL;
+    do{
+        if (temp->nombre == nombre) //si el atributo nombre del nodo es igual a variable nombre.
+            return temp; // retorno nodo
+        temp = temp->sig; //avanzo al siguiente nodo
+    }while(temp != listaCantones); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
+    return NULL; // en caso de no coincidir ningun nodo, retorna NULL
+};
 
 //  --- Puestos --- //
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
@@ -400,7 +410,6 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 
 	insertarCapacitacion(nom);
 }
-
 
 //  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
