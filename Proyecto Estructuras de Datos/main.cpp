@@ -230,20 +230,7 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	fflush(stdin);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
 	getline(cin,p);
-
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
-}
-
-void insertarPuestos(string nom){//inserta al inicio de la lista simple
-    struct Puestos*buscador=buscarPuestos(nom);
-    if(buscador!=NULL)
-        cout<<"\nEse puesto ya existe\n";
-    else{
-        struct Puestos*nuevoPuesto=new Puestos(nom);
-        nuevoPuesto->sig=listaPuestos;
-        listaPuestos=nuevoPuesto;
-        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
-    }
 }
 
 struct Cantones *buscarCanton (string nombre){
@@ -272,6 +259,18 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
         }
     }
     cout<<"------------ULTIMA LINEA-----------------";
+}
+
+void insertarPuestos(string nom){//inserta al inicio de la lista simple
+    struct Puestos*buscador=buscarPuestos(nom);
+    if(buscador!=NULL)
+        cout<<"\nEse puesto ya existe\n";
+    else{
+        struct Puestos*nuevoPuesto=new Puestos(nom);
+        nuevoPuesto->sig=listaPuestos;
+        listaPuestos=nuevoPuesto;
+        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
+    }
 }
 
 struct Puestos *buscarPuestos(string nom){
