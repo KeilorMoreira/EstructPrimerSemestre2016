@@ -411,8 +411,6 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	insertarCapacitacion(nom);
 }
 
-<<<<<<< HEAD
-
 void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
    struct Convenios*buscador=buscarConvenios(nom);
    if(buscador!=NULL)
@@ -459,14 +457,10 @@ void datosConvenios(){
 	cout<<"\nEscriba el nombre del convenio\n";
 	cin>>nom;
 	cout<<"\nSe agregado correctamente\n";
-	
+
 	insertarConvenios(nom);
 }
 
-
-
-=======
->>>>>>> origin/master
 //  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
