@@ -10,6 +10,7 @@ using namespace std;
 struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 struct Capacitaciones*buscarCapacitaciones(string);
+struct Convenios*buscarConvenios(string);
 
 
 
@@ -402,6 +403,57 @@ void datosCapacitacion(){// funcion que pide los datos de capacitacion
 }
 
 
+void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
+   struct Convenios*buscador=buscarConvenios(nom);
+   if(buscador!=NULL)
+   cout<<"\nEse convenio ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Convenios*nuevoConvenio=new Convenios(nom);
+	nuevoConvenio->sig=listaConvenios;
+	listaConvenios=nuevoConvenio;
+    }
+}
+
+void imprimirConvenios(struct Convenios*primero){//funcion que imprime los convenios
+    struct Convenios*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Convenios\n";
+    else{
+        cout<<"Nombre\t\tID\t\t\t"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<"\t\t"<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}
+
+struct Convenios *buscarConvenios(string nom){
+    if(listaConvenios==NULL){
+        return NULL;
+    }
+    else{
+        struct Convenios*temp=listaConvenios;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+}
+
+void datosConvenios(){
+	string nom;
+	cout<<"\nEscriba el nombre del convenio\n";
+	cin>>nom;
+	
+	insertarConvenios(nom);
+}
+
+
+
 //  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
 	struct MiembrosComite * nn = new MiembrosComite(nom, Id);
@@ -548,8 +600,8 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n6  Insertar Programas.";
         cout<<"\n7  imprimir Programas.";
         cout<<"\n8  Insertar formacion.";
-        cout<<"\n9  CargarDatos.";
-        cout<<"\n10 Salir.  ";
+        cout<<"\n9  Insertar convenios.";
+        cout<<"\n11 Salir.  ";
         cin >> opcion;
 
         if(opcion == 1){
@@ -580,6 +632,8 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 			cargarDatos();
 		}
 		else if(opcion == 10){
+			datosConvenios();
+		}
             return ;
 		}
     }
