@@ -3,12 +3,8 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
-<<<<<<< HEAD
 #include <windows.h>
 #include <stdlib.h>
-=======
-//#include <windows.h>
->>>>>>> origin/master
 
 using namespace std;
 
@@ -845,7 +841,6 @@ void cargarDatos(){
 void menuAdministracion(){
     int opcion = 0;
     while(true){
-<<<<<<< HEAD
         cout<<"\n[1]  Insertar Cantón.";
         cout<<"\n[2]  Eliminar Cantón.";
         cout<<"\n[3]  Imprimir Cantones.\n- - - - - - - - - - - - - -";
@@ -879,20 +874,6 @@ void menuAdministracion(){
         cout<<"\n[24] Imprimir Infraestructuras.";
 
         cout<<"\n[-1] Salir.";
-=======
-        cout<<"\n1. Insertar Canton.  ";
-        cout<<"\n2. Insertar Puestos.  ";
-        cout<<"\n3. Imprimir Puestos.  ";
-        cout<<"\n4  Insertar Capacitacion. ";
-        cout<<"\n5  Insertar Miembro del comite.";
-        cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  imprimir Programas.";
-        cout<<"\n8  Insertar formacion.";
-        cout<<"\n9  Insertar convenios.";
-        cout<<"\n10 Insertar infraestructura.";
-        cout<<"\n11 CargarDatos.";
-        cout<<"\n12 Salir.  ";
->>>>>>> origin/master
         cin >> opcion;
 
         if(opcion == 1){
@@ -924,7 +905,7 @@ void menuAdministracion(){
             insertarConvenios("INA");
             insertarConvenios("TEC");
             //imprimirConvenios(listaConvenios);
-            
+
         }
         else if(opcion == 10){
         	datosInfraestructura();
@@ -933,11 +914,7 @@ void menuAdministracion(){
 			cargarDatos();
 			system("cls");
 		}
-<<<<<<< HEAD
 		else if(opcion == -1){
-=======
-		else if(opcion == 12){
->>>>>>> origin/master
             return ;
 		}
     }
