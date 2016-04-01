@@ -4,6 +4,7 @@
 #include<sstream>
 #include <cstdlib>
 #include <windows.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -669,29 +670,26 @@ struct MiembrosComite *buscarMiembro(int ID){
 };
 
 //  --- Programas --- //
-
+/*
 struct Programas *buscarPrograma(){
 
 
 
 };
+*/
 
 struct Programas * insertar( struct Programas * Lista, string Id, string nomp , string tip, string fe, string lu , string ho){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(Id, nomp, tip, fe, lu, ho);
     if(Lista == NULL){
         Lista = nn;
         Lista->sig = Lista;//se hace circular
-
-    }
+        }
     else{// se insertará al inicio de la lista circular
-
         struct Programas *temp = Lista;
         while(temp->sig!= Lista)
             temp= temp->sig;
-
         nn->sig = Lista;
         temp->sig = nn;
-
         Lista = nn;
         {
         	return Lista;//retorna la lista modificada, osea con un elemento más
@@ -699,10 +697,8 @@ struct Programas * insertar( struct Programas * Lista, string Id, string nomp , 
     }
 
     cout<<"\nSe agregado correctamente";
-    {
-
-}
-
+        {
+    }
 }
 
 void datosProgramas(){
@@ -794,7 +790,7 @@ void cargarDatos(){
 	listaProgramas = insertar(listaProgramas, "Cod_02","Yoga" , "Recreativo", "mayo 14", "Polideportivo TEC" , "11:00 am");
 	listaProgramas = insertar(listaProgramas, "Cod_03","Futbol sala" , "Deportivo" , "mayo 15", "CanchaTEC" , "8:00 am");
     //
-    insertarFormacion("Programa");
+    insertarFormacion("Programador");
     insertarFormacion("Doctorado");
     insertarFormacion("Maestria");
     insertarFormacion("Segundaria");
@@ -812,22 +808,42 @@ void cargarDatos(){
 
 
 
-
-
-void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
+void menuAdministracion(){
     int opcion = 0;
     while(true){
-        cout<<"\n1. Insertar Canton.  ";
-        cout<<"\n2. Insertar Puestos.  ";
-        cout<<"\n3. Imprimir Puestos.  ";
-        cout<<"\n4  Insertar Capacitacion. ";
-        cout<<"\n5  Insertar Miembro del comite.";
-        cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  imprimir Programas.";
-        cout<<"\n8  Insertar formacion.";
-        cout<<"\n9  Insertar convenios.";
-        cout<<"\n10 CargarDatos.";
-        cout<<"\n11 Salir.  ";
+        cout<<"\n[1]  Insertar Cantón.";
+        cout<<"\n[2]  Eliminar Cantón.";
+        cout<<"\n[3]  Imprimir Cantones.\n- - - - - - - - - - - - - -";
+
+        cout<<"\n[4]  Insertar Puesto.";
+        cout<<"\n[5]  Eliminar Puesto.";
+        cout<<"\n[6]  Imprimir Puestos.";
+
+        cout<<"\n[7]  Insertar Capacitación.";
+        cout<<"\n[8]  Eliminar Capacitación.";
+        cout<<"\n[9]  Imprimir Capacitaciones.";
+
+        cout<<"\n[10] Insertar Miembro de Comité.";
+        cout<<"\n[11] Eliminar Miembro de Comité.";
+        cout<<"\n[12] Imprimir Miembros de los Comité.";
+
+        cout<<"\n[13] Insertar Programa.";
+        cout<<"\n[14] Eliminar Programa.";
+        cout<<"\n[15] Imprimir Programas.";
+
+        cout<<"\n[16] Insertar Formación Académica.";
+        cout<<"\n[17] Eliminar Formación Académica.";
+        cout<<"\n[18] Imprimir Formación Académica.";
+
+        cout<<"\n[19] Insertar Convenio.";
+        cout<<"\n[20] Eliminar Convenio.";
+        cout<<"\n[21] Imprimir Convenios.";
+
+        cout<<"\n[22] Insertar Infraestructura.";
+        cout<<"\n[23] Eliminar Infraestructura.";
+        cout<<"\n[24] Imprimir Infraestructuras.";
+
+        cout<<"\n[-1] Salir.";
         cin >> opcion;
 
         if(opcion == 1){
@@ -864,10 +880,43 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 			cargarDatos();
 			system("cls");
 		}
-		else if(opcion == 11){
+		else if(opcion == -1){
             return ;
 		}
     }
+}
+
+void menuConsultas(){
+
+}
+
+void menuReportes(){
+
+}
+
+void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
+    int opcion = 0;
+    while(true){
+        cout<<"\n[1]  Menu de Administrador.";
+        cout<<"\n[2]  Menu de Consultas.";
+        cout<<"\n[3]  Menu de Reportes.\n";
+        cout<<"\n[-1] Salir del Programa.\n- - - - - - - - - - - - - -\n>>> ";
+        cin >> opcion;
+
+        if(opcion == 1){
+            menuAdministracion();
+        }
+        else if(opcion == 2){
+            menuConsultas();
+        }
+        else if(opcion == 3){
+            menuReportes();
+        }
+        else if(opcion == -1){
+            return;
+        }
+    }
+
 }
 
 
