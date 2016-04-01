@@ -907,7 +907,7 @@ void menuAdministracion(){
         	//eliminar un puesto
         }
         else if(opcion == 6){
-        	imprimir("puestos"));
+        	//imprimir("puestos"));
 		}
 		else if(opcion ==7){
             datosCapacitacion();
