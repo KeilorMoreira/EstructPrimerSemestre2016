@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <windows.h>
 #include <stdlib.h>
+#include <locale.h> // permite utilizar el idioma local, para acentos u otros.
 
 using namespace std;
 
@@ -841,39 +842,66 @@ void cargarDatos(){
 void menuAdministracion(){
     int opcion = 0;
     while(true){
-        cout<<"\n[1]  Insertar Cantón.";
-        cout<<"\n[2]  Eliminar Cantón.";
-        cout<<"\n[3]  Imprimir Cantones.\n- - - - - - - - - - - - - -";
+        /* Tabla de colores.
+        0 = Negro
+        1 = Azul
+        2 = Verde
+        3 = Aguamarina
+        4 = Rojo
+        5 = Purpura
+        6 = Amarillo
+        7 = Blanco
+        8 = Gris
+        9 = Azul claro
+        A = Verde claro
+        B = Aguamarina claro
+        C = Rojo claro
+        D = Purpura claro
+        E = Amarillo claro
+        F = Blanco brillante
+        */
+        system ("color 8F" ); // primer digito cambia pantalla, segundo cambia letra.
+        system("cls");
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"**** Menu de Administración ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
 
-        cout<<"\n[4]  Insertar Puesto.";
-        cout<<"\n[5]  Eliminar Puesto.";
-        cout<<"\n[6]  Imprimir Puestos.";
+        cout<<"\n [1] Insertar Cantón.";
+        cout<<"\n [2] Eliminar Cantón.";
+        cout<<"\n [3] Imprimir Cantones.";
 
-        cout<<"\n[7]  Insertar Capacitación.";
-        cout<<"\n[8]  Eliminar Capacitación.";
-        cout<<"\n[9]  Imprimir Capacitaciones.";
+        cout<<"\n [4] Insertar Puesto.";
+        cout<<"\n [5] Eliminar Puesto.";
+        cout<<"\n [6] Imprimir Puestos.\n";
+
+        cout<<"\n [7] Insertar Capacitación.";
+        cout<<"\n [8] Eliminar Capacitación.";
+        cout<<"\n [9] Imprimir Capacitaciones.\n";
 
         cout<<"\n[10] Insertar Miembro de Comité.";
         cout<<"\n[11] Eliminar Miembro de Comité.";
-        cout<<"\n[12] Imprimir Miembros de los Comité.";
+        cout<<"\n[12] Imprimir Miembros de los Comité.\n";
 
         cout<<"\n[13] Insertar Programa.";
         cout<<"\n[14] Eliminar Programa.";
-        cout<<"\n[15] Imprimir Programas.";
+        cout<<"\n[15] Imprimir Programas.\n";
 
         cout<<"\n[16] Insertar Formación Académica.";
         cout<<"\n[17] Eliminar Formación Académica.";
-        cout<<"\n[18] Imprimir Formación Académica.";
+        cout<<"\n[18] Imprimir Formación Académica.\n";
 
         cout<<"\n[19] Insertar Convenio.";
         cout<<"\n[20] Eliminar Convenio.";
-        cout<<"\n[21] Imprimir Convenios.";
+        cout<<"\n[21] Imprimir Convenios.\n";
 
         cout<<"\n[22] Insertar Infraestructura.";
         cout<<"\n[23] Eliminar Infraestructura.";
-        cout<<"\n[24] Imprimir Infraestructuras.";
+        cout<<"\n[24] Imprimir Infraestructuras.\n";
 
-        cout<<"\n[-1] Salir.";
+        cout<<"\n[-1] Atras.\n________________________________\n\n>>> ";
+
         cin >> opcion;
 
         if(opcion == 1){
@@ -911,10 +939,9 @@ void menuAdministracion(){
         	datosInfraestructura();
 		}
 		else if(opcion == 11){
-			cargarDatos();
-			system("cls");
 		}
 		else if(opcion == -1){
+            system("cls");
             return ;
 		}
     }
@@ -931,10 +958,15 @@ void menuReportes(){
 void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
     int opcion = 0;
     while(true){
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"****          MENU          ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
         cout<<"\n[1]  Menu de Administrador.";
         cout<<"\n[2]  Menu de Consultas.";
         cout<<"\n[3]  Menu de Reportes.\n";
-        cout<<"\n[-1] Salir del Programa.\n- - - - - - - - - - - - - -\n>>> ";
+        cout<<"\n[-1] Salir del Programa.\n________________________________\n\n>>> ";
         cin >> opcion;
 
         if(opcion == 1){
@@ -957,7 +989,9 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
 
 
 int main(){
+    setlocale(LC_CTYPE, "Spanish"); // para que se reconozcan las tildes.
 	//cargarDatos();
     menu();
+
 	return 0;
 }
