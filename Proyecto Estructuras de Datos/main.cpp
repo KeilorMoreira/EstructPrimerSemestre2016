@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
-#include <windows.h>
+//#include <windows.h>
 
 using namespace std;
 
@@ -138,13 +138,10 @@ struct En_Capacitaciones{
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
-<<<<<<< HEAD
-void insertarInfraestructura(){
-    struct Canton *tempCant = buscarCanton(nombrCant);
-=======
+//void insertarInfraestructura(){
+    //struct Canton *tempCant = buscarCanton(nombrCant);
 void insertarInfraestructura (string nombrCant,string nombrInfra){
     struct Cantones *tempCant = buscarCanton(nombrCant);
->>>>>>> origin/master
     struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
     if((tempCant != NULL) && (tempInf != NULL)){
         struct sublista_Infraestructura *nn = new sublista_Infraestructura();
@@ -749,6 +746,34 @@ void imprimirProgramas(){
 //  --- Infraestructuras --- //
 
 
+//insertar al inicio de la lista doble
+void insertarInfraestructuras(string nom, string adm,  string com){
+
+    struct Infraestructura *nn = new Infraestructura(nom, adm, com);
+
+    nn->sig = listaInfraestructura;
+
+    if (listaInfraestructura!= NULL)
+        listaInfraestructura->ant = nn;
+
+    listaInfraestructura = nn;
+}
+
+void datosInfraestructura(){
+	string nom;
+	string adm;
+	string com;
+	cout<<"\nNombre de la infraestructura:\n";
+	cin>>nom;
+	cout<<"\nNombre de la infraestructura administrada:\n";
+	cin>>adm;
+	cout<<"\nNombre de la infraestrura compartida:\n";
+	cin>>com;
+	cout<<"\nInfraestructura agregada correctamente\n";
+	insertarInfraestructuras(nom,adm,com);
+}
+
+
 
 struct Infraestructura *buscarInfraestructura(string nomb){
     if(listaConvenios==NULL){
@@ -831,8 +856,9 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
         cout<<"\n7  imprimir Programas.";
         cout<<"\n8  Insertar formacion.";
         cout<<"\n9  Insertar convenios.";
-        cout<<"\n10 CargarDatos.";
-        cout<<"\n11 Salir.  ";
+        cout<<"\n10 Insertar infraestructura.";
+        cout<<"\n11 CargarDatos.";
+        cout<<"\n12 Salir.  ";
         cin >> opcion;
 
         if(opcion == 1){
@@ -864,12 +890,16 @@ void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
             insertarConvenios("INA");
             insertarConvenios("TEC");
             //imprimirConvenios(listaConvenios);
+            
+        }
+        else if(opcion == 10){
+        	datosInfraestructura();
 		}
-		else if(opcion == 10){
+		else if(opcion == 11){
 			cargarDatos();
 			system("cls");
 		}
-		else if(opcion == 11){
+		else if(opcion == 12){
             return ;
 		}
     }
