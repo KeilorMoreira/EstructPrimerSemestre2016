@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <locale.h> // permite utilizar el idioma local, para acentos u otros.
 
+
 using namespace std;
 
 //Prototipos
@@ -199,7 +200,8 @@ void imprimir(string lista){
         struct Cantones *temp = listaCantones;
         if (temp == NULL){
 
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         system("cls");
@@ -218,7 +220,8 @@ void imprimir(string lista){
     else if(lista == "programas"){ // Programas, lista circular.
         struct Programas *temp = listaProgramas;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         do{
@@ -236,7 +239,8 @@ void imprimir(string lista){
     else if(lista == "infraestructuras"){ // Infraestructuras, lista doble.
         struct Infraestructura *temp = listaInfraestructura;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -252,7 +256,8 @@ void imprimir(string lista){
     else if(lista == "convenios"){ // Convenios, lista simple.
         struct Convenios *temp = listaConvenios;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -266,7 +271,8 @@ void imprimir(string lista){
     else if(lista == "miembros"){ // MiembrosComite, lista simple.
         struct MiembrosComite *temp = listaMiembros;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -280,7 +286,8 @@ void imprimir(string lista){
     else if(lista == "puestos"){ // Puestos, lista simple.
         struct Puestos *temp = listaPuestos;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -294,7 +301,8 @@ void imprimir(string lista){
     else if(lista == "formaciones"){ // Formacion, lista simple.
         struct Formacion *temp = listaFormacion;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -308,7 +316,8 @@ void imprimir(string lista){
     else if(lista == "capacitaciones"){ // Capacitaciones
         struct Capacitaciones *temp = listaCapacitaciones;
         if (temp == NULL){
-            cout<<"La lista se encuentra vacia";
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
             return;
             }
         while(temp != NULL){
@@ -873,15 +882,15 @@ void menuAdministracion(){
         cout<<"********************************\n";
 
         cout<<"\n [1] Insertar Cantón.";
-        cout<<"\n [2] Eliminar Cantón.";
+        //cout<<"\n [2] Eliminar Cantón.";
         cout<<"\n [3] Imprimir Cantones.\n";
 
         cout<<"\n [4] Insertar Puesto.";
-        cout<<"\n [5] Eliminar Puesto.";
+        //cout<<"\n [5] Eliminar Puesto.";
         cout<<"\n [6] Imprimir Puestos.\n";
 
         cout<<"\n [7] Insertar Capacitación.";
-        cout<<"\n [8] Eliminar Capacitación.";
+        //cout<<"\n [8] Eliminar Capacitación.";
         cout<<"\n [9] Imprimir Capacitaciones.\n";
 
         cout<<"\n[10] Insertar Miembro a Comité.";
@@ -889,15 +898,15 @@ void menuAdministracion(){
         cout<<"\n[12] Imprimir Miembros del Comité.\n";
 
         cout<<"\n[13] Insertar Programa.";
-        cout<<"\n[14] Eliminar Programa.";
+        //cout<<"\n[14] Eliminar Programa.";
         cout<<"\n[15] Imprimir Programas.\n";
 
         cout<<"\n[16] Insertar Formación Académica.";
-        cout<<"\n[17] Eliminar Formación Académica.";
+        //cout<<"\n[17] Eliminar Formación Académica.";
         cout<<"\n[18] Imprimir Formación Académica.\n";
 
         cout<<"\n[19] Insertar Convenio.";
-        cout<<"\n[20] Eliminar Convenio.";
+        //cout<<"\n[20] Eliminar Convenio.";
         cout<<"\n[21] Imprimir Convenios.\n";
 
         cout<<"\n[22] Insertar Infraestructura.";
@@ -906,7 +915,7 @@ void menuAdministracion(){
 
         cout<<"\n[-1] Atras.\n________________________________\n\n>>> ";
 
-        cin >> opcion;
+        cin>>opcion;
 
         if(opcion == 1){
             datosCantones();
