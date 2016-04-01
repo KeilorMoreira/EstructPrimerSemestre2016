@@ -3,8 +3,12 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
+<<<<<<< HEAD
 #include <windows.h>
 #include <stdlib.h>
+=======
+//#include <windows.h>
+>>>>>>> origin/master
 
 using namespace std;
 
@@ -104,7 +108,7 @@ struct Formacion{ // Lista simple
 struct Capacitaciones{//lista simple
 	string nombre;
 	struct Capacitaciones *sig;
-	Capacitaciones(string  nom){
+	Capacitaciones(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
@@ -132,13 +136,15 @@ struct En_Convenios{
 };
 // Enlace miembrosComite - Capacitaciones
 struct En_Capacitaciones{
-    struct Capacitaciones * enlace;
+    struct Capacitaciones *enlace;
     struct En_Capacitaciones *sig;
 };
 
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
+//void insertarInfraestructura(){
+    //struct Canton *tempCant = buscarCanton(nombrCant);
 void insertarInfraestructura (string nombrCant,string nombrInfra){
     struct Cantones *tempCant = buscarCanton(nombrCant);
     struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
@@ -148,7 +154,7 @@ void insertarInfraestructura (string nombrCant,string nombrInfra){
         nn->sig = tempInf->Sub_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo sublista_Infraestructura (sig).
         tempInf->Sub_Infra = nn; // se corre el primero de sublista_Infraestructura (sublista)
     }
-};
+}
 
 /*
 struct asignarPrograma(){
@@ -374,7 +380,7 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	fflush(stdin);
 	cout<<"Ingrese el nombre del canton: ";
 	getline(cin,nom);
-	fflush(stdin);
+	//fflush(stdin);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
 	getline(cin,p);
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
@@ -740,6 +746,34 @@ void imprimirProgramas(){
 //  --- Infraestructuras --- //
 
 
+//insertar al inicio de la lista doble
+void insertarInfraestructuras(string nom, string adm,  string com){
+
+    struct Infraestructura *nn = new Infraestructura(nom, adm, com);
+
+    nn->sig = listaInfraestructura;
+
+    if (listaInfraestructura!= NULL)
+        listaInfraestructura->ant = nn;
+
+    listaInfraestructura = nn;
+}
+
+void datosInfraestructura(){
+	string nom;
+	string adm;
+	string com;
+	cout<<"\nNombre de la infraestructura:\n";
+	cin>>nom;
+	cout<<"\nNombre de la infraestructura administrada:\n";
+	cin>>adm;
+	cout<<"\nNombre de la infraestrura compartida:\n";
+	cin>>com;
+	cout<<"\nInfraestructura agregada correctamente\n";
+	insertarInfraestructuras(nom,adm,com);
+}
+
+
 
 struct Infraestructura *buscarInfraestructura(string nomb){
     if(listaConvenios==NULL){
@@ -811,6 +845,7 @@ void cargarDatos(){
 void menuAdministracion(){
     int opcion = 0;
     while(true){
+<<<<<<< HEAD
         cout<<"\n[1]  Insertar Cantón.";
         cout<<"\n[2]  Eliminar Cantón.";
         cout<<"\n[3]  Imprimir Cantones.\n- - - - - - - - - - - - - -";
@@ -844,6 +879,20 @@ void menuAdministracion(){
         cout<<"\n[24] Imprimir Infraestructuras.";
 
         cout<<"\n[-1] Salir.";
+=======
+        cout<<"\n1. Insertar Canton.  ";
+        cout<<"\n2. Insertar Puestos.  ";
+        cout<<"\n3. Imprimir Puestos.  ";
+        cout<<"\n4  Insertar Capacitacion. ";
+        cout<<"\n5  Insertar Miembro del comite.";
+        cout<<"\n6  Insertar Programas.";
+        cout<<"\n7  imprimir Programas.";
+        cout<<"\n8  Insertar formacion.";
+        cout<<"\n9  Insertar convenios.";
+        cout<<"\n10 Insertar infraestructura.";
+        cout<<"\n11 CargarDatos.";
+        cout<<"\n12 Salir.  ";
+>>>>>>> origin/master
         cin >> opcion;
 
         if(opcion == 1){
@@ -875,12 +924,20 @@ void menuAdministracion(){
             insertarConvenios("INA");
             insertarConvenios("TEC");
             //imprimirConvenios(listaConvenios);
+            
+        }
+        else if(opcion == 10){
+        	datosInfraestructura();
 		}
-		else if(opcion == 10){
+		else if(opcion == 11){
 			cargarDatos();
 			system("cls");
 		}
+<<<<<<< HEAD
 		else if(opcion == -1){
+=======
+		else if(opcion == 12){
+>>>>>>> origin/master
             return ;
 		}
     }
