@@ -747,10 +747,10 @@ void insertarInfraestructuras(string nom, string adm,  string com){
 
     struct Infraestructura *nn = new Infraestructura(nom, adm, com);
 
-    nn->sig = listaInfraestructura;
+    nn->ant = listaInfraestructura;
 
     if (listaInfraestructura!= NULL)
-        listaInfraestructura->ant = nn;
+        listaInfraestructura->sig = nn;
 
     listaInfraestructura = nn;
 }
