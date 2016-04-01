@@ -100,7 +100,7 @@ struct Formacion{ // Lista simple
 struct Capacitaciones{//lista simple
 	string nombre;
 	struct Capacitaciones *sig;
-	Capacitaciones(string  nom){
+	Capacitaciones(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
@@ -128,14 +128,14 @@ struct En_Convenios{
 };
 // Enlace miembrosComite - Capacitaciones
 struct En_Capacitaciones{
-    struct Capacitaciones * enlace;
+    struct Capacitaciones *enlace;
     struct En_Capacitaciones *sig;
 };
 
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
-struct insertarInfraestructura (string nombrCant,string nombrInfra){
+void insertarInfraestructura(){
     struct Canton *tempCant = buscarCanton(nombrCant);
     struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
     if((tempCant != NULL) && (tempInf != NULL)){
@@ -144,7 +144,7 @@ struct insertarInfraestructura (string nombrCant,string nombrInfra){
         nn->sig = tempInf->En_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo En_Infraestructura (sig).
         tempInf->En_Infra = nn; // se corre el primero de En_Infraestructura (sublista)
     }
-};
+}
 
 /*
 struct asignarPrograma(){
@@ -370,7 +370,7 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	fflush(stdin);
 	cout<<"Ingrese el nombre del canton: ";
 	getline(cin,nom);
-	fflush(stdin);
+	//fflush(stdin);
 	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
 	getline(cin,p);
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
