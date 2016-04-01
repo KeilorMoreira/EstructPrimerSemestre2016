@@ -13,6 +13,7 @@ struct Puestos*buscarPuestos(string);
 struct Formacion*buscarFormacion(string);
 struct Capacitaciones*buscarCapacitaciones(string);
 struct Convenios*buscarConvenios(string);
+struct Infraestructura *buscarInfraestructura(string);
 
 
 
@@ -21,20 +22,22 @@ struct Convenios*buscarConvenios(string);
 // ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
 struct Programas{//Lista circular con insercion al inicio
+    string ID;
 	string nombre;
+	string tipo;
 	string fecha;
 	string lugar;
 	string hora;
 	struct Programas *sig;
-	Programas(string nom , string fe, string lu, string ho){
+	Programas(string Id, string nom , string tip, string fe, string lu, string ho){
+	    ID = Id;
 		nombre = nom;
+		tipo = tip;
 		fecha = fe;
 		lugar = lu;
 		hora = ho;
 		sig = NULL;
-
 	}
-
 }*listaProgramas;// Puntero de Programas
 
 struct Infraestructura{//Lista doble con insercion al final
@@ -42,7 +45,7 @@ struct Infraestructura{//Lista doble con insercion al final
 	string administrada;
 	string compartida;
 	struct Infraestructura *ant, *sig;
-	struct Infraestructura *En_Infra; // Nodo de enlace
+	struct sublista_Infraestructura *Sub_Infra; // Nodo de enlace
 	Infraestructura(string nombre, string adm,  string com){
 		administrada = adm;
 		compartida = com;
@@ -115,11 +118,11 @@ struct En_Programas{
     struct En_Programas *sig;
 };
 // Enlace cantones - Infraestructura
-struct En_Infraestructura{
+struct sublista_Infraestructura{
     //string nombre;
     //string ubicacion;
-    struct Infraestructura *enlace;
-    struct En_Infraestructura *sig;
+    struct Cantones *enlace;
+    struct sublista_Infraestructura *sig;
 };
 //Enlace cantones - convenios
 struct En_Convenios{
@@ -135,14 +138,14 @@ struct En_Capacitaciones{
 
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
 
-struct insertarInfraestructura (string nombrCant,string nombrInfra){
-    struct Canton *tempCant = buscarCanton(nombrCant);
+void insertarInfraestructura (string nombrCant,string nombrInfra){
+    struct Cantones *tempCant = buscarCanton(nombrCant);
     struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
     if((tempCant != NULL) && (tempInf != NULL)){
-        struct En_Infraestructura *nn = new En_Infraestructura();
-        nn->enlace = tempCant; // Nodo de enlace dentro de nn de tipo En_Infraestructura(sublista) se relaciona al nodo de canton correspondiente.
-        nn->sig = tempInf->En_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo En_Infraestructura (sig).
-        tempInf->En_Infra = nn; // se corre el primero de En_Infraestructura (sublista)
+        struct sublista_Infraestructura *nn = new sublista_Infraestructura();
+        nn->enlace = tempCant; // Nodo de enlace dentro de nn de tipo sublista_Infraestructura(sublista) se relaciona al nodo de canton correspondiente.
+        nn->sig = tempInf->Sub_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo sublista_Infraestructura (sig).
+        tempInf->Sub_Infra = nn; // se corre el primero de sublista_Infraestructura (sublista)
     }
 };
 
@@ -667,10 +670,14 @@ struct MiembrosComite *buscarMiembro(int ID){
 
 //  --- Programas --- //
 
-struct Programas *buscarPrograma()
+struct Programas *buscarPrograma(){
 
-struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
-    struct Programas * nn = new Programas(nomp,fe,lu,ho);
+
+
+};
+
+struct Programas * insertar( struct Programas * Lista, string Id, string nomp , string tip, string fe, string lu , string ho){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
+    struct Programas * nn = new Programas(Id, nomp, tip, fe, lu, ho);
     if(Lista == NULL){
         Lista = nn;
         Lista->sig = Lista;//se hace circular
@@ -700,11 +707,15 @@ struct Programas * insertar(string nomp , string fe, string lu , string ho, stru
 
 void datosProgramas(){
 	string nomp;
+	string tip;
 	string fe;
 	string lu;
 	string ho;
+	string ID;
 	cout<<"\nEscriba el nombre del programa\n";
 	getline(cin,nomp);
+	cout<<"\nEscriba el tipo del programa\n";
+	getline(cin,tip);
 	cout<<"\nFecha del programa\n";
 	getline(cin,fe);
 	cout<<"\nEscriba el nombre del lugar\n";
@@ -713,7 +724,7 @@ void datosProgramas(){
 	getline(cin,ho);
 	cout<<"\nSe agregado correctamente"<<endl;
 
-    listaProgramas = insertar(nomp , fe, lu , ho,listaProgramas);
+    listaProgramas = insertar(listaProgramas, ID, nomp , tip, fe, lu , ho);
     }
 
 /*
@@ -779,9 +790,9 @@ void cargarDatos(){
     //imprimirPuestos(listaPuestos);
 
     //
-	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
-	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
-	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
+	listaProgramas = insertar(listaProgramas, "Cod_01","Natacion" , "Deportivo", "mayo 14", "piscina TEC" , "10:00 am");
+	listaProgramas = insertar(listaProgramas, "Cod_02","Yoga" , "Recreativo", "mayo 14", "Polideportivo TEC" , "11:00 am");
+	listaProgramas = insertar(listaProgramas, "Cod_03","Futbol sala" , "Deportivo" , "mayo 15", "CanchaTEC" , "8:00 am");
     //
     insertarFormacion("Programa");
     insertarFormacion("Doctorado");
