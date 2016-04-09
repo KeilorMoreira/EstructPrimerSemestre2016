@@ -1,0 +1,5 @@
+Metodo para insertar matricula
+
+nn->enlaceCuros = tempC; // asigno el nodo buscado tipo Curso al enlaceCurso dentro de matricula. 
+nn->sig  = tempE->enlaceMatricula; // asigno el puntero siguiente en matricula hacia enlaceMatricula en Estudiante.
+tempE->enlaceMatricula = nn; // Muevo primero de matricula, de enlaceMatricula en Estudiante hacia nuevo nodo.

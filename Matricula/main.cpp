@@ -15,6 +15,10 @@ struct Curso{
 struct Matricula{
     struct Curso *enlace;//enlace hacia el curso a matricular
     struct Matricula *sig;
+    Matricula(){
+    	enlace = NULL;
+    	sig = NULL;
+	}
 };
 
 ////Estructura Estudiante
