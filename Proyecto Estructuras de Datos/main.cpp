@@ -113,13 +113,14 @@ struct Capacitaciones{//lista simple
 }*listaCapacitaciones;// puntero capacitacion
 
 
-//   #################### ESTRUCTURAS DE ENLACE ################# //
+//   #################### SUBLISTAS DE ENLACE ################# //
 
 //Enlace cantones - programas
 struct En_Programas{
     struct Programas *enlace;
     struct En_Programas *sig;
 };
+
 // Enlace cantones - Infraestructura
 struct sublista_Infraestructura{
     //string nombre;
@@ -127,11 +128,13 @@ struct sublista_Infraestructura{
     struct Cantones *enlace;
     struct sublista_Infraestructura *sig;
 };
+
 //Enlace cantones - convenios
 struct En_Convenios{
     struct Convenios *enlace;
     struct En_Convenios *sig;
 };
+
 // Enlace miembrosComite - Capacitaciones
 struct En_Capacitaciones{
     struct Capacitaciones *enlace;
@@ -139,7 +142,7 @@ struct En_Capacitaciones{
 };
 
 
-// #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
+// #################### ASIGNACION RELACIONAL ################# //
 
 //void insertarInfraestructura(){
     //struct Canton *tempCant = buscarCanton(nombrCant);
@@ -379,6 +382,7 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 }
 
 }
+
 
 void datosCantones(){//funcion que pide los datos para agregar un canton y provincia
 	string nom;
