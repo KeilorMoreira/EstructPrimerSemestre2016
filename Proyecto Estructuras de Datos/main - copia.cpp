@@ -3,40 +3,53 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
+#include <windows.h>
+#include <stdlib.h>
+#include <locale.h> // permite utilizar el idioma local, para acentos u otros.
+
 
 using namespace std;
 
 //Prototipos
-struct Puestos *buscarPuestos(string);
-struct Formacion *buscarFormacion(string);
+struct Cantones*buscarCanton(string);
+struct Puestos*buscarPuestos(string);
+struct Formacion*buscarFormacion(string);
+struct Capacitaciones*buscarCapacitaciones(string);
+struct Convenios*buscarConvenios(string);
+struct Infraestructura *buscarInfraestructura(string);
+
+
 
 
 
 // ###########################  ESTRUCTURAS QUE SE RELACIONAN A LA ESTRUCTURA PRINCIPAL CANTONES ################ //
 
 struct Programas{//Lista circular con insercion al inicio
-	string nombrePrograma;
+    string ID;
+	string nombre;
+	string tipo;
 	string fecha;
 	string lugar;
 	string hora;
 	struct Programas *sig;
-	Programas(string nom , string fe, string lu, string ho){
-		nombrePrograma = nom;
+	Programas(string Id, string nom , string tip, string fe, string lu, string ho){
+	    ID = Id;
+		nombre = nom;
+		tipo = tip;
 		fecha = fe;
 		lugar = lu;
 		hora = ho;
 		sig = NULL;
-
 	}
-
 }*listaProgramas;// Puntero de Programas
 
 struct Infraestructura{//Lista doble con insercion al final
+    string nombre;
 	string administrada;
 	string compartida;
-	struct Infraestructura *sig;
-	struct Infraestructura *ant;
-	Infraestructura(string adm,  string com){
+	struct Infraestructura *ant, *sig;
+	struct sublista_Infraestructura *Sub_Infra; // Nodo de enlace
+	Infraestructura(string nombre, string adm,  string com){
 		administrada = adm;
 		compartida = com;
 		sig = NULL;
@@ -69,19 +82,17 @@ struct MiembrosComite{
 }*listaMiembros;//Puntero miembros Comite
 
 // ##   Estructuras que se relacionan con MiembrosComite ## //
-
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
-	int Id;
 	struct Puestos *sig;
-	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
+	struct miembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
 	Puestos(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
 }*listaPuestos;// Puntero de puestos
 
-struct Formacion{
+struct Formacion{ // Lista simple
 	string nombre;
 	struct Formacion *sig;
 	struct MiembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de formacion por medio de un enlace
@@ -95,11 +106,11 @@ struct Formacion{
 struct Capacitaciones{//lista simple
 	string nombre;
 	struct Capacitaciones *sig;
-	Capacitaciones(string  nom){
+	Capacitaciones(string nom){
 		nombre = nom;
 		sig = NULL;
 	}
-}*listaCapacitacion;// puntero capacitacion
+}*listaCapacitaciones;// puntero capacitacion
 
 
 //   #################### ESTRUCTURAS DE ENLACE ################# //
@@ -110,9 +121,11 @@ struct En_Programas{
     struct En_Programas *sig;
 };
 // Enlace cantones - Infraestructura
-struct En_Infraestructura{
-    struct Infraestructura *enlace;
-    struct En_Infraestructura *sig;
+struct sublista_Infraestructura{
+    //string nombre;
+    //string ubicacion;
+    struct Cantones *enlace;
+    struct sublista_Infraestructura *sig;
 };
 //Enlace cantones - convenios
 struct En_Convenios{
@@ -121,11 +134,25 @@ struct En_Convenios{
 };
 // Enlace miembrosComite - Capacitaciones
 struct En_Capacitaciones{
-    struct Capacitaciones * enlace;
+    struct Capacitaciones *enlace;
     struct En_Capacitaciones *sig;
 };
 
+
 // #################### ESTRUCTURAS DE ASIGNACION RELACIONAL ################# //
+
+//void insertarInfraestructura(){
+    //struct Canton *tempCant = buscarCanton(nombrCant);
+void insertarInfraestructura (string nombrCant,string nombrInfra){
+    struct Cantones *tempCant = buscarCanton(nombrCant);
+    struct Infraestructura *tempInf = buscarInfraestructura(nombrInfra);
+    if((tempCant != NULL) && (tempInf != NULL)){
+        struct sublista_Infraestructura *nn = new sublista_Infraestructura();
+        nn->enlace = tempCant; // Nodo de enlace dentro de nn de tipo sublista_Infraestructura(sublista) se relaciona al nodo de canton correspondiente.
+        nn->sig = tempInf->Sub_Infra; // Nodo de enlace dentro de nodo tipo Infraenstructura (En_infra) se relaciona al sig dentro del nodo tipo sublista_Infraestructura (sig).
+        tempInf->Sub_Infra = nn; // se corre el primero de sublista_Infraestructura (sublista)
+    }
+}
 
 /*
 struct asignarPrograma(){
@@ -135,10 +162,6 @@ struct asignarPrograma(){
 
 
 struct asignarConvenio(){
-
-};
-
-struct asignarInfraestructura(){
 
 };
 
@@ -169,6 +192,143 @@ struct Cantones{
 	}
 
 }*listaCantones;//Primero de la estructura cantones
+
+// ############ ESTRUCTURA IMPRIMIR ########### //
+void imprimir(string lista){
+
+    if(lista == "cantones"){ // Cantones, lista doble.
+        struct Cantones *temp = listaCantones;
+        if (temp == NULL){
+
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        system("cls");
+        cout<<"\n~~~~~~~~~~~~~~~~  CANTONES ~~~~~~~~~~~~~~~~"<<endl;
+        while(temp != NULL){
+
+                cout<<"Nombre:   \t"<<temp->nombre<<endl;
+                cout<<"Provincia:\t"<<temp->provincia<<endl<<endl;
+                temp= temp->sig;
+                }
+        cout<<"~~~~~~~~~~~~~~~~     UL    ~~~~~~~~~~~~~~~~"<<endl;
+        system("pause");
+        return;
+    }
+
+    else if(lista == "programas"){ // Programas, lista circular.
+        struct Programas *temp = listaProgramas;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        do{
+            if(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"Fecha: "<<temp->fecha<<endl;
+                cout<<"Lugar: "<<temp->lugar<<endl;
+                cout<<"Hora: "<<temp->hora<<endl;
+                temp = temp->sig;
+            }
+        }while(temp != listaProgramas);
+        return;
+    }
+
+    else if(lista == "infraestructuras"){ // Infraestructuras, lista doble.
+        struct Infraestructura *temp = listaInfraestructura;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Administrada: "<<temp->administrada<<endl;
+                cout<<"Compartida: "<<temp->compartida<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+
+    }
+
+    else if(lista == "convenios"){ // Convenios, lista simple.
+        struct Convenios *temp = listaConvenios;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "miembros"){ // MiembrosComite, lista simple.
+        struct MiembrosComite *temp = listaMiembros;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"ID: "<<temp->identificador<<endl;
+                temp= temp->sig;
+                }
+        return;
+    }
+
+    else if(lista == "puestos"){ // Puestos, lista simple.
+        struct Puestos *temp = listaPuestos;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "formaciones"){ // Formacion, lista simple.
+        struct Formacion *temp = listaFormacion;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+    else if(lista == "capacitaciones"){ // Capacitaciones
+        struct Capacitaciones *temp = listaCapacitaciones;
+        if (temp == NULL){
+            cout<<"La lista se encuentra vacia.\n";
+            system("pause");
+            return;
+            }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                temp= temp->sig;
+                }
+        return;
+
+    }
+
+}
 
 // #############################   METODOS VARIOS ############################ //
 
@@ -223,28 +383,46 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 void datosCantones(){//funcion que pide los datos para agregar un canton y provincia
 	string nom;
 	string p;
-	cout<<"\nIngrese el nombre del canton: "<<endl;
+	fflush(stdin);
+	cout<<"Ingrese el nombre del canton: ";
 	getline(cin,nom);
-	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
+	fflush(stdin);
+	cout<<"\nIngrese el nombre de la provincia del canton: ";
 	getline(cin,p);
-
+	fflush(stdin);
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
 
-void insertarPuestos(string nom){//inserta al inicio de la lista simple
-    struct Puestos*buscador=buscarPuestos(nom);
-    if(buscador!=NULL)
-        cout<<"\nEse puesto ya existe\n";
-    else{
-        struct Puestos*nuevoPuesto=new Puestos(nom);
-        nuevoPuesto->sig=listaPuestos;
-        listaPuestos=nuevoPuesto;
-        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
-    }
-}
+struct Cantones *buscarCanton (string nombre){
+    struct Cantones *temp = listaCantones; // nodo temporal tipo Cantones
+    if(temp == NULL)
+        return NULL;
+    do{
+        if (temp->nombre == nombre) //si el atributo nombre del nodo es igual a variable nombre.
+            return temp; // retorno nodo
+        temp = temp->sig; //avanzo al siguiente nodo
+    }while(temp != listaCantones); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
+    return NULL; // en caso de no coincidir ningun nodo, retorna NULL
+};
 
+/*
+void imprimirCantones(){
+        struct Cantones *temp = listaCantones;
+        if (temp == NULL){
+            cout<<"La lista de cantones se encuentra vacia";
+            return;
+        }
+        while(temp != NULL){
+                cout<<"Nombre: "<<temp->nombre<<endl;
+                cout<<"Provincia: "<<temp->provincia<<endl;
+                temp= temp->sig;
+        }
+        return;
+}
+*/
 
 //  --- Puestos --- //
+/*
 void imprimirPuestos(struct Puestos*primero){//funcion que imprime
     struct Puestos*temp=primero;
     if(temp==NULL)
@@ -257,6 +435,19 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
         }
     }
     cout<<"------------ULTIMA LINEA-----------------";
+}
+*/
+
+void insertarPuestos(string nom){//inserta al inicio de la lista simple
+    struct Puestos*buscador=buscarPuestos(nom);
+    if(buscador!=NULL)
+        cout<<"\nEse puesto ya existe\n";
+    else{
+        struct Puestos*nuevoPuesto=new Puestos(nom);
+        nuevoPuesto->sig=listaPuestos;
+        listaPuestos=nuevoPuesto;
+        //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
+    }
 }
 
 struct Puestos *buscarPuestos(string nom){
@@ -277,23 +468,14 @@ struct Puestos *buscarPuestos(string nom){
 
 void datosPuestos(){
 	string nom;
-	int id;
-	cout<<"\nNombre del puesto: "<<endl;
+	fflush(stdin);
+	cout<<"\nNombre del puesto: ";
 	getline(cin,nom);
-
+	fflush(stdin);
+	cout<<"Puesto agregado\n";
 	insertarPuestos(nom);
 
 }
-
-void imprimirPuestos(){//funcion para imprimir la lista de puestos
-    struct Puestos * temp = listaPuestos;
-    while(temp != NULL){
-        cout<<temp->nombre<<"  "<<endl;
-        temp = temp->sig;
-    }
-    cout<<"\n-------------------Fin de lista de puestos--------------\n\n";
-}
-
 
 //  --- Formacion Profesional --- //
 void insertarFormacion(string n){//Insercion al final de una lista simple
@@ -317,6 +499,7 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
     }
 }
 
+/*
 void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     struct Formacion*temp=primero;
     if(temp==NULL)
@@ -330,6 +513,7 @@ void imprimirFormacion(struct Formacion*primero){//Imprime la lista de formacion
     }
     cout<<"------------ULTIMA LINEA-----------------";
 }
+*/
 
 struct Formacion*buscarFormacion(string n){
     if(listaFormacion==NULL){//si no hay formacion
@@ -349,8 +533,9 @@ struct Formacion*buscarFormacion(string n){
 
 void datosFormacion(){
 	string nom;
+	fflush(stdin);
 	cout<<"\n Nombre de la formacion\n";
-	getline(cin,nom);
+	cin>>nom;
 	cout<<"\nFormacion agregada correctamente\n";
 
 
@@ -361,23 +546,109 @@ void datosFormacion(){
 
 //  --- Capacitaciones --- //
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
-	struct Capacitaciones * nn = new Capacitaciones(nom);
+   struct Capacitaciones*buscador=buscarCapacitaciones(nom);
+   if(buscador!=NULL)
+   cout<<"\nEsa capacitacion ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Capacitaciones*nuevoCapacitaciones=new Capacitaciones(nom);
+	nuevoCapacitaciones->sig=listaCapacitaciones;
+	listaCapacitaciones=nuevoCapacitaciones;
+    }
+}
 
-	nn->sig = listaCapacitacion;
-	listaCapacitacion = nn;
-	cout<<"\n Capacitacion agregado correctamente\n";
+/*
+void imprimirCapacitaciones(struct Capacitaciones*primero){//funcion que imprime
+    struct Capacitaciones*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Capacitaciones\n";
+    else{
+        cout<<"Nombre\t\tID\t\t\t"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<"\t\t"<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}
+*/
 
-
+struct Capacitaciones *buscarCapacitaciones(string nom){
+    if(listaCapacitaciones==NULL){
+        return NULL;
+    }
+    else{
+        struct Capacitaciones*temp=listaCapacitaciones;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
 }
 
 void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
-	cout<<"\nNombre de la Capacitacion\n";
-	cin>> nom;
-
+	fflush(stdin);
+	cout<<"\nNombre de la Capacitacion: ";
+	getline(cin,nom);
+	fflush(stdin);
 	insertarCapacitacion(nom);
 }
 
+void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
+   struct Convenios*buscador=buscarConvenios(nom);
+   if(buscador!=NULL)
+   cout<<"\nEse convenio ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Convenios*nuevoConvenio=new Convenios(nom);
+	nuevoConvenio->sig=listaConvenios;
+	listaConvenios=nuevoConvenio;
+    }
+}
+
+/*
+void imprimirConvenios(struct Convenios*primero){//funcion que imprime los convenios
+    struct Convenios*temp=primero;
+    if(temp==NULL)
+        cout<<"\nNo hay Convenios\n";
+    else{
+        cout<<"Nombre\t\tID\t\t\t"<<endl;
+        while(temp!=NULL){
+            cout<<"\n"<<temp->nombre<<"\t\t"<<endl;
+            temp=temp->sig;
+        }
+    }
+    cout<<"------------ULTIMA LINEA-----------------";
+}
+*/
+
+struct Convenios *buscarConvenios(string nom){
+    if(listaConvenios==NULL){
+        return NULL;
+    }
+    else{
+        struct Convenios*temp=listaConvenios;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+}
+
+void datosConvenios(){
+	string nom;
+	fflush(stdin);
+	cout<<"\nEscriba el nombre del convenio\n";
+	getline(cin,nom);
+	fflush(stdin);
+	cout<<"\nSe agregado correctamente\n";
+	insertarConvenios(nom);
+}
 
 //  --- MiembrosComite --- //
 void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio los miembros del comite
@@ -390,60 +661,94 @@ void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio 
 void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	string nom;
 	int Id;
+	fflush(stdin);
 	cout<<"\nNombre del miembro del comite\n";
-	cin>>nom;
+	getline(cin,nom);
+	fflush(stdin);
 	cout<<"\nIdentificador del miembro del comite\n";
 	cin>>Id;
-
+	fflush(stdin);
 	insertarMiembrosComite(nom,Id);
 }
 
+struct MiembrosComite *buscarMiembro(int ID){
+    if(listaMiembros==NULL){
+        return NULL;
+    }
+    else{
+        struct MiembrosComite*temp=listaMiembros;
+        while(temp!=NULL){
+            if(temp->identificador==ID){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+
+};
 
 //  --- Programas --- //
+/*
+struct Programas *buscarPrograma(){
 
-struct Programas * insertar(string nomp , string fe, string lu , string ho, struct Programas * Lista){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
-    struct Programas * nn = new Programas(nomp,fe,lu,ho);
+
+
+};
+*/
+
+struct Programas * insertar( struct Programas * Lista, string Id, string nomp , string tip, string fe, string lu , string ho){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
+    struct Programas * nn = new Programas(Id, nomp, tip, fe, lu, ho);
     if(Lista == NULL){
         Lista = nn;
         Lista->sig = Lista;//se hace circular
-
-    }
+        }
     else{// se insertará al inicio de la lista circular
-
         struct Programas *temp = Lista;
         while(temp->sig!= Lista)
             temp= temp->sig;
-
         nn->sig = Lista;
         temp->sig = nn;
-
         Lista = nn;
         {
         	return Lista;//retorna la lista modificada, osea con un elemento más
 		}
     }
 
-    //cout<<"\nSe agregado correctamente";
+    cout<<"\nSe agregado correctamente";
+        {
+    }
 }
 
 void datosProgramas(){
 	string nomp;
+	string tip;
 	string fe;
 	string lu;
 	string ho;
+	string ID;
+	fflush(stdin);
 	cout<<"\nEscriba el nombre del programa\n";
 	getline(cin,nomp);
+	fflush(stdin);
+	cout<<"\nEscriba el tipo del programa\n";
+	getline(cin,tip);
+	fflush(stdin);
 	cout<<"\nFecha del programa\n";
 	getline(cin,fe);
+	fflush(stdin);
 	cout<<"\nEscriba el nombre del lugar\n";
 	getline(cin,lu);
+	fflush(stdin);
 	cout<<"\nHora del programa a realizar\n";
 	getline(cin,ho);
+	fflush(stdin);
 	cout<<"\nSe agregado correctamente"<<endl;
 
-    listaProgramas = insertar(nomp , fe, lu , ho,listaProgramas);
+    listaProgramas = insertar(listaProgramas, ID, nomp , tip, fe, lu , ho);
     }
 
+/*
 void imprimirProgramas(){
     struct Programas * temp = listaProgramas; //Se establece un nodo temporal igual al primer nodo
     for(;temp!=NULL; temp = temp->sig){ // Se encicla el for para que recorra la lista.
@@ -454,69 +759,56 @@ void imprimirProgramas(){
         if(temp->sig == listaProgramas) // Punto de parada cuando el nodo siguiente sea igual al primero.
             return;
     }
+}
+*/
 
+//  --- Infraestructuras --- //
 
+//insertar al inicio de la lista doble
+void insertarInfraestructuras(string nom, string adm,  string com){
 
+    struct Infraestructura *nn = new Infraestructura(nom, adm, com);
 
+    nn->ant = listaInfraestructura;
 
+    if (listaInfraestructura!= NULL)
+        listaInfraestructura->sig = nn;
 
-
-
-
-
-
+    listaInfraestructura = nn;
 }
 
+void datosInfraestructura(){
+	string nom;
+	string adm;
+	string com;
+	fflush(stdin);
+	cout<<"\nNombre de la infraestructura:\n";
+	getline(cin,nom);
+	fflush(stdin);
+	cout<<"\nNombre de la infraestructura administrada:\n";
+	getline(cin,adm);
+	fflush(stdin);
+	cout<<"\nNombre de la infraestrura compartida:\n";
+	getline(cin,com);
+	fflush(stdin);
+	cout<<"\nInfraestructura agregada correctamente\n";
+	insertarInfraestructuras(nom,adm,com);
+}
 
-
-
-void menu(){//funcion del men aqui se maneja lo que el usuario desea realizar
-    int opcion = 0;
-    while(true){
-        cout<<"\n1. Insertar Canton.  ";
-        cout<<"\n2. Insertar Puestos.  ";
-        cout<<"\n3. Imprimir Puestos.  ";
-        cout<<"\n4  Insertar Capacitacion. ";
-        cout<<"\n5  Insertar Miembro del comite.";
-        cout<<"\n6  Insertar Programas.";
-        cout<<"\n7  imprimir Programas.";
-        cout<<"\n8  Insertar formacion.";
-        cout<<"\n-1. Salir.  ";
-
-        cin >> opcion;
-
-        if(opcion == 1){
-            datosCantones();
-        }
-        else if(opcion == 2){
-            datosPuestos();
-        }
-        else if(opcion == 3){
-            imprimirPuestos();
-         }
-        else if(opcion == 4){
-        	datosCapacitacion();
-        }
-        else if(opcion == 5){
-        	datosMiembroComite();
-        }
-        else if(opcion == 6){
-        	datosProgramas();
-		}
-		else if(opcion ==7){
-            imprimirProgramas();
-		}
-		else if(opcion ==8){
-			datosFormacion();
-	    }
-		else if(opcion == -1){
-            return ;
-		}
+struct Infraestructura *buscarInfraestructura(string nomb){
+    if(listaConvenios==NULL){
+        return NULL;
     }
-}
+    struct Infraestructura* temp = listaInfraestructura;
+    do{
+        if(temp->nombre == nomb)
+            return temp;
+        temp = temp->sig;
+    }while(temp != NULL);
+    return NULL;
+};
 
-
-cargarDatos(){
+void cargarDatos(){
 	// ########### Datos precargados ################ //
 	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
 	insertarCantones("Santo Domingo","Heredia");
@@ -528,6 +820,7 @@ cargarDatos(){
 	insertarCantones("San Carlos","Alajuela");
 	insertarCantones("San Ramon","Alajuela");
 	insertarCantones("Santa Barbara","Heredia");
+	imprimir("cant");
 
 	//
     insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
@@ -542,11 +835,11 @@ cargarDatos(){
     //imprimirPuestos(listaPuestos);
 
     //
-	listaProgramas = insertar("Natacion" , "mayo 14", "piscina TEC" , "10:00 am", listaProgramas);
-	listaProgramas = insertar("Ajedres" , "mayo 14", "Polideportivo TEC" , "11:00 am", listaProgramas);
-	listaProgramas = insertar("Futbol sala" , "mayo 15", "CanchaTEC" , "8:00 am", listaProgramas);
+	listaProgramas = insertar(listaProgramas, "Cod_01","Natacion" , "Deportivo", "mayo 14", "piscina TEC" , "10:00 am");
+	listaProgramas = insertar(listaProgramas, "Cod_02","Yoga" , "Recreativo", "mayo 14", "Polideportivo TEC" , "11:00 am");
+	listaProgramas = insertar(listaProgramas, "Cod_03","Futbol sala" , "Deportivo" , "mayo 15", "CanchaTEC" , "8:00 am");
     //
-    insertarFormacion("Programa");
+    insertarFormacion("Programador");
     insertarFormacion("Doctorado");
     insertarFormacion("Maestria");
     insertarFormacion("Segundaria");
@@ -556,13 +849,196 @@ cargarDatos(){
     insertarFormacion("Bachiderato");
     insertarFormacion("Universetaria");
     insertarFormacion("Colegio");
-    insertarFormacion("Programa 10");
     //imprimirFormacion(listaFormacion);
 }
 
+void menuAdministracion(){
+    int opcion = 0;
+        /* Tabla de colores.
+        0 = Negro
+        1 = Azul
+        2 = Verde
+        3 = Aguamarina
+        4 = Rojo
+        5 = Purpura
+        6 = Amarillo
+        7 = Blanco
+        8 = Gris
+        9 = Azul claro
+        A = Verde claro
+        B = Aguamarina claro
+        C = Rojo claro
+        D = Purpura claro
+        E = Amarillo claro
+        F = Blanco brillante
+        */
+        system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
+    while(true){
+        system("cls");
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"**** Menu de Administración ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
+
+        cout<<"\n [1] Insertar Cantón.";
+        //cout<<"\n [2] Eliminar Cantón.";
+        cout<<"\n [3] Imprimir Cantones.\n";
+
+        cout<<"\n [4] Insertar Puesto.";
+        //cout<<"\n [5] Eliminar Puesto.";
+        cout<<"\n [6] Imprimir Puestos.\n";
+
+        cout<<"\n [7] Insertar Capacitación.";
+        //cout<<"\n [8] Eliminar Capacitación.";
+        cout<<"\n [9] Imprimir Capacitaciones.\n";
+
+        cout<<"\n[10] Insertar Miembro a Comité.";
+        cout<<"\n[11] Eliminar Miembro a Comité.";
+        cout<<"\n[12] Imprimir Miembros del Comité.\n";
+
+        cout<<"\n[13] Insertar Programa.";
+        //cout<<"\n[14] Eliminar Programa.";
+        cout<<"\n[15] Imprimir Programas.\n";
+
+        cout<<"\n[16] Insertar Formación Académica.";
+        //cout<<"\n[17] Eliminar Formación Académica.";
+        cout<<"\n[18] Imprimir Formación Académica.\n";
+
+        cout<<"\n[19] Insertar Convenio.";
+        //cout<<"\n[20] Eliminar Convenio.";
+        cout<<"\n[21] Imprimir Convenios.\n";
+
+        cout<<"\n[22] Insertar Infraestructura.";
+        cout<<"\n[23] Eliminar Infraestructura.";
+        cout<<"\n[24] Imprimir Infraestructuras.\n";
+
+        cout<<"\n[-1] Atras.\n________________________________\n\n>>> ";
+
+        cin>>opcion;
+
+        if(opcion == 1){
+            datosCantones();
+        }
+        else if(opcion == 2){
+            // eliminar cantones
+        }
+        else if(opcion == 3){
+            imprimir("cantones");
+         }
+        else if(opcion == 4){
+        	datosPuestos();
+        }
+        else if(opcion == 5){
+        	//eliminar un puesto
+        }
+        else if(opcion == 6){
+        	imprimir("puestos");
+		}
+		else if(opcion ==7){
+            datosCapacitacion();
+		}
+		else if(opcion ==8){
+			// eliminar capacitacion
+	    }
+		else if(opcion == 9){
+            imprimir("capacitaciones");
+
+        }
+        else if(opcion == 10){
+        	datosMiembroComite();
+		}
+		else if(opcion == 11){
+            //eliminar miembro
+		}
+		else if(opcion == 12){
+            imprimir("miembros");
+		}
+		else if(opcion == 13){
+            datosProgramas();
+		}
+		else if(opcion == 14){
+            // eliminar programa
+		}
+		else if(opcion == 15){
+            imprimir("programas");
+		}
+		else if(opcion == 16){
+            datosFormacion();
+		}
+		else if(opcion == 17){
+            // eliminar formacion
+		}
+		else if(opcion == 18){
+            imprimir("formaciones");
+		}
+		else if(opcion == 19){
+            datosConvenios();
+		}
+		else if(opcion == 20){
+            //eliminar convenio
+		}
+		else if(opcion == 21){
+            imprimir("convenios");
+		}
+		else if(opcion == 22){
+            datosInfraestructura();
+		}
+		else if(opcion == 23){
+            //eliminar infraestructura
+		}
+		else if(opcion == 24){
+            imprimir("infraestructuras");
+		}
+		else if(opcion == -1){
+            system("cls");
+            return ;
+		}
+    }
+}
+
+void menuConsultas(){
+
+}
+
+void menuReportes(){
+
+}
+
+void menu(){//funcion del menu aqui se maneja lo que el usuario desea realizar
+    int opcion = 1;
+    while(true){
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"****          MENU          ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
+        cout<<"\n[1]  Menu de Administración.";
+        cout<<"\n[2]  Menu de Consultas.";
+        cout<<"\n[3]  Menu de Reportes.\n";
+        cout<<"\n[-1] Salir del Programa.\n________________________________\n\n>>> ";
+        //cin >> opcion;
+
+        if(opcion == 1){
+            menuAdministracion();
+        }
+        else if(opcion == 2){
+            menuConsultas();
+        }
+        else if(opcion == 3){
+            menuReportes();
+        }
+        else if(opcion == -1){
+            return;
+        }
+    }
+
+}
+
 int main(){
-	cargarDatos();
+    setlocale(LC_CTYPE, "Spanish"); // para que se reconozcan las tildes.
+	//cargarDatos();
     menu();
-    cout<<"\n\n\n\nFIN";
+
 	return 0;
 }
