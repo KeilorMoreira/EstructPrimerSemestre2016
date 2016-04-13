@@ -86,10 +86,10 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 			temp1->ant= nn;
 			// cout<<"Se agrego el Canton"<<endl;
 		}
-		else
+		//else
 		{
-			temp2->sig= nn;
-			nn->ant= temp2;
+			//temp2->sig= nn;
+			//nn->ant= temp2;
 			// cout<<"Se agrego el Canton"<<endl;
 		}
 	}
@@ -385,7 +385,7 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
     struct Cantones * cantonBuscado = buscarCanton(cant);
     struct Puestos * puestoBuscado = buscarPuestos(puest);
     struct Formaciones * formacionBuscada = buscarFormacion(form);
-    struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
+    //struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 
     if( cantonBuscado == NULL){
         cout<<"Canton no encontrado, favor verificar";
@@ -402,11 +402,11 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
         system("pause");
         return;
     }
-    if(capacitacionBuscada == NULL){
-        cout<<"Capacitación no encontrada, favor verificar";
-        system("pause");
-        return;
-        }
+    //if(capacitacionBuscada == NULL){
+        //cout<<"Capacitación no encontrada, favor verificar";
+        //system("pause");
+       // return;
+        //}
 
         struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nomb);
         for(;cantonBuscado->enlaceSubMiembros->sig!=NULL;cantonBuscado->enlaceSubMiembros->sig=cantonBuscado->enlaceSubMiembros){
@@ -416,21 +416,42 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
             }
         }// Si sale del for se valida correctamente y no es un dato repetido.
 
-        nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
-        cantonBuscado->enlaceSubMiembros = nuevoMiembro;
+
 
         nuevoMiembro->enlacePuesto = puestoBuscado;
         nuevoMiembro->enlaceFormacion = formacionBuscada;
-
-        struct subListaCapacitaciones * nuevoNodo = NULL;
-        nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
-        nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
-        nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
-
-
+		
+		nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
+        cantonBuscado->enlaceSubMiembros = nuevoMiembro;
+		
+		
+		
 
 }
 
+void sublistaCapasitaciones(){
+	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones();
+	//struct subListaCapacitaciones * nuevoNodo = new sublistaCapasitaciones;
+	
+	if(capacitacionBuscada == NULL){
+        cout<<"Capacitación no encontrada, favor verificar";
+        system("pause");
+        return;
+        }
+        
+        struct sublistaCapasitaciones *nuevoNodo = new sublistaCapasitaciones();
+        for(;capacitacionBuscada->enlaceSubCapacitacion->sig!=NULL;capacitacionBuscada->enlaceSubCapacitacion->sig=capacitacionBuscada->enlaceSubCapacitacion){
+            if(capacitacionBuscada->enlaceSubCapacitacion->nombre==nom){
+                cout<<"El capasitacion ya se encuentra registrada";
+                return;
+            }
+        }// Si sale del for se valida correctamente y no es un dato repetido.
+
+        
+		nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
+		nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
+		nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
+	}
 
 void AgregarNuevoMiembro(){
     int identificacion;
@@ -652,7 +673,7 @@ void datosProgramas(){
 	getline(cin,tip);
 	cout<<"\nSe agregado correctamente"<<endl;
 
-    PProgramas = insertar(PProgramas, ID, nomp , tip, fe, lu , ho);
+    PProgramas = insertar(PProgramas, tip);
     }
 
 
@@ -663,7 +684,7 @@ struct sublista_Programas{
     string lugar;
     struct sublista_Programas *sig;
     struct Programas *enlaceProgramas;
-    sublista_Programas(string h , f , lu){
+    sublista_Programas(string h , string f ,  string lu){
         hora = h;
         fecha = f;
         lugar = lu;
