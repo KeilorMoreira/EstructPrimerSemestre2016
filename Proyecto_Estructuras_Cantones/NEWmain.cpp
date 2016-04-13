@@ -423,17 +423,11 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
 
 		nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
         cantonBuscado->enlaceSubMiembros = nuevoMiembro;
+   }
 
 
-
-
-}
-
-<<<<<<< HEAD
 void sublistaCapasitaciones(){
-=======
 struct CreaNodo_sublistaCapacitaciones(string cap){
->>>>>>> origin/master
 	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 	//struct subListaCapacitaciones * nuevoNodo = new sublistaCapasitaciones;
 
@@ -456,7 +450,7 @@ struct CreaNodo_sublistaCapacitaciones(string cap){
 		nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
 		nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
 	}
-
+}
 void AgregarNuevoMiembro(){
     int identificacion;
     string nombre, apellidos, puesto, formacion, capacitaciones;
