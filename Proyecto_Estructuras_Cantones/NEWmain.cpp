@@ -420,25 +420,29 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
 
         nuevoMiembro->enlacePuesto = puestoBuscado;
         nuevoMiembro->enlaceFormacion = formacionBuscada;
-		
+
 		nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
         cantonBuscado->enlaceSubMiembros = nuevoMiembro;
-		
-		
-		
+
+
+
 
 }
 
+<<<<<<< HEAD
 void sublistaCapasitaciones(){
+=======
+struct CreaNodo_sublistaCapacitaciones(string cap){
+>>>>>>> origin/master
 	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 	//struct subListaCapacitaciones * nuevoNodo = new sublistaCapasitaciones;
-	
+
 	if(capacitacionBuscada == NULL){
         cout<<"Capacitación no encontrada, favor verificar";
-        system("pause");
-        return;
+        //system("pause");
+        //return;
         }
-        
+
         struct sublistaCapasitaciones *nuevoNodo = new sublistaCapasitaciones();
         for(;capacitacionBuscada->enlaceSubCapacitacion->sig!=NULL;capacitacionBuscada->enlaceSubCapacitacion->sig=capacitacionBuscada->enlaceSubCapacitacion){
             if(capacitacionBuscada->enlaceSubCapacitacion->nombre==nom){
@@ -447,7 +451,7 @@ void sublistaCapasitaciones(){
             }
         }// Si sale del for se valida correctamente y no es un dato repetido.
 
-        
+
 		nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
 		nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
 		nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
