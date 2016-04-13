@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include<sstream>
 #include <cstdlib>
-#include <windows.h>
+//#include <windows.h>
 #include <stdlib.h>
 #include <locale.h> // permite utilizar el idioma local, para acentos u otros.
 
@@ -83,10 +83,12 @@ struct MiembrosComite{
 // ##   Estructuras que se relacionan con MiembrosComite ## //
 struct Puestos{//Lista simple insercion al inicio
 	string nombre;//nombre
+	int identificador;
 	struct Puestos *sig;
 	struct miembrosComite *enlaceM;// aqui conecta el struct de miembroscomite con el struct de de puestos por medio de un enlace
-	Puestos(string nom){
+	Puestos(string nom, int in){
 		nombre = nom;
+		identificador = in;
 		sig = NULL;
 	}
 }*listaPuestos;// Puntero de puestos
@@ -210,7 +212,7 @@ void imprimir(string lista){
                 cout<<"Provincia:\t"<<temp->provincia<<endl<<endl;
                 temp= temp->sig;
                 }
-        cout<<"~~~~~~~~~~~~~~~~      UL     ~~~~~~~~~~~~~~~~"<<endl;
+        cout<<"~~~~~~~~~~~~~~~~     UL    ~~~~~~~~~~~~~~~~"<<endl;
         system("pause");
         return;
     }
@@ -377,9 +379,10 @@ void datosCantones(){//funcion que pide los datos para agregar un canton y provi
 	fflush(stdin);
 	cout<<"Ingrese el nombre del canton: ";
 	getline(cin,nom);
-	//fflush(stdin);
-	cout<<"\nIngrese el nombre de la provincia del canton: "<<endl;
+	fflush(stdin);
+	cout<<"\nIngrese el nombre de la provincia del canton: ";
 	getline(cin,p);
+	fflush(stdin);
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
 }
 
@@ -428,12 +431,12 @@ void imprimirPuestos(struct Puestos*primero){//funcion que imprime
 }
 */
 
-void insertarPuestos(string nom){//inserta al inicio de la lista simple
+void insertarPuestos(string nom, int in){//inserta al inicio de la lista simple
     struct Puestos*buscador=buscarPuestos(nom);
     if(buscador!=NULL)
         cout<<"\nEse puesto ya existe\n";
     else{
-        struct Puestos*nuevoPuesto=new Puestos(nom);
+        struct Puestos*nuevoPuesto=new Puestos(nom ,in);
         nuevoPuesto->sig=listaPuestos;
         listaPuestos=nuevoPuesto;
         //cout<<"\n\nEl Puesto "<<nuevoPuesto->nombre<<" ha sido insertado";
@@ -458,11 +461,15 @@ struct Puestos *buscarPuestos(string nom){
 
 void datosPuestos(){
 	string nom;
-	cout<<"\nNombre del puesto: "<<endl;
-	cin>>nom;
+	int in;
+	fflush(stdin);
+	cout<<"\nNombre del puesto: ";
+	getline(cin,nom);
+	fflush(stdin);
+	cout<<"\nIdentificador del puesto: ";
+	cin>>in;
 	cout<<"Puesto agregado\n";
-
-	insertarPuestos(nom);
+	insertarPuestos(nom , in);
 
 }
 
@@ -522,6 +529,7 @@ struct Formacion*buscarFormacion(string n){
 
 void datosFormacion(){
 	string nom;
+	fflush(stdin);
 	cout<<"\n Nombre de la formacion\n";
 	cin>>nom;
 	cout<<"\nFormacion agregada correctamente\n";
@@ -578,9 +586,10 @@ struct Capacitaciones *buscarCapacitaciones(string nom){
 
 void datosCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
-	cout<<"\nNombre de la Capacitacion\n";
-	cin>> nom;
-
+	fflush(stdin);
+	cout<<"\nNombre de la Capacitacion: ";
+	getline(cin,nom);
+	fflush(stdin);
 	insertarCapacitacion(nom);
 }
 
@@ -629,10 +638,11 @@ struct Convenios *buscarConvenios(string nom){
 
 void datosConvenios(){
 	string nom;
+	fflush(stdin);
 	cout<<"\nEscriba el nombre del convenio\n";
-	cin>>nom;
+	getline(cin,nom);
+	fflush(stdin);
 	cout<<"\nSe agregado correctamente\n";
-
 	insertarConvenios(nom);
 }
 
@@ -647,11 +657,13 @@ void insertarMiembrosComite(string nom, int Id){//funcion que inserta al inicio 
 void datosMiembroComite(){//Funcion que pide los datos a los miembros del comite
 	string nom;
 	int Id;
+	fflush(stdin);
 	cout<<"\nNombre del miembro del comite\n";
-	cin>>nom;
+	getline(cin,nom);
+	fflush(stdin);
 	cout<<"\nIdentificador del miembro del comite\n";
 	cin>>Id;
-
+	fflush(stdin);
 	insertarMiembrosComite(nom,Id);
 }
 
@@ -711,16 +723,22 @@ void datosProgramas(){
 	string lu;
 	string ho;
 	string ID;
+	fflush(stdin);
 	cout<<"\nEscriba el nombre del programa\n";
 	getline(cin,nomp);
+	fflush(stdin);
 	cout<<"\nEscriba el tipo del programa\n";
 	getline(cin,tip);
+	fflush(stdin);
 	cout<<"\nFecha del programa\n";
 	getline(cin,fe);
+	fflush(stdin);
 	cout<<"\nEscriba el nombre del lugar\n";
 	getline(cin,lu);
+	fflush(stdin);
 	cout<<"\nHora del programa a realizar\n";
 	getline(cin,ho);
+	fflush(stdin);
 	cout<<"\nSe agregado correctamente"<<endl;
 
     listaProgramas = insertar(listaProgramas, ID, nomp , tip, fe, lu , ho);
@@ -759,12 +777,16 @@ void datosInfraestructura(){
 	string nom;
 	string adm;
 	string com;
+	fflush(stdin);
 	cout<<"\nNombre de la infraestructura:\n";
-	cin>>nom;
+	getline(cin,nom);
+	fflush(stdin);
 	cout<<"\nNombre de la infraestructura administrada:\n";
-	cin>>adm;
+	getline(cin,adm);
+	fflush(stdin);
 	cout<<"\nNombre de la infraestrura compartida:\n";
-	cin>>com;
+	getline(cin,com);
+	fflush(stdin);
 	cout<<"\nInfraestructura agregada correctamente\n";
 	insertarInfraestructuras(nom,adm,com);
 }
@@ -781,6 +803,37 @@ struct Infraestructura *buscarInfraestructura(string nomb){
     }while(temp != NULL);
     return NULL;
 };
+
+
+void modificarPuesto(string nom, int nuevoPuesto){//recibe el programa y el nuevo precio, el cual reemplazará el precio actual
+    struct Puestos *temp=buscarPuestos(nom);
+    if(temp!=NULL){
+        temp->identificador=nuevoPuesto;
+        cout<<"\n\nEl nuevo puesto "<<temp->nombre<<endl;
+    }
+    else{
+        cout<<"\nPuesto no encontrado";
+    }
+}
+
+void modificarPuestos(){//Pide los datos para modificar la funcion modificarPrecioPrograma()
+    system("cls");
+    string puesto;
+    string nuevoPuesto;
+    cout<<"\nDigite el puesto:\n>>";
+    cin>>puesto;
+    cout<<"\n\nDigite el nuevo puesto:\n>>";
+    cin>>nuevoPuesto;
+    modificarPuesto(string nom,int nuevoPuesto);
+    cout << "\n\n\ndigite cualquier letra para continuar";
+    cin>>regresar;
+    menuModificarDatos();
+
+}
+
+
+
+
 
 void cargarDatos(){
 	// ########### Datos precargados ################ //
@@ -847,8 +900,8 @@ void menuAdministracion(){
         F = Blanco brillante
         */
         system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
-        system("cls");
     while(true){
+        system("cls");
         cout<<"********************************\n";
         cout<<"****                        ****\n";
         cout<<"**** Menu de Administración ****\n";
@@ -907,7 +960,9 @@ void menuAdministracion(){
         	//eliminar un puesto
         }
         else if(opcion == 6){
+
         	//imprimir("puestos"));
+        	imprimir("puestos");
 		}
 		else if(opcion ==7){
             datosCapacitacion();
@@ -920,9 +975,49 @@ void menuAdministracion(){
 
         }
         else if(opcion == 10){
-        	datosInfraestructura();
+        	datosMiembroComite();
 		}
 		else if(opcion == 11){
+            //eliminar miembro
+		}
+		else if(opcion == 12){
+            imprimir("miembros");
+		}
+		else if(opcion == 13){
+            datosProgramas();
+		}
+		else if(opcion == 14){
+            // eliminar programa
+		}
+		else if(opcion == 15){
+            imprimir("programas");
+		}
+		else if(opcion == 16){
+            datosFormacion();
+		}
+		else if(opcion == 17){
+            // eliminar formacion
+		}
+		else if(opcion == 18){
+            imprimir("formaciones");
+		}
+		else if(opcion == 19){
+            datosConvenios();
+		}
+		else if(opcion == 20){
+            //eliminar convenio
+		}
+		else if(opcion == 21){
+            imprimir("convenios");
+		}
+		else if(opcion == 22){
+            datosInfraestructura();
+		}
+		else if(opcion == 23){
+            //eliminar infraestructura
+		}
+		else if(opcion == 24){
+            imprimir("infraestructuras");
 		}
 		else if(opcion == -1){
             system("cls");
