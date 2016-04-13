@@ -173,7 +173,7 @@ struct Capacitaciones{//lista simple
 	}
 }*PCapacitaciones;// puntero capacitacion
 
-struct Capacitaciones *buscarCapacitaciones(string nom){
+struct Capacitaciones *buscarCapacitacion(string nom){
     if(PCapacitaciones==NULL){
         return NULL;
     }
@@ -190,7 +190,7 @@ struct Capacitaciones *buscarCapacitaciones(string nom){
 }
 
 void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la lista simple de capacitaciones
-   struct Capacitaciones*buscado=buscarCapacitaciones(nom);
+   struct Capacitaciones*buscado=buscarCapacitacion(nom);
    if(buscado!=NULL)
    cout<<"\nEsa capacitacion ya existe\n";//Valida si hay datos repetidos
     else{
@@ -324,7 +324,6 @@ struct Puestos *buscarPuestos(string nom){
         struct Puestos*temp=PPuestos;
         while(temp->sig!=NULL){
             if(temp->nombre==nom){
-                    cout<<"Encontrado: "<<temp->nombre<<endl;
                 return temp;
             }
             temp=temp->sig;
@@ -381,77 +380,67 @@ void imprimirPuestos(){
 // ^^^^^  RELACIONES SOBRE SUBLISTAS   ^^^^^^
 
 // Restricciones :  Enlaza un UNICO nodo a las sublistas, 1 puesto con 1 formacion y 1 capacitacion.
-void insertarMiembro(string cant,int ID, string nomb, string puest, string form, string cap){
+struct sublistaMiembros *buscarMiembro(struct Cantones * cantonBuscado, int ID){
+    if (cantonBuscado->enlaceSubMiembros == NULL){
+        //cout<<"El canton a buscar no posee miembros enlazados";
+        return NULL;
+        }
+    else{
+        for(;cantonBuscado->enlaceSubMiembros->sig == NULL; cantonBuscado->enlaceSubMiembros->sig = cantonBuscado->enlaceSubMiembros){
+            if (cantonBuscado->enlaceSubMiembros->identificador == ID)
+                return cantonBuscado->enlaceSubMiembros;
+
+        }
+    }
+    return NULL;
+};
+
+void insertarMiembro(string cant,int ID, string nomb, string puest, string form){
     struct Cantones * cantonBuscado = buscarCanton(cant);
     struct Puestos * puestoBuscado = buscarPuestos(puest);
     struct Formaciones * formacionBuscada = buscarFormacion(form);
-    //struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 
-    if( cantonBuscado == NULL){
-        cout<<"Canton no encontrado, favor verificar";
+    if(( cantonBuscado == NULL)&&(puestoBuscado == NULL)&&(formacionBuscada == NULL)){
+        cout<<"(Canton o puesto o formacion) no encontrados, favor verificar ref: L-389";
         system("pause");
         return;
     }
-    if (puestoBuscado == NULL){
-        cout<<"Puesto no encontrado, favor verificar";
-        system("pause");
-        return;
-    }
-    if(formacionBuscada == NULL){
-        cout<<"Formación no encontrado, favor verificar";
-        system("pause");
-        return;
-    }
-    //if(capacitacionBuscada == NULL){
-        //cout<<"Capacitación no encontrada, favor verificar";
-        //system("pause");
-       // return;
-        //}
 
         struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nomb);
-        for(;cantonBuscado->enlaceSubMiembros->sig!=NULL;cantonBuscado->enlaceSubMiembros->sig=cantonBuscado->enlaceSubMiembros){
-            if(cantonBuscado->enlaceSubMiembros->identificador==ID){
-                cout<<"El miembro del cantón ya se encuentra registrado";
-                return;
-            }
-        }// Si sale del for se valida correctamente y no es un dato repetido.
 
-
-
+        struct sublistaMiembros *miembroBuscado = buscarMiembro(cantonBuscado,ID);
+        if(miembroBuscado==nuevoMiembro){
+            cout<<"Miembro registrado";
+            return;
+        }
+        //cout<<"paso restricciones ref: L-416";
         nuevoMiembro->enlacePuesto = puestoBuscado;
         nuevoMiembro->enlaceFormacion = formacionBuscada;
 
 		nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
         cantonBuscado->enlaceSubMiembros = nuevoMiembro;
-
-
-
-
 }
 
-struct CreaNodo_sublistaCapacitaciones(string cap){
-	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
-	//struct subListaCapacitaciones * nuevoNodo = new sublistaCapasitaciones;
+void asignarCapacitacion(string nombreCanton, int ID, string cap){
+    struct Cantones *cantonBuscado = buscarCanton(nombreCanton);
+    if (cantonBuscado==NULL){
+        cout<<"CantonBuscado = NULL ref:L-438";
+        return;
+    }
+    struct sublistaMiembros * miembroBuscado = buscarMiembro(cantonBuscado,ID);
+    struct Capacitaciones* capacitacionBuscada = buscarCapacitacion(cap);
+    if((miembroBuscado==NULL) && (capacitacionBuscada==NULL)){
+        cout<<"Error en nodo buscado de miembros o de capacitacion";
+        return;
+    }
+    else{
+        struct sublistaCapacitaciones *nn = new sublistaCapacitaciones();
+        nn->sig = miembroBuscado->enlaceSubCapacitacion;
+        miembroBuscado->enlaceSubCapacitacion = nn;
+        nn->enlaceCapacitaciones = capacitacionBuscada;
 
-	if(capacitacionBuscada == NULL){
-        cout<<"Capacitación no encontrada, favor verificar";
-        //system("pause");
-        //return;
-        }
-
-        struct sublistaCapasitaciones *nuevoNodo = new sublistaCapasitaciones();
-        for(;capacitacionBuscada->enlaceSubCapacitacion->sig!=NULL;capacitacionBuscada->enlaceSubCapacitacion->sig=capacitacionBuscada->enlaceSubCapacitacion){
-            if(capacitacionBuscada->enlaceSubCapacitacion->nombre==nom){
-                cout<<"El capasitacion ya se encuentra registrada";
-                return;
-            }
-        }// Si sale del for se valida correctamente y no es un dato repetido.
-
-
-		nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
-		nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
-		nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
-	}
+    }
+}
 
 void AgregarNuevoMiembro(){
     int identificacion;
@@ -461,38 +450,42 @@ void AgregarNuevoMiembro(){
     cin>>identificacion;
     cout<<"Digite el nombre del nuevo Miembro: "<<endl;
     getline(cin,nombre);
-
-
-
-
 }
-
+/*
 void impInfoPersoXcanton(){
+    if (PCantones==NULL)
+        return;
     struct Cantones * temp = PCantones;
-    for(;temp!=NULL;temp->sig=temp){
-        cout<<"Canton: ["<<temp->nombre<<"]"<<endl;
-        for(;temp->enlaceSubMiembros->sig!=NULL;temp->enlaceSubMiembros->sig = temp->enlaceSubMiembros){
-            cout<<"Identificación: "<<temp->enlaceSubMiembros->identificador<<endl;
-            cout<<"Nombre Completo: "<<temp->enlaceSubMiembros->nombre<<endl;
-            cout<<"Puesto: "<<temp->enlaceSubMiembros->enlacePuesto->nombre<<endl;
-            cout<<"Grado académico: "<<temp->enlaceSubMiembros->enlaceFormacion->nombre<<endl;
-            for(;temp->enlaceSubMiembros->enlaceSubCapacitacion->sig!=NULL; temp->enlaceSubMiembros->
-            enlaceSubCapacitacion->sig=temp->enlaceSubMiembros->enlaceSubCapacitacion){
-                    cout<<"Capacitado en: "<<temp->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl;
-                }
-
-
+    do{
+        cout<<endl<<"-------------CANTON => ["<<temp->nombre<<"]-------------"<<endl;
+        for(;temp->enlaceSubMiembros->sig==NULL; temp->enlaceSubMiembros->sig = temp->enlaceSubMiembros){
+            cout<<"\nID: "<<temp->enlaceSubMiembros->identificador;
+            cout<<"\nNombre: "<<temp->enlaceSubMiembros->nombre;
+            cout<<"\nPuesto: "<<temp->enlaceSubMiembros->enlacePuesto->nombre;
+            cout<<"\nFormación: "<<temp->enlaceSubMiembros->enlaceFormacion->nombre;
+            for(;temp->enlaceSubMiembros->enlaceSubCapacitacion->sig==NULL;temp->enlaceSubMiembros->enlaceSubCapacitacion->sig=temp->enlaceSubMiembros->enlaceSubCapacitacion){
+                cout<<"\nCapacitacion: "<<temp->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->nombre;
+            }
         }
-
-    }
+    }while(temp->sig!=PCantones);
 
 
 
 
 }
+*/
 
-
-
+void imprimirMiembro(string nombreCanton, int ID){
+    struct Cantones * cantonBus = buscarCanton(nombreCanton);
+    struct sublistaMiembros* miembroEncontrado = buscarMiembro(cantonBus,ID);
+    cout<<"ID: "<<miembroEncontrado->identificador;
+    cout<<"Nombre: "<<miembroEncontrado->nombre;
+    cout<<"Puesto: "<<miembroEncontrado->enlacePuesto->nombre;
+    cout<<"Formacion: "<<miembroEncontrado->enlaceFormacion->nombre;
+    for (;miembroEncontrado->enlaceSubCapacitacion->sig==NULL;miembroEncontrado->enlaceSubCapacitacion->sig=miembroEncontrado->enlaceSubCapacitacion){
+        cout<<"Capacitacion: "<<miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones->nombre;
+    }
+}
 //  Clase estructura con sus respectivos metodos
 struct Convenios{
 	string nombre ;
@@ -737,9 +730,11 @@ void cargarDatos(){
     insertarPuestos("Informatico");
     //imprimirPuestos();
     //
-    insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universitaria","Ofimatica");
-    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria","SAP");
+    insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universitaria");
+    asignarCapacitacion("Sarapiqui",206710961,"Ofimatica");
+    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria");
     //impInfoPersoXcanton();
+    //imprimirMiembro("Sarapiqui",206710961);
 
 }
 
