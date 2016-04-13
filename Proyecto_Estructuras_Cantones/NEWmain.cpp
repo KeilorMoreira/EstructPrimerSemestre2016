@@ -17,6 +17,8 @@ struct Cantones{ // Lista Doble
 	string provincia;
 	struct Cantones *ant, *sig;           //Punteros de lista doble
     struct sublistaMiembros *enlaceSubMiembros;
+    struct sublista_Covenios *enlaceConvenios;
+    struct sublista_Infraestructura *enlaceInfraestructura;
 
 	Cantones(string nom, string p){ // Constructor
 		nombre = nom;
@@ -24,6 +26,8 @@ struct Cantones{ // Lista Doble
 		sig = NULL; // Inicializador puntero
 		ant = NULL; // Inicializador puntero
 		enlaceSubMiembros = NULL;
+		enlaceConvenios = NULL;
+		enlaceInfraestructura = NULL;
 	}
 
 }*PCantones;//Primero de la estructura cantones
@@ -119,7 +123,6 @@ void imprimirCantones(){
     system("pause");
     return;
 }
-
 // Estructura, sublista de miebros de un comite cantonal
 struct sublistaMiembros{
     int identificador;
@@ -147,10 +150,16 @@ struct sublistaCapacitaciones{
         enlaceCapacitaciones = NULL;
     }
 };
-
-
 //* ------------------------------------Estructura y Metodos sobre lista Capacitaciones (buscar, insertar, pedirDatos, imprimir, otros)
-
+struct sublista_Infraestructura{// Estructura , sublista de infraestructra de cantones
+    struct sublista_Infraestructura *sig ;
+    struct Infraestructura *enlaceInfraestructura;//enlace con la estructura infraestructura
+    sublista_Infraestructura(){
+	sig = NULL;
+    enlaceInfraestructura = NULL;
+}
+};
+//
 struct Capacitaciones{//lista simple
 	string nombre;
 	struct Capacitaciones *sig;
@@ -452,22 +461,142 @@ void impInfoPersoXcanton(){
 
 
 
+//  Clase estructura con sus respectivos metodos
+struct Convenios{
+	string nombre ;
+	struct Convenios *sig;
+	Convenios(string nom){
+		nombre = nom;
+		sig = NULL;
+
+	}
+}*PConvenios;
+
+struct Convenios *buscarConvenios(string nom){
+    if(PConvenios==NULL){
+        return NULL;
+    }
+    else{
+        struct Convenios*temp=PConvenios;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+}
+
+void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
+   struct Convenios*buscador=buscarConvenios(nom);
+   if(buscador!=NULL)
+   cout<<"\nEse convenio ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Convenios*nuevoConvenio=new Convenios(nom);
+	nuevoConvenio->sig=PConvenios;
+	PConvenios=nuevoConvenio;
+    }
+}
+
+void datosConvenios(){
+    string nom;
+	fflush(stdin);
+	cout<<"\nEscriba el nombre del convenio\n";
+	getline(cin,nom);
+	fflush(stdin);
+	cout<<"\nSe agregado correctamente\n";
+	insertarConvenios(nom);
+
+
+}
+
+void imprimirConvenios(){
+    struct Convenios *temp = PConvenios;
+    if (temp == NULL){
+        cout<<"La lista de convenios se encuentra vacia.\n";
+        system("pause");
+        return;
+        }
+    cout<<"\n~~~~~~~~~~~~~~~~  LISTA DE Convenios ~~~~~~~~~~~~~~~~\n"<<endl;
+    while(temp != NULL){
+            cout<<"Nombre: "<<temp->nombre<<endl;
+            temp= temp->sig;
+            }
+    system("pause");
+    return;
+
+}
+
+// Sublista simple que se enlace con la clase convenios
+struct sublista_Covenios{
+    struct sub_Covenios *sig;
+    struct Convenios *enlaceC;
+    sublista_Covenios(){
+    sig = NULL;
+}
+};
 
 
 
 
+// clase estructura de infraestructura con sus respetivos metodos
+struct Infraestructura{//Lista doble con insercion al final
+    string nombre;
+	string administrada;
+	string compartida;
+	struct Infraestructura *ant, *sig;
+	Infraestructura(string nombre, string adm,  string com){
+		administrada = adm;
+		compartida = com;
+		sig = NULL;
+		ant = NULL;
 
+	}
+}*PInfraestructura;//Puntero de infraestruc
 
+struct Infraestructura *buscarInfraestructura(string nomb){//Buscar de infraestructura
+    if(PInfraestructura==NULL){
+        return NULL;
+    }
+    struct Infraestructura* temp = PInfraestructura;
+    do{
+        if(temp->nombre == nomb)
+            return temp;
+        temp = temp->sig;
+    }while(temp != NULL);
+    return NULL;
+};
 
+//insertar al inicio de la lista doble
+void insertarInfraestructuras(string nom, string adm,  string com){
 
+    struct Infraestructura *nn = new Infraestructura(nom, adm, com);
 
+    nn->ant = PInfraestructura;
 
+    if (PInfraestructura!= NULL)
+        PInfraestructura->sig = nn;
 
-
-
-
-
-
+    PInfraestructura = nn;
+}
+void datosInfraestructura(){//funcion que pide los datos
+	string nom;
+	string adm;
+	string com;
+	fflush(stdin);
+	cout<<"\nNombre de la infraestructura:\n";
+	getline(cin,nom);
+	fflush(stdin);
+	cout<<"\nNombre de la infraestructura administrada:\n";
+	getline(cin,adm);
+	fflush(stdin);
+	cout<<"\nNombre de la infraestrura compartida:\n";
+	getline(cin,com);
+	fflush(stdin);
+	cout<<"\nInfraestructura agregada correctamente\n";
+	insertarInfraestructuras(nom,adm,com);
+}
 
 
 
