@@ -430,7 +430,7 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form,
 }
 
 void sublistaCapasitaciones(){
-	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones();
+	struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 	//struct subListaCapacitaciones * nuevoNodo = new sublistaCapasitaciones;
 	
 	if(capacitacionBuscada == NULL){
@@ -442,7 +442,7 @@ void sublistaCapasitaciones(){
         struct sublistaCapasitaciones *nuevoNodo = new sublistaCapasitaciones();
         for(;capacitacionBuscada->enlaceSubCapacitacion->sig!=NULL;capacitacionBuscada->enlaceSubCapacitacion->sig=capacitacionBuscada->enlaceSubCapacitacion){
             if(capacitacionBuscada->enlaceSubCapacitacion->nombre==nom){
-                cout<<"El capasitacion ya se encuentra registrada";
+                cout<<"La capacitación ya se encuentra registrada";
                 return;
             }
         }// Si sale del for se valida correctamente y no es un dato repetido.
