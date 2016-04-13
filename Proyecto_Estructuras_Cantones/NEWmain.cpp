@@ -120,13 +120,14 @@ void imprimirCantones(){
     return;
 }
 
+
 // Estructura, sublista de miebros de un comite cantonal
 struct sublistaMiembros{
     int identificador;
     string nombre;
     struct sublistaMiembros *sig;
     struct Formaciones * enlaceFormacion;
-    struct sublistaCapacitaciones *enlaceSubCapacitacion;
+    struct subListaCapacitaciones *enlaceSubCapacitacion;
     struct Puestos * enlacePuesto;
     sublistaMiembros(int ID, string nomb){
         identificador = ID;
@@ -139,10 +140,10 @@ struct sublistaMiembros{
 };
 
 // Estructura, sublista de capacitaciones que puede tener un miembro de comite.
-struct sublistaCapacitaciones{
-    struct sublistaCapacitaciones *sig;
+struct subListaCapacitaciones{
+    struct subListaCapacitaciones *sig;
     struct Capacitaciones * enlaceCapacitaciones; // enlace a nodo de la lista capacitaciones.
-    sublistaCapacitaciones(){
+    subListaCapacitaciones(){
         sig = NULL;
         enlaceCapacitaciones = NULL;
     }
@@ -168,6 +169,7 @@ struct Capacitaciones *buscarCapacitaciones(string nom){
         struct Capacitaciones*temp=PCapacitaciones;
         while(temp!=NULL){
             if(temp->nombre==nom){
+                cout<<"Capacitacion: "<<temp->nombre;
                 return temp;
             }
             temp=temp->sig;
@@ -225,20 +227,21 @@ struct Formaciones{ // Lista simple
 	}
 }*PFormacion;// puntero de formacion
 
-struct Formaciones*buscarFormacion(string n){
+struct Formaciones*buscarFormacion(string form){
     if(PFormacion==NULL){//si no hay formacion
         return NULL;
     }
     else{
         struct Formaciones*temp=PFormacion;
-        while(temp!=NULL){
-            if(temp->nombre==n){
+        for(;temp->sig==NULL;temp->sig=temp){
+            cout<<temp->nombre<<endl;
+            if(temp->nombre==form){
+                cout<<"Formacion: "<<temp->nombre;
                 return temp;//retorna esa formacion
             }
-            temp=temp->sig;
         }
+        return NULL;//no encontro la formaci
     }
-    return NULL;//no encontro la formacion
 }
 
 void insertarFormacion(string n){//Insercion al final de una lista simple
@@ -254,7 +257,7 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
         else{
             struct Formaciones*temp=PFormacion;
             while(temp->sig!=NULL){
-                temp=temp->sig;
+                temp->sig=temp;
             }
             temp->sig=nuevoFormacion;
             //cout<<"\n\nLa formacion ha sido insertado";
@@ -311,8 +314,8 @@ struct Puestos *buscarPuestos(string nom){
         struct Puestos*temp=PPuestos;
         while(temp->sig!=NULL){
             if(temp->nombre==nom){
-                    cout<<"Encontrado: "<<temp->nombre<<endl;
-                return temp;
+                    cout<<"Puesto: "<<temp->nombre<<endl;
+                    return temp;
             }
             temp=temp->sig;
         }
@@ -372,6 +375,7 @@ void insertarMiembro(string canton,int ID, string nombre, string puesto, string 
     struct Cantones * cantonBuscado = buscarCanton(canton);
     struct Puestos * puestoBuscado = buscarPuestos(puesto);
     struct Formaciones * formacionBuscada = buscarFormacion(formacion);
+
     struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(capacitacion);
 
     if( cantonBuscado == NULL){
@@ -396,21 +400,29 @@ void insertarMiembro(string canton,int ID, string nombre, string puesto, string 
         }
 
         struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nombre);
-        cout<<"ggggggg";
-        nuevoMiembro ->sig = cantonBuscado->enlaceSubMiembros->sig; // Se asigna nodo nuevo al inicio de la lista.
-        cantonBuscado->enlaceSubMiembros->sig = nuevoMiembro; // se corre el enlace, con nuevo nodo miembro como primero.
+        for(;cantonBuscado->enlaceSubMiembros->sig!=NULL;cantonBuscado->enlaceSubMiembros->sig=cantonBuscado->enlaceSubMiembros){
+            if(cantonBuscado->enlaceSubMiembros->identificador==ID){
+                cout<<"El miembro del cantón ya se encuentra registrado";
+                return;
+            }
+        }// Si sale del for se valida correctamente y no es un dato repetido.
 
-        puestoBuscado->sig = cantonBuscado->enlaceSubMiembros->enlacePuesto->sig;
-        cantonBuscado->enlaceSubMiembros->enlacePuesto->sig = puestoBuscado;
+        nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
+        cantonBuscado->enlaceSubMiembros = nuevoMiembro;
 
-        formacionBuscada->sig = cantonBuscado->enlaceSubMiembros->enlaceFormacion->sig;
-        cantonBuscado->enlaceSubMiembros->enlaceFormacion->sig = formacionBuscada;
+        //nuevoMiembro->enlacePuesto = puestoBuscado;
+        //nuevoMiembro->enlaceFormacion = formacionBuscada;
 
-        capacitacionBuscada->sig = cantonBuscado->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->sig;
-        cantonBuscado->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->sig = capacitacionBuscada;
+        //struct subListaCapacitaciones * nuevoNodo = NULL;
+        //nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
+        //nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
+        //nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
+
+
+
+
 
 }
-
 
 void AgregarNuevoMiembro(){
     int identificacion;
@@ -439,8 +451,6 @@ void impInfoPersoXcanton(){
             enlaceSubCapacitacion->sig=temp->enlaceSubMiembros->enlaceSubCapacitacion){
                     cout<<"Capacitado en: "<<temp->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl;
                 }
-
-
         }
 
     }
@@ -502,9 +512,9 @@ void cargarDatos(){
     insertarFormacion("Kinder");
     insertarFormacion("Licenciatura");
     insertarFormacion("Bachiderato");
-    insertarFormacion("Universetaria");
+    insertarFormacion("Universitaria");
     insertarFormacion("Colegio");
-    //imprimirFormaciones();
+    imprimirFormaciones();
 	//
     insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
     insertarPuestos("Gerente");
@@ -515,10 +525,10 @@ void cargarDatos(){
     insertarPuestos("Secretaria");
     insertarPuestos("Tesorero");
     insertarPuestos("Informatico");
-    imprimirPuestos();
+    //imprimirPuestos();
     //
     insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universetaria","Ofimatica");
-    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universetaria","SAP");
+    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Maestria","SAP");
     //impInfoPersoXcanton();
 
 }
