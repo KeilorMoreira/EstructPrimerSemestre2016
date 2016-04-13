@@ -19,6 +19,7 @@ struct Cantones{ // Lista Doble
     struct sublistaMiembros *enlaceSubMiembros;
     struct sublista_Covenios *enlaceConvenios;
     struct sublista_Infraestructura *enlaceInfraestructura;
+    struct sublista_Programas *enlaceSublista_Programas;
 
 	Cantones(string nom, string p){ // Constructor
 		nombre = nom;
@@ -28,6 +29,7 @@ struct Cantones{ // Lista Doble
 		enlaceSubMiembros = NULL;
 		enlaceConvenios = NULL;
 		enlaceInfraestructura = NULL;
+		enlaceSublista_Programas = NULL;
 	}
 
 }*PCantones;//Primero de la estructura cantones
@@ -488,6 +490,10 @@ struct Convenios *buscarConvenios(string nom){
     return NULL;
 }
 
+
+
+
+
 void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
    struct Convenios*buscador=buscarConvenios(nom);
    if(buscador!=NULL)
@@ -598,9 +604,63 @@ void datosInfraestructura(){//funcion que pide los datos
 	insertarInfraestructuras(nom,adm,com);
 }
 
+//Estructura de programa y sus metodos
+struct Programas{//Lista circular con insercion al inicio
+	string tipoPrograma;
+	struct Programas *sig;
+	Programas( string tip){
+	    tipoPrograma = tip;
+		sig = NULL;
+	}
+}*PProgramas;// Puntero de Programas
+struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
+    struct Programas * nn = new Programas(tip);
+    if(Lista == NULL){
+        Lista = nn;
+        Lista->sig = Lista;//se hace circular
+        }
+    else{// se insertará al inicio de la lista circular
+        struct Programas *temp = Lista;
+        while(temp->sig!= Lista)
+            temp= temp->sig;
+        nn->sig = Lista;
+        temp->sig = nn;
+        Lista = nn;
+        {
+        	return Lista;//retorna la lista modificada, osea con un elemento más
+		}
+    }
+
+    cout<<"\nSe agregado correctamente";
+        {
+    }
+}
+void datosProgramas(){
+    string tip;
+	fflush(stdin);
+	cout<<"\nEscriba el tipo del programa\n";
+	getline(cin,tip);
+	cout<<"\nSe agregado correctamente"<<endl;
+
+    PProgramas = insertar(PProgramas, ID, nomp , tip, fe, lu , ho);
+    }
 
 
 
+struct sublista_Programas{
+    string hora;
+    string fecha;
+    string lugar;
+    struct sublista_Programas *sig;
+    struct Programas *enlaceProgramas;
+    sublista_Programas(string h , f , lu){
+        hora = h;
+        fecha = f;
+        lugar = lu;
+        sig = NULL;
+        enlaceProgramas = NULL;
+    }
+};
 // #################################################             CICLO DE  MENUES             ###############################################
 
 void cargarDatos(){
