@@ -381,15 +381,17 @@ void imprimirPuestos(){
 
 // Restricciones :  Enlaza un UNICO nodo a las sublistas, 1 puesto con 1 formacion y 1 capacitacion.
 struct sublistaMiembros *buscarMiembro(struct Cantones * cantonBuscado, int ID){
-    if (cantonBuscado->enlaceSubMiembros == NULL){
-        //cout<<"El canton a buscar no posee miembros enlazados";
+    if ((cantonBuscado == NULL)||(cantonBuscado->enlaceSubMiembros == NULL)){
         return NULL;
         }
     else{
+        cout<<"ghj\n";
         for(;cantonBuscado->enlaceSubMiembros->sig == NULL; cantonBuscado->enlaceSubMiembros->sig = cantonBuscado->enlaceSubMiembros){
-            if (cantonBuscado->enlaceSubMiembros->identificador == ID)
+            if (cantonBuscado->enlaceSubMiembros->identificador == ID){
+                cout<<"123gj\n";
                 return cantonBuscado->enlaceSubMiembros;
-
+            }
+            cout<<"ghjj\n";
         }
     }
     return NULL;
@@ -400,19 +402,19 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form)
     struct Puestos * puestoBuscado = buscarPuestos(puest);
     struct Formaciones * formacionBuscada = buscarFormacion(form);
 
-    if(( cantonBuscado == NULL)&&(puestoBuscado == NULL)&&(formacionBuscada == NULL)){
+    if(( cantonBuscado == NULL)||(puestoBuscado == NULL)||(formacionBuscada == NULL)){
         cout<<"(Canton o puesto o formacion) no encontrados, favor verificar ref: L-389";
         system("pause");
         return;
     }
-
+        struct sublistaMiembros *miembroBuscado = buscarMiembro(cantonBuscado,ID);
+        if(miembroBuscado!=NULL){
+                cout<<"Miembro registrado";
+                return;
+                }
         struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nomb);
 
-        struct sublistaMiembros *miembroBuscado = buscarMiembro(cantonBuscado,ID);
-        if(miembroBuscado==nuevoMiembro){
-            cout<<"Miembro registrado";
-            return;
-        }
+
         //cout<<"paso restricciones ref: L-416";
         nuevoMiembro->enlacePuesto = puestoBuscado;
         nuevoMiembro->enlaceFormacion = formacionBuscada;
@@ -429,7 +431,7 @@ void asignarCapacitacion(string nombreCanton, int ID, string cap){
     }
     struct sublistaMiembros * miembroBuscado = buscarMiembro(cantonBuscado,ID);
     struct Capacitaciones* capacitacionBuscada = buscarCapacitacion(cap);
-    if((miembroBuscado==NULL) && (capacitacionBuscada==NULL)){
+    if((miembroBuscado==NULL) || (capacitacionBuscada==NULL)){
         cout<<"Error en nodo buscado de miembros o de capacitacion";
         return;
     }
@@ -473,11 +475,17 @@ void impInfoPersoXcanton(){
 
 void imprimirMiembro(string nombreCanton, int ID){
     struct Cantones * cantonBus = buscarCanton(nombreCanton);
-    struct sublistaMiembros* miembroEncontrado = buscarMiembro(cantonBus,ID);
-    cout<<"ID: "<<miembroEncontrado->identificador;
-    cout<<"Nombre: "<<miembroEncontrado->nombre;
-    cout<<"Puesto: "<<miembroEncontrado->enlacePuesto->nombre;
-    cout<<"Formacion: "<<miembroEncontrado->enlaceFormacion->nombre;
+    struct sublistaMiembros* miembroEncontrado =cantonBus->enlaceSubMiembros;
+
+    cout<<"ID: "<<miembroEncontrado->identificador<<endl;
+    cout<<"Nombre: "<<miembroEncontrado->nombre<<endl;
+    cout<<"Puesto: "<<miembroEncontrado->enlacePuesto->nombre<<endl;
+    cout<<"Formacion: "<<miembroEncontrado->enlaceFormacion->nombre<<endl;
+    if(miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones == NULL)
+        cout<<"ggggggggggggggggggggg";
+    cout<<"Cap: "<<miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl;
+
+    system("pause");
     for (;miembroEncontrado->enlaceSubCapacitacion->sig==NULL;miembroEncontrado->enlaceSubCapacitacion->sig=miembroEncontrado->enlaceSubCapacitacion){
         cout<<"Capacitacion: "<<miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones->nombre;
     }
@@ -508,8 +516,6 @@ struct Convenios *buscarConvenios(string nom){
     }
     return NULL;
 }
-
-
 
 
 
@@ -730,7 +736,7 @@ void cargarDatos(){
     asignarCapacitacion("Sarapiqui",206710961,"Ofimatica");
     insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria");
     //impInfoPersoXcanton();
-    //imprimirMiembro("Sarapiqui",206710961);
+    imprimirMiembro("Sarapiqui",206710961);
 
 }
 
