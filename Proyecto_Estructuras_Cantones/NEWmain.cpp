@@ -379,11 +379,11 @@ void imprimirPuestos(){
 // ^^^^^  RELACIONES SOBRE SUBLISTAS   ^^^^^^
 
 // Restricciones :  Enlaza un UNICO nodo a las sublistas, 1 puesto con 1 formacion y 1 capacitacion.
-void insertarMiembro(string canton,int ID, string nombre, string puesto, string formacion, string capacitacion){
-    struct Cantones * cantonBuscado = buscarCanton(canton);
-    struct Puestos * puestoBuscado = buscarPuestos(puesto);
-    struct Formaciones * formacionBuscada = buscarFormacion(formacion);
-    struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(capacitacion);
+void insertarMiembro(string cant,int ID, string nomb, string puest, string form, string cap){
+    struct Cantones * cantonBuscado = buscarCanton(cant);
+    struct Puestos * puestoBuscado = buscarPuestos(puest);
+    struct Formaciones * formacionBuscada = buscarFormacion(form);
+    struct Capacitaciones * capacitacionBuscada = buscarCapacitaciones(cap);
 
     if( cantonBuscado == NULL){
         cout<<"Canton no encontrado, favor verificar";
@@ -406,19 +406,26 @@ void insertarMiembro(string canton,int ID, string nombre, string puesto, string 
         return;
         }
 
-        struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nombre);
-        cout<<"ggggggg";
-        nuevoMiembro ->sig = cantonBuscado->enlaceSubMiembros->sig; // Se asigna nodo nuevo al inicio de la lista.
-        cantonBuscado->enlaceSubMiembros->sig = nuevoMiembro; // se corre el enlace, con nuevo nodo miembro como primero.
+        struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nomb);
+        for(;cantonBuscado->enlaceSubMiembros->sig!=NULL;cantonBuscado->enlaceSubMiembros->sig=cantonBuscado->enlaceSubMiembros){
+            if(cantonBuscado->enlaceSubMiembros->identificador==ID){
+                cout<<"El miembro del cantón ya se encuentra registrado";
+                return;
+            }
+        }// Si sale del for se valida correctamente y no es un dato repetido.
 
-        puestoBuscado->sig = cantonBuscado->enlaceSubMiembros->enlacePuesto->sig;
-        cantonBuscado->enlaceSubMiembros->enlacePuesto->sig = puestoBuscado;
+        nuevoMiembro->sig = cantonBuscado->enlaceSubMiembros;
+        cantonBuscado->enlaceSubMiembros = nuevoMiembro;
 
-        formacionBuscada->sig = cantonBuscado->enlaceSubMiembros->enlaceFormacion->sig;
-        cantonBuscado->enlaceSubMiembros->enlaceFormacion->sig = formacionBuscada;
+        nuevoMiembro->enlacePuesto = puestoBuscado;
+        nuevoMiembro->enlaceFormacion = formacionBuscada;
 
-        capacitacionBuscada->sig = cantonBuscado->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->sig;
-        cantonBuscado->enlaceSubMiembros->enlaceSubCapacitacion->enlaceCapacitaciones->sig = capacitacionBuscada;
+        struct subListaCapacitaciones * nuevoNodo = NULL;
+        nuevoNodo->sig = nuevoMiembro->enlaceSubCapacitacion;
+        nuevoMiembro->enlaceSubCapacitacion = nuevoNodo;
+        nuevoNodo->enlaceCapacitaciones = capacitacionBuscada;
+
+
 
 }
 
@@ -586,6 +593,7 @@ void insertarInfraestructuras(string nom, string adm,  string com){
 
     PInfraestructura = nn;
 }
+
 void datosInfraestructura(){//funcion que pide los datos
 	string nom;
 	string adm;
@@ -691,7 +699,7 @@ void cargarDatos(){
     insertarFormacion("Kinder");
     insertarFormacion("Licenciatura");
     insertarFormacion("Bachiderato");
-    insertarFormacion("Universetaria");
+    insertarFormacion("Universitaria");
     insertarFormacion("Colegio");
     //imprimirFormaciones();
 	//
@@ -704,10 +712,10 @@ void cargarDatos(){
     insertarPuestos("Secretaria");
     insertarPuestos("Tesorero");
     insertarPuestos("Informatico");
-    imprimirPuestos();
+    //imprimirPuestos();
     //
-    insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universetaria","Ofimatica");
-    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universetaria","SAP");
+    insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universitaria","Ofimatica");
+    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria","SAP");
     //impInfoPersoXcanton();
 
 }
@@ -900,6 +908,5 @@ int main(){
     setlocale(LC_CTYPE, "Spanish"); // para que se reconozcan las tildes.
 	cargarDatos();
     //menu();
-
 	return 0;
 }
