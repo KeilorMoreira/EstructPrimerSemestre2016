@@ -227,7 +227,6 @@ void imprimirCapacitaciones(){
     }
 
 
-
 //* ------------------------------------Estructura y Metodos sobre lista Formacion (buscar, insertar, pedirDatos, imprimir, otros)
 struct Formaciones{ // Lista simple
 	string nombre;
@@ -513,10 +512,6 @@ struct Convenios *buscarConvenios(string nom){
     return NULL;
 }
 
-
-
-
-
 void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
    struct Convenios*buscador=buscarConvenios(nom);
    if(buscador!=NULL)
@@ -565,8 +560,6 @@ struct sublista_Covenios{
     sig = NULL;
 }
 };
-
-
 
 
 // clase estructura de infraestructura con sus respetivos metodos
@@ -637,6 +630,7 @@ struct Programas{//Lista circular con insercion al inicio
 		sig = NULL;
 	}
 }*PProgramas;// Puntero de Programas
+
 struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(tip);
     if(Lista == NULL){
@@ -659,6 +653,7 @@ struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion qu
         {
     }
 }
+
 void datosProgramas(){
     string tip;
 	fflush(stdin);
@@ -668,8 +663,6 @@ void datosProgramas(){
 
     PProgramas = insertar(PProgramas, tip);
     }
-
-
 
 struct sublista_Programas{
     string hora;
@@ -685,6 +678,8 @@ struct sublista_Programas{
         enlaceProgramas = NULL;
     }
 };
+
+
 // #################################################             CICLO DE  MENUES             ###############################################
 
 void cargarDatos(){
