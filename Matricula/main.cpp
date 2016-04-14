@@ -72,7 +72,7 @@ return NULL;
 //Inserción al inicio de una lista circular
 //Retorna la lista modificada con la nueva insercción
 
-struct Curso * insertar(struct Curso *lista, string sigla, string nombre, int cred){
+struct Curso * insertarCurso(struct Curso *lista, string sigla, string nombre, int cred){
       struct Curso * nn= new Curso(); //se crea el nuevo nodo
       nn->sigla = sigla; //se le asignan la informacion con los parametros recibidos
       nn->nombre= nombre;

@@ -444,7 +444,7 @@ void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
     if(canton==NULL){
         cout<<"Canton digitado no se encuentra en lista. Reintentar"<<endl;
         system("pause");
-        return AgregarNuevoMiembro();
+        return agregarNuevoMiembro();
     }
     cout<<"Digite identificación del nuevo Miembro: "<<endl<<"-:";
     getline(cin,identificacion);
@@ -453,7 +453,7 @@ void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
         if(listaMiembros->identificador == identificacion){
             cout<<"Miembro ya registrado. Operación cancelada."<<endl;
             system("pause");
-            return AgregarNuevoMiembro();
+            return agregarNuevoMiembro();
         }
         listaMiembros=listaMiembros->sig;
     }
@@ -467,7 +467,7 @@ void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
     if(buscarPuestos(puesto)==NULL){
         cout<<"Puesto digitado no se encuentra en lista. Reintentar"<<endl;
         system("pause");
-        return AgregarNuevoMiembro();
+        return agregarNuevoMiembro();
     }
     imprimirFormaciones();
     fflush(stdin);
@@ -476,13 +476,9 @@ void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
     if(buscarFormacion(formacion)==NULL){
         cout<<"Formación digitada no se encuentra en lista. Reintentar"<<endl;
         system("pause");
-        return AgregarNuevoMiembro();
+        return agregarNuevoMiembro();
     }
     insertarMiembro(nombreCanton,identificacion, nombre,  puesto,  formacion);
-
-
-
-
 }
 
 
@@ -600,12 +596,13 @@ void agregarNuevoConvenio(){
 // clase estructura de infraestructura con sus respetivos metodos
 struct Infraestructura{//Lista doble con insercion al final
     string nombre;
-	string administrada;
-	string compartida;
+	string tipo;
+	string ubicacion;
 	struct Infraestructura *ant, *sig;
-	Infraestructura(string nombre, string adm,  string com){
-		administrada = adm;
-		compartida = com;
+	Infraestructura(string nombre, string tipo,  string ubica){
+		nombre = nombre;
+		tipo = tipo;
+		ubicacion = ubica;
 		sig = NULL;
 		ant = NULL;
 
@@ -626,9 +623,9 @@ struct Infraestructura *buscarInfraestructura(string nomb){//Buscar de infraestr
 };
 
 //insertar al inicio de la lista doble
-void insertarInfraestructuras(string nom, string adm,  string com){
+void insertarInfraestructuras(string nom, string tipo,  string ubica){
 
-    struct Infraestructura *nn = new Infraestructura(nom, adm, com);
+    struct Infraestructura *nn = new Infraestructura(nom, tipo, ubica);
 
     nn->ant = PInfraestructura;
 
@@ -638,7 +635,7 @@ void insertarInfraestructuras(string nom, string adm,  string com){
     PInfraestructura = nn;
 }
 
-void datosInfraestructura(){//funcion que pide los datos
+void agregarNuevaInfraestructura(){//funcion que pide los datos
 	string nom;
 	string adm;
 	string com;
@@ -656,49 +653,61 @@ void datosInfraestructura(){//funcion que pide los datos
 	insertarInfraestructuras(nom,adm,com);
 }
 
+// ^^^^^  RELACIONES SOBRE INFRAESTRUCTURAS   ^^^^^^
+
+void insertarInfraestructuraNcanton(string nombreCanton, string nombreInfraestructura){
+    struct Cantones * cantonBuscado = buscarCanton(nombreCanton);
+    struct Infraestructura * InfraBuscada = buscarInfraestructura(nombreInfraestructura);
+
+    if((cantonBuscado != NULL) && (InfraBuscada != NULL)){
+        struct sublista_Infraestructura * nn = new sublista_Infraestructura();
+        nn->enlaceProgramas = programaBuscado;
+        nn->sig = cantonBuscado->enlaceSublista_Programas;
+        cantonBuscado->enlaceSublista_Programas = nn;
+    }
+}
+
+
+
 // ###################  CUARTA ESTRUCTURA RELACIONAL: PROGRAMAS (VER DIAGRAMA DE RELACCION CANTON - PROGRAMAS EN DOC EXTERNA) ##################
 //Estructura de programa y sus metodos
 struct Programas{//Lista circular con insercion al inicio
+	string nombre;
 	string tipoPrograma;
 	struct Programas *sig;
-	Programas( string tip){
+	Programas( string nom, string tip){
+	    nombre = nom;
 	    tipoPrograma = tip;
 		sig = NULL;
 	}
 }*PProgramas;// Puntero de Programas
 
-struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
-    struct Programas * nn = new Programas(tip);
-    if(Lista == NULL){
-        Lista = nn;
-        Lista->sig = Lista;//se hace circular
-        }
-    else{// se insertará al inicio de la lista circular
-        struct Programas *temp = Lista;
-        while(temp->sig!= Lista)
-            temp= temp->sig;
-        nn->sig = Lista;
-        temp->sig = nn;
-        Lista = nn;
-        {
-        	return Lista;//retorna la lista modificada, osea con un elemento más
-		}
+struct Programas * buscarPrograma(string nom){
+        if(PProgramas==NULL){
+        return NULL;
     }
+    else{
+        struct Programas*temp=PProgramas;
+        while(temp!=NULL){
+            if(temp->nombre==nom){
+                return temp;
+            }
+            temp=temp->sig;
+        }
+    }
+    return NULL;
+};
 
-    cout<<"\nSe agregado correctamente";
-        {
+void insertarPrograma(string nom, string tipo){//Funcion que inserta al inicio de la lista simple de convenios
+   struct Programas*buscador=buscarPrograma(nom);
+   if(buscador!=NULL)
+   cout<<"\nEse programa ya existe\n";//Valida si hay datos repetidos
+    else{
+	struct Programas*nuevoPrograma=new Programas(nom, tipo);
+	nuevoPrograma->sig=PProgramas;
+	PProgramas=nuevoPrograma;
     }
 }
-
-void datosProgramas(){
-    string tip;
-	fflush(stdin);
-	cout<<"\nEscriba el tipo del programa\n";
-	getline(cin,tip);
-	cout<<"\nSe agregado correctamente"<<endl;
-
-    PProgramas = insertar(PProgramas, tip);
-    }
 
 struct sublista_Programas{
     string hora;
@@ -715,7 +724,91 @@ struct sublista_Programas{
     }
 };
 
-// ^^^^^  RELACIONES SOBRE CONVENIOS   ^^^^^^
+// ^^^^^  RELACIONES SOBRE PROGRAMAS   ^^^^^^
+
+void insertarProgramaNcanton(string nombreCanton, string nombrePrograma, string hora, string fecha, string lugar){
+    struct Cantones * cantonBuscado = buscarCanton(nombreCanton);
+    struct Programas * programaBuscado = buscarPrograma(nombrePrograma);
+
+    if((cantonBuscado != NULL) && (programaBuscado != NULL)){
+        struct sublista_Programas * nn = new sublista_Programas(hora,fecha,lugar);
+        nn->enlaceProgramas = programaBuscado;
+        nn->sig = cantonBuscado->enlaceSublista_Programas;
+        cantonBuscado->enlaceSublista_Programas = nn;
+    }
+}
+
+void crearEvento(string nombreCanton, string nombrePrograma){
+    string hora,fecha,lugar;
+    cout<<"\nDigite la fecha del nuevo evento. \n  -:";
+    fflush(stdin);
+    getline(cin,fecha);
+    cout<<"\nDigite el lugar del nuevo evento. \n  -:";
+    fflush(stdin);
+    getline(cin,lugar);// FALTA VALIDACION DE INFRAESTRUCTURA
+    cout<<"\nDigite la hora del nuevo evento. \n  -:";
+    fflush(stdin);
+    getline(cin,hora);
+    insertarProgramaNcanton(nombreCanton,nombrePrograma,hora,fecha,lugar);
+    cout<<"\nPrograma: "<<nombrePrograma<<" asignado a:"<<nombreCanton<<endl;
+}
+
+void agregarNuevoPrograma(){
+    string opc, nombreCanton, nombrePrograma, tipoPrograma;
+    cout<<"\nDigite el nombre del canton a agregar el nuevo programa. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreCanton);
+    struct Cantones *canton = buscarCanton(nombreCanton);
+    if(canton==NULL){
+        cout<<"\nCanton digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return agregarNuevoPrograma();
+    }
+    cout<<"\nDigite el nombre del nuevo programa. \n  -:";
+    fflush(stdin);
+    getline(cin,nombrePrograma);
+    cout<<"\nSeleccione el tipo del nuevo programa. \n  -:";
+    cout<<"\n[1] Deportivo.\n[2] Recreativo.\n[3] Preventivo.\n  -:";
+    fflush(stdin);
+    getline(cin,opc);
+    if(opc == "1"){
+        tipoPrograma ="Deportivo";
+    }
+    else if(opc == "2"){
+        tipoPrograma ="Recreativo";
+    }
+    else if(opc == "3"){
+        tipoPrograma ="Preventivo";
+    }
+    else{
+        cout<<"\nFavor seleccione con 1,2,3 el tipo de programa. Dato digitado invalido, Operacion reiniciada.";
+        return agregarNuevoPrograma();
+    }
+    opc = "0"; // Reasignamos la variable para usarla mas adelante.
+    struct Programas *programa = buscarPrograma(nombrePrograma);
+    if(programa==NULL){
+        insertarPrograma(nombrePrograma, tipoPrograma);
+        cout<<"\nPrograma insertado: "<<nombrePrograma;
+        cout<<"\nDesea crear un evento con el programa recien creado?. \n -:";
+        cout<<"\n[1] SI.\n[2] NO.\n -:";
+        fflush(stdin);
+        getline(cin,opc);
+        if(opc == "1"){
+                crearEvento(nombreCanton, nombrePrograma);
+        }
+        cout<<"\nNo se creo ningun evento al programa creado.";
+    }
+    else{
+    cout<<"\nPrograma digitado se encuentra en lista. Operación cancelada."<<endl;
+        system("pause");
+        return agregarNuevoPrograma();
+    }
+
+
+}
+
+
+
 
 
 
@@ -820,8 +913,11 @@ void cargarDatos(){
     insertarFormacion("Diplomado");
     insertarFormacion("Bachillerato");
     insertarFormacion("Licenciatura");
+    insertarFormacion("Ingeniero");
     insertarFormacion("Maestria");
     insertarFormacion("Doctorado");
+    insertarFormacion("Catedratico");
+    insertarFormacion("")
     //imprimirFormaciones();
 	//  PUESTOS
     insertarPuestos("Presidente");//datos predefinidos de puestos y su identificador
@@ -883,9 +979,19 @@ void cargarDatos(){
     insertarConvenioNcanton("Liberia","CCSS");
     insertarConvenioNcanton("Liberia","Coopelesca");
     insertarConvenioNcanton("Liberia","AYA");
+    //
+
+    //
+    insertarPrograma("Futbol","Deportivo");
+    insertarProgramaNcanton("Liberia","Futbol","10:20","10-12-2016","Cancha TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+    insertarPrograma("Natacion","Deportivo");
+    insertarProgramaNcanton("Liberia","Natacion","10:20","10-12-2016","Piscina TEC");
+
+    agregarNuevoPrograma();
+
     //impInfoPersoXcanton();
-	agregarNuevoConvenio();
-    imprimirConvenioXcanton();
+	//agregarNuevoConvenio();
+    //imprimirConvenioXcanton();
 
 
 
@@ -957,7 +1063,7 @@ void menuAdministracion(){
         cin>>opcion;
 
         if(opcion == 1){
-            datosCantones();
+            //datosCantones();
         }
         else if(opcion == 2){
             // eliminar cantones
@@ -966,7 +1072,7 @@ void menuAdministracion(){
                 // imprimir Catones
          }
         else if(opcion == 4){
-        	datosPuestos();
+        	//datosPuestos();
         }
         else if(opcion == 5){
         	//eliminar un puesto
@@ -975,7 +1081,7 @@ void menuAdministracion(){
         	//imprimirPuestos();
 		}
 		else if(opcion ==7){
-            datosCapacitacion();
+            //datosCapacitacion();
 		}
 		else if(opcion ==8){
 			// eliminar capacitacion
@@ -1003,7 +1109,7 @@ void menuAdministracion(){
             //imprimir("programas");
 		}
 		else if(opcion == 16){
-            datosFormacion();
+            //datosFormacion();
 		}
 		else if(opcion == 17){
             // eliminar formacion
