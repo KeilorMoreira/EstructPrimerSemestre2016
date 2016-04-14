@@ -414,14 +414,25 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form)
 void asignarCapacitacion(string nombreCanton, int ID, string cap){
     struct Cantones *cantonBuscado = buscarCanton(nombreCanton);
     struct Capacitaciones* capacitacionBuscada = buscarCapacitacion(cap);
-    if ((cantonBuscado==NULL) ||(capacitacionBuscada == NULL){
+    if ((cantonBuscado==NULL) ||(capacitacionBuscada == NULL)){
         cout<<"Nodo = NULL ref:L-414";
         return;
     }
 
-    struct sublistaMiembros *temp = cantonBuscado->enlaceSubMiembros;
-    for()
+    struct sublistaMiembros *tempMiembro = cantonBuscado->enlaceSubMiembros;
+    while(tempMiembro!=NULL){
+            if (tempMiembro->identificador == ID){
+
+                    struct sublistaCapacitaciones *nodoSubLista_Capacitaciones = new sublistaCapacitaciones();
+                    nodoSubLista_Capacitaciones->enlaceCapacitaciones = capacitacionBuscada;
+                    nodoSubLista_Capacitaciones->sig = tempMiembro->enlaceSubCapacitacion;
+                    tempMiembro->enlaceSubCapacitacion = nodoSubLista_Capacitaciones;
+
+            }
+            tempMiembro=tempMiembro->sig;
+        }
 }
+
 
 void AgregarNuevoMiembro(){
     int identificacion;
@@ -441,12 +452,15 @@ void imprimirMiembro(string nombreCanton, int ID){
     cout<<"Nombre: "<<miembroEncontrado->nombre<<endl;
     cout<<"Puesto: "<<miembroEncontrado->enlacePuesto->nombre<<endl;
     cout<<"Formacion: "<<miembroEncontrado->enlaceFormacion->nombre<<endl;
+    //cout<<"capacitacion1: "<<miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl<<endl<<endl;
+
 
     cout<<"\nID: "<<miembroEncontrado->sig->identificador<<endl;
     cout<<"Nombre: "<<miembroEncontrado->sig->nombre<<endl;
     cout<<"Puesto: "<<miembroEncontrado->sig->enlacePuesto->nombre<<endl;
     cout<<"Formacion: "<<miembroEncontrado->sig->enlaceFormacion->nombre<<endl;
-
+    cout<<"capacitacion1: "<<miembroEncontrado->sig->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl;
+    cout<<"capacitacion2: "<<miembroEncontrado->sig->enlaceSubCapacitacion->sig->enlaceCapacitaciones->nombre<<endl;
     system("pause");
 }
 
@@ -694,7 +708,8 @@ void cargarDatos(){
     //
     insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universitaria");
     insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria");
-    //asignarCapacitacion("Sarapiqui",206710961,"Ofimatica");
+    asignarCapacitacion("Sarapiqui",206710961,"Ofimatica");
+    asignarCapacitacion("Sarapiqui",206710961,"SAP");
     //impInfoPersoXcanton();
     imprimirMiembro("Sarapiqui",206710961);
 
