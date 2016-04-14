@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include<stdio.h>
+#include <ctype.h>
 #include<sstream>
 #include <cstdlib>
 #include <windows.h>
@@ -43,10 +44,11 @@ struct Cantones *buscarCanton (string nombre){
     if(temp == NULL)
         return NULL;
     do{
-        if (temp->nombre == nombre) //si el atributo nombre del nodo es igual a variable nombre.
+        if (temp->nombre == nombre){ //si el atributo nombre del nodo es igual a variable nombre.
             return temp; // retorno nodo
+        }
         temp = temp->sig; //avanzo al siguiente nodo
-    }while(temp != PCantones); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
+    }while(temp != NULL); // hago lo anterior mientras nodo temporal sea diferente al primer nodo, o sea se puede recorrer toda la lista
     return NULL; // en caso de no coincidir ningun nodo, retorna NULL
 };
 
@@ -129,13 +131,13 @@ void imprimirCantones(){
 }
 // Estructura, sublista de miebros de un comite cantonal
 struct sublistaMiembros{
-    int identificador;
+    string identificador;
     string nombre;
     struct sublistaMiembros *sig;
     struct Formaciones * enlaceFormacion;
     struct sublistaCapacitaciones *enlaceSubCapacitacion;
     struct Puestos * enlacePuesto;
-    sublistaMiembros(int ID, string nomb){
+    sublistaMiembros(string ID, string nomb){
         identificador = ID;
         nombre = nomb;
         sig = NULL;
@@ -382,7 +384,7 @@ void imprimirPuestos(){
 // Restricciones :  Enlaza un UNICO nodo a las sublistas, 1 puesto con 1 formacion y 1 capacitacion.
 
 
-void insertarMiembro(string cant,int ID, string nomb, string puest, string form){
+void insertarMiembro(string cant,string ID, string nomb, string puest, string form){
     struct Cantones * cantonBuscado = buscarCanton(cant);
     struct Puestos * puestoBuscado = buscarPuestos(puest);
     struct Formaciones * formacionBuscada = buscarFormacion(form);
@@ -411,7 +413,7 @@ void insertarMiembro(string cant,int ID, string nomb, string puest, string form)
         }
 }
 
-void asignarCapacitacion(string nombreCanton, int ID, string cap){
+void asignarCapacitacion(string nombreCanton, string ID, string cap){
     struct Cantones *cantonBuscado = buscarCanton(nombreCanton);
     struct Capacitaciones* capacitacionBuscada = buscarCapacitacion(cap);
     if ((cantonBuscado==NULL) ||(capacitacionBuscada == NULL)){
@@ -421,6 +423,7 @@ void asignarCapacitacion(string nombreCanton, int ID, string cap){
 
     struct sublistaMiembros *tempMiembro = cantonBuscado->enlaceSubMiembros;
     while(tempMiembro!=NULL){
+
             if (tempMiembro->identificador == ID){
 
                     struct sublistaCapacitaciones *nodoSubLista_Capacitaciones = new sublistaCapacitaciones();
@@ -432,19 +435,60 @@ void asignarCapacitacion(string nombreCanton, int ID, string cap){
             tempMiembro=tempMiembro->sig;
         }
 }
-
-
-void AgregarNuevoMiembro(){
-    int identificacion;
-    string nombre, apellidos, puesto, formacion, capacitaciones;
+void AgregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string puesto, string form
+    string identificacion;
+    string nombreCanton, nombre, puesto, formacion, capacitaciones;
+    imprimirCantones();
+    cout<<"Digite el nombre del canton a agregar un miembro:"<<endl<<"-:";
     fflush(stdin);
-    cout<<"Digite identificación del nuevo Miembro: "<<endl;
-    cin>>identificacion;
-    cout<<"Digite el nombre del nuevo Miembro: "<<endl;
+    getline(cin,nombreCanton);
+    struct Cantones *canton = buscarCanton(nombreCanton);
+    if(canton==NULL){
+        cout<<"Canton digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return AgregarNuevoMiembro();
+    }
+    cout<<"Digite identificación del nuevo Miembro: "<<endl<<"-:";
+    getline(cin,identificacion);
+    struct sublistaMiembros *listaMiembros = canton->enlaceSubMiembros;
+    while(listaMiembros!=NULL){
+        if(listaMiembros->identificador == identificacion){
+            cout<<"Miembro ya registrado. Operación cancelada."<<endl;
+            system("pause");
+            return AgregarNuevoMiembro();
+        }
+        listaMiembros=listaMiembros->sig;
+    }
+    fflush(stdin);
+    cout<<"Digite el nombre completo del nuevo Miembro: "<<endl<<"-:";
     getline(cin,nombre);
+    imprimirPuestos();
+    fflush(stdin);
+    cout<<"Digite el puesto: "<<endl<<"-:";
+    getline(cin,puesto);
+    if(buscarPuestos(puesto)==NULL){
+        cout<<"Puesto digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return AgregarNuevoMiembro();
+    }
+    imprimirFormaciones();
+    fflush(stdin);
+    cout<<"Digite la formación: "<<endl<<"-:";
+    getline(cin,formacion);
+    if(buscarFormacion(formacion)==NULL){
+        cout<<"Formación digitada no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return AgregarNuevoMiembro();
+    }
+    insertarMiembro(nombreCanton,identificacion, nombre,  puesto,  formacion);
+    cout<<"bieneeeeeeeeeeeeeeeeeeeeee done";
+
+
+
 }
 
-void imprimirMiembro(string nombreCanton, int ID){
+///////////////////////////////////////////////// imprimir de comprobacion PARA BORRAR
+void imprimirMiembro(string nombreCanton, string ID){
     struct Cantones * cantonBus = buscarCanton(nombreCanton);
     struct sublistaMiembros* miembroEncontrado =cantonBus->enlaceSubMiembros;
 
@@ -706,12 +750,13 @@ void cargarDatos(){
     insertarPuestos("Informatico");
     //imprimirPuestos();
     //
-    insertarMiembro("Sarapiqui",206710961,"Keilor Moreira Alvarado","Fiscal","Universitaria");
-    insertarMiembro("Sarapiqui",111111111,"Tony Corrales","Visepresidente","Universitaria");
-    asignarCapacitacion("Sarapiqui",206710961,"Ofimatica");
-    asignarCapacitacion("Sarapiqui",206710961,"SAP");
+    insertarMiembro("Sarapiqui","206710961","Keilor Moreira Alvarado","Fiscal","Universitaria");
+    //insertarMiembro("Sarapiqui","111111111","Tony Corrales","Visepresidente","Universitaria");
+    //asignarCapacitacion("Sarapiqui","206710961","Ofimatica");
+    //asignarCapacitacion("Sarapiqui","206710961","SAP");
     //impInfoPersoXcanton();
-    imprimirMiembro("Sarapiqui",206710961);
+    AgregarNuevoMiembro();
+    imprimirMiembro("Sarapiqui","206710961");
 
 }
 
