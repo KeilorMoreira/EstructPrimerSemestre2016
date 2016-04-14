@@ -20,7 +20,7 @@ struct Cantones{ // Lista Doble
 	string provincia;
 	struct Cantones *ant, *sig;           //Punteros de lista doble
     struct sublistaMiembros *enlaceSubMiembros;
-    struct sublista_Covenios *enlaceConvenios;
+    struct sublista_Convenios *enlaceConvenios;
     struct sublista_Infraestructura *enlaceInfraestructura;
     struct sublista_Programas *enlaceSublista_Programas;
 
@@ -39,12 +39,14 @@ struct Cantones{ // Lista Doble
 
 //* ------------------------------------Metodos sobre lista Cantones (buscar, insertar, pedirDatos, imprimir, otros)
 
-struct Cantones *buscarCanton (string nombre){
+struct Cantones *buscarCanton (string nombr){
     struct Cantones *temp = PCantones; // nodo temporal tipo Cantones
-    if(temp == NULL)
+    if(temp == NULL){
         return NULL;
+    }
+
     do{
-        if (temp->nombre == nombre){ //si el atributo nombre del nodo es igual a variable nombre.
+        if (temp->nombre == nombr){ //si el atributo nombre del nodo es igual a variable nombre.
             return temp; // retorno nodo
         }
         temp = temp->sig; //avanzo al siguiente nodo
@@ -88,18 +90,18 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 			temp1->ant= nn;
 			// cout<<"Se agrego el Canton"<<endl;
 		}
-		//else
+		else
 		{
-			//temp2->sig= nn;
-			//nn->ant= temp2;
-			// cout<<"Se agrego el Canton"<<endl;
+			temp2->sig= nn;
+			nn->ant= temp2;
+			 //cout<<"Se agrego el Canton"<<endl;
 		}
 	}
 }
 
 }
 
-void datosCantones(){//funcion que pide los datos para agregar un canton y provincia
+void agregarNuevoCanton(){//funcion que pide los datos para agregar un canton y provincia
 	string nom;
 	string p;
 	fflush(stdin);
@@ -122,8 +124,8 @@ void imprimirCantones(){
     system("cls");
     cout<<"\n~~~~~~~~~~~~~~~~  LISTA DE CANTONES ~~~~~~~~~~~~~~~~\n"<<endl;
     while(temp != NULL){
-            cout<<"Nombre:   \t"<<temp->nombre<<endl;
-            cout<<"Provincia:\t"<<temp->provincia<<endl<<endl;
+            cout<<"Canton:    "<<temp->nombre;
+            cout<<", "<<temp->provincia<<endl<<endl;
             temp= temp->sig;
                 }
     system("pause");
@@ -202,7 +204,7 @@ void insertarCapacitacion(string nom){//Funcion que inserta al inicio de la list
     }
 }
 
-void datosCapacitacion(){// funcion que pide los datos de capacitacion
+void agregarNuevaCapacitacion(){// funcion que pide los datos de capacitacion
 	string nom;
 	fflush(stdin);
 	cout<<"\nNombre de la Capacitacion: ";
@@ -227,8 +229,6 @@ void imprimirCapacitaciones(){
     return;
 
     }
-
-
 
 //* ------------------------------------Estructura y Metodos sobre lista Formacion (buscar, insertar, pedirDatos, imprimir, otros)
 struct Formaciones{ // Lista simple
@@ -277,7 +277,7 @@ void insertarFormacion(string n){//Insercion al final de una lista simple
     }
 }
 
-void datosFormacion(){
+void agregarNuevaFormacion(){
 	string nom;
 	fflush(stdin);
 	cout<<"\n Nombre de la formacion\n";
@@ -324,7 +324,7 @@ struct Puestos *buscarPuestos(string nom){
     }
     else{
         struct Puestos*temp=PPuestos;
-        while(temp->sig!=NULL){
+        while(temp!=NULL){
             if(temp->nombre==nom){
                 return temp;
             }
@@ -350,7 +350,7 @@ void insertarPuestos(string nom){//inserta al inicio de la lista simple
     }
 }
 
-void datosPuestos(){
+void agregarNuevoPuesto(){
 	string nom;
 	fflush(stdin);
 	cout<<"\nNombre del puesto: ";
@@ -379,10 +379,7 @@ void imprimirPuestos(){
 }
 
 
-// ^^^^^  RELACIONES SOBRE SUBLISTAS   ^^^^^^
-
-// Restricciones :  Enlaza un UNICO nodo a las sublistas, 1 puesto con 1 formacion y 1 capacitacion.
-
+// ^^^^^  RELACIONES SOBRE MIEMBROS   ^^^^^^
 
 void insertarMiembro(string cant,string ID, string nomb, string puest, string form){
     struct Cantones * cantonBuscado = buscarCanton(cant);
@@ -435,7 +432,8 @@ void asignarCapacitacion(string nombreCanton, string ID, string cap){
             tempMiembro=tempMiembro->sig;
         }
 }
-void AgregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string puesto, string form
+
+void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string puesto, string form
     string identificacion;
     string nombreCanton, nombre, puesto, formacion, capacitaciones;
     imprimirCantones();
@@ -481,33 +479,14 @@ void AgregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
         return AgregarNuevoMiembro();
     }
     insertarMiembro(nombreCanton,identificacion, nombre,  puesto,  formacion);
-    cout<<"bieneeeeeeeeeeeeeeeeeeeeee done";
+
 
 
 
 }
 
-///////////////////////////////////////////////// imprimir de comprobacion PARA BORRAR
-void imprimirMiembro(string nombreCanton, string ID){
-    struct Cantones * cantonBus = buscarCanton(nombreCanton);
-    struct sublistaMiembros* miembroEncontrado =cantonBus->enlaceSubMiembros;
 
-    cout<<"\nID: "<<miembroEncontrado->identificador<<endl;
-    cout<<"Nombre: "<<miembroEncontrado->nombre<<endl;
-    cout<<"Puesto: "<<miembroEncontrado->enlacePuesto->nombre<<endl;
-    cout<<"Formacion: "<<miembroEncontrado->enlaceFormacion->nombre<<endl;
-    //cout<<"capacitacion1: "<<miembroEncontrado->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl<<endl<<endl;
-
-
-    cout<<"\nID: "<<miembroEncontrado->sig->identificador<<endl;
-    cout<<"Nombre: "<<miembroEncontrado->sig->nombre<<endl;
-    cout<<"Puesto: "<<miembroEncontrado->sig->enlacePuesto->nombre<<endl;
-    cout<<"Formacion: "<<miembroEncontrado->sig->enlaceFormacion->nombre<<endl;
-    cout<<"capacitacion1: "<<miembroEncontrado->sig->enlaceSubCapacitacion->enlaceCapacitaciones->nombre<<endl;
-    cout<<"capacitacion2: "<<miembroEncontrado->sig->enlaceSubCapacitacion->sig->enlaceCapacitaciones->nombre<<endl;
-    system("pause");
-}
-
+// ###################  SEGUNDA ESTRUCTURA RELACIONAL: CONVENIOS (VER DIAGRAMA DE RELACCION CANTON - CONVENIOS EN DOC EXTERNA) ##################
 //  Clase estructura con sus respectivos metodos
 struct Convenios{
 	string nombre ;
@@ -517,7 +496,6 @@ struct Convenios{
 		sig = NULL;
         }
     }*PConvenios;
-
 
 struct Convenios *buscarConvenios(string nom){
     if(PConvenios==NULL){
@@ -535,8 +513,6 @@ struct Convenios *buscarConvenios(string nom){
     return NULL;
 }
 
-
-
 void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista simple de convenios
    struct Convenios*buscador=buscarConvenios(nom);
    if(buscador!=NULL)
@@ -546,18 +522,6 @@ void insertarConvenios(string nom){//Funcion que inserta al inicio de la lista s
 	nuevoConvenio->sig=PConvenios;
 	PConvenios=nuevoConvenio;
     }
-}
-
-void datosConvenios(){
-    string nom;
-	fflush(stdin);
-	cout<<"\nEscriba el nombre del convenio\n";
-	getline(cin,nom);
-	fflush(stdin);
-	cout<<"\nSe agregado correctamente\n";
-	insertarConvenios(nom);
-
-
 }
 
 void imprimirConvenios(){
@@ -578,16 +542,60 @@ void imprimirConvenios(){
 }
 
 // Sublista simple que se enlace con la clase convenios
-struct sublista_Covenios{
-    struct sub_Covenios *sig;
-    struct Convenios *enlaceC;
-    sublista_Covenios(){
+struct sublista_Convenios{
+    struct sublista_Convenios *sig;
+    struct Convenios *enlaceConvenios;
+    sublista_Convenios(){
     sig = NULL;
 }
 };
 
+// ^^^^^  RELACIONES SOBRE CONVENIOS   ^^^^^^
+
+void insertarConvenioNcanton(string nombreCanton, string nombreConvenio){
+    struct Cantones * cantonBuscado = buscarCanton(nombreCanton);
+    struct Convenios * convenioBuscado = buscarConvenios(nombreConvenio);
+
+    if((cantonBuscado != NULL) && (convenioBuscado != NULL)){
+        struct sublista_Convenios * nn = new sublista_Convenios();
+        nn->enlaceConvenios = convenioBuscado;
+        nn->sig = cantonBuscado->enlaceConvenios;
+        cantonBuscado->enlaceConvenios = nn;
+    }
+}
+
+void agregarNuevoConvenio(){
+    string nombreCanton, nombreConvenio;
+    cout<<"\nDigite el nombre del canton a agregar el nuevo convenio. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreCanton);
+    struct Cantones *canton = buscarCanton(nombreCanton);
+    if(canton==NULL){
+        cout<<"\nCanton digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return agregarNuevoConvenio();
+    }
+    cout<<"\nDigite el nombre del nuevo convenio. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreConvenio);
+    struct Convenios *convenio = buscarConvenios(nombreConvenio);
+    if(convenio==NULL){
+        insertarConvenios(nombreConvenio);
+        cout<<"\nConvenio insertado: "<<nombreConvenio;
+        insertarConvenioNcanton(nombreCanton,nombreConvenio);
+        cout<<"\nConvenio asignado a:"<<nombreCanton<<endl;
+    }
+    else{
+    cout<<"\nConvenio digitado se encuentra en lista. Operación cancelada."<<endl;
+        system("pause");
+        return agregarNuevoConvenio();
+    }
 
 
+}
+
+
+// ###################  TERCER ESTRUCTURA RELACIONAL: INFRAESTRUCTURA (VER DIAGRAMA DE RELACCION CANTON - INFRAESTRUCTURAS EN DOC EXTERNA) ##################
 
 // clase estructura de infraestructura con sus respetivos metodos
 struct Infraestructura{//Lista doble con insercion al final
@@ -648,6 +656,7 @@ void datosInfraestructura(){//funcion que pide los datos
 	insertarInfraestructuras(nom,adm,com);
 }
 
+// ###################  CUARTA ESTRUCTURA RELACIONAL: PROGRAMAS (VER DIAGRAMA DE RELACCION CANTON - PROGRAMAS EN DOC EXTERNA) ##################
 //Estructura de programa y sus metodos
 struct Programas{//Lista circular con insercion al inicio
 	string tipoPrograma;
@@ -657,6 +666,7 @@ struct Programas{//Lista circular con insercion al inicio
 		sig = NULL;
 	}
 }*PProgramas;// Puntero de Programas
+
 struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion que inserta los programas (nodos) a la lista circular al inicio
     struct Programas * nn = new Programas(tip);
     if(Lista == NULL){
@@ -679,6 +689,7 @@ struct Programas * insertar( struct Programas * Lista, string tip){ //Funcion qu
         {
     }
 }
+
 void datosProgramas(){
     string tip;
 	fflush(stdin);
@@ -688,8 +699,6 @@ void datosProgramas(){
 
     PProgramas = insertar(PProgramas, tip);
     }
-
-
 
 struct sublista_Programas{
     string hora;
@@ -705,61 +714,182 @@ struct sublista_Programas{
         enlaceProgramas = NULL;
     }
 };
+
+// ^^^^^  RELACIONES SOBRE CONVENIOS   ^^^^^^
+
+
+
+// #######################################################        CONSULTAS        #######################################################
+
+
+
+
+
+
+
+// #######################################################         REPORTES       #######################################################
+void impInfoPersoXcanton(){
+    int contador = 0;
+    struct Cantones * tempCanton = PCantones;
+    cout<<"\n________________Miembros según canton____________________";
+    while(tempCanton!=NULL){
+        cout<<"\n\nCanton ["<<tempCanton->nombre<<"]\n"<<endl;
+        struct sublistaMiembros * tempMiembro = tempCanton->enlaceSubMiembros;
+        while(tempMiembro!=NULL){
+            cout<<"\nID del Miembro:          "<<tempMiembro->identificador<<endl;
+            cout<<"Nombre del Miembro:      "<<tempMiembro->nombre<<endl;
+            cout<<"Puesto del Miembro:      "<<tempMiembro->enlacePuesto->nombre<<endl;
+            cout<<"Formación del Miembro:   "<<tempMiembro->enlaceFormacion->nombre<<endl;
+            struct sublistaCapacitaciones *tempCapacitacion = tempMiembro->enlaceSubCapacitacion;
+            while(tempCapacitacion!=NULL){
+                contador+=1;
+                cout<<"Capacitacion "<<contador<<": "<<tempCapacitacion->enlaceCapacitaciones->nombre<<endl;
+                tempCapacitacion=tempCapacitacion->sig;
+            }
+            contador = 0;
+            tempMiembro=tempMiembro->sig;
+        }
+        cout<<"\n____________________________________";
+        tempCanton=tempCanton->sig;
+    }
+}
+
+void imprimirConvenioXcanton(){
+    string nombreCanton;
+    cout<<"\nDigite el nombre del canton. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreCanton);
+    struct Cantones *tempCantones = buscarCanton(nombreCanton);
+    if(tempCantones==NULL){
+        cout<<"\nCanton digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return imprimirConvenioXcanton();
+    }
+    else{
+          cout<< "\nCanton: ["<<tempCantones->nombre << "]\nPosee convenios con:"<<endl;
+          struct sublista_Convenios *tempConvenios = tempCantones->enlaceConvenios;
+          while(tempConvenios!=NULL)//se recorre la sublista de matricula del estudiante buscado
+            {
+                cout<<"\n\t\t-"<<tempConvenios->enlaceConvenios->nombre;
+                tempConvenios=tempConvenios->sig;
+            }
+        }
+        cout<<endl;
+        system("pause");
+		 }
+
+
+
 // #################################################             CICLO DE  MENUES             ###############################################
 
 void cargarDatos(){
 	// ########### Datos precargados ################ //
-	insertarCantones("Sarapiqui","Heredia");//Datos predefinos de canton y su provincia
-	insertarCantones("Santo Domingo","Heredia");
-	insertarCantones("San Isidro","Heredia");
-	insertarCantones("Puerto Viejo","Heredia");
-	insertarCantones("Upala","Alajuela");
-	insertarCantones("Barva","Heredia");
-	insertarCantones("Santa Barbara","Heredia");
+	//  CANTONES
+	insertarCantones("San Jose","San Jose");//Datos predefinos de canton y su provincia
+	insertarCantones("Mora","San Jose");
+	insertarCantones("Cartago","Cartago");
+	insertarCantones("Paraiso","Cartago");
+	insertarCantones("Alajuelita","Alajuela");
+	insertarCantones("Poas","Alajuela");
 	insertarCantones("San Carlos","Alajuela");
-	insertarCantones("San Ramon","Alajuela");
-	insertarCantones("Santa Barbara","Heredia");
+	insertarCantones("Sarapiqui","Heredia");
+	insertarCantones("Barva","Heredia");
+	insertarCantones("Puntarenas","Puntarenas");
+	insertarCantones("Osa","Puntarenas");
+	insertarCantones("Limon","Limon");
+	insertarCantones("Pococi","Limon");
+	insertarCantones("Liberia","Guanacaste");
+	insertarCantones("Carrillo","Guanacaste");
 	//imprimirCantones();
-	//
+	// CAPACITACIONES
     insertarCapacitacion("Primeros Auxilios");
     insertarCapacitacion("SAP");
     insertarCapacitacion("Ofimatica");
     insertarCapacitacion("Encryptación Digital");
     insertarCapacitacion("Seguridad Documental");
+    insertarCapacitacion("Firma Digital");
+    insertarCapacitacion("Recursos Humanos");
+    insertarCapacitacion("Ingles Conversacional");
+    insertarCapacitacion("Clima Organizacional");
+    insertarCapacitacion("Control del Tiempo");
     //imprimirCapacitaciones();
-    //
-    insertarFormacion("Programador");
-    insertarFormacion("Doctorado");
-    insertarFormacion("Maestria");
-    insertarFormacion("Segundaria");
+    // FORMACIONES
     insertarFormacion("Kinder");
+    insertarFormacion("Primaria");
+    insertarFormacion("Secundaria");
+    insertarFormacion("Diplomado");
+    insertarFormacion("Bachillerato");
     insertarFormacion("Licenciatura");
-    insertarFormacion("Bachiderato");
-    insertarFormacion("Universitaria");
-    insertarFormacion("Colegio");
+    insertarFormacion("Maestria");
+    insertarFormacion("Doctorado");
     //imprimirFormaciones();
-	//
-    insertarPuestos("Contador");//datos predefinidos de puestos y su identificador
-    insertarPuestos("Gerente");
-    insertarPuestos("Presidente");
-    insertarPuestos("Contadora");
+	//  PUESTOS
+    insertarPuestos("Presidente");//datos predefinidos de puestos y su identificador
     insertarPuestos("Visepresidente");
+    insertarPuestos("Secretario");
     insertarPuestos("Fiscal");
-    insertarPuestos("Secretaria");
     insertarPuestos("Tesorero");
-    insertarPuestos("Informatico");
+    insertarPuestos("Vocal 1");
+    insertarPuestos("Vocal 2");
+    insertarPuestos("Vocal 3");
     //imprimirPuestos();
-    //
-    insertarMiembro("Sarapiqui","206710961","Keilor Moreira Alvarado","Fiscal","Universitaria");
-    //insertarMiembro("Sarapiqui","111111111","Tony Corrales","Visepresidente","Universitaria");
-    //asignarCapacitacion("Sarapiqui","206710961","Ofimatica");
-    //asignarCapacitacion("Sarapiqui","206710961","SAP");
+    //#1
+    insertarMiembro("Sarapiqui","206710961","Keilor Moreira Alvarado","Presidente","Bachillerato");
+    asignarCapacitacion("Sarapiqui","206710961","Ofimatica");
+    asignarCapacitacion("Sarapiqui","206710961","Encryptación Digital");
+    asignarCapacitacion("Sarapiqui","206710961","Primeros Auxilios");
+    //#2
+    insertarMiembro("Sarapiqui","402320214","Tony Corrales","Visepresidente","Maestria");
+    asignarCapacitacion("Sarapiqui","402320214","SAP");
+    asignarCapacitacion("Sarapiqui","402320214","Encryptación Digital");
+    //#3
+    insertarMiembro("Mora","2222222222","Juan Garro Espinoza","Visepresidente","Maestria");
+    asignarCapacitacion("Sarapiqui","206710961","Ofimatica");
+    //#4
+    insertarMiembro("Liberia","777777777","Ana Lorena Valerio","Fiscal","Doctorado");
+    asignarCapacitacion("Liberia","777777777","Ofimatica");
+    //#5
+    insertarMiembro("Barva","54678934","Carmen Zalguero","Presidente","Doctorado");
+    asignarCapacitacion("Barva","54678934","Ofimatica");
+    //#6
+    insertarMiembro("Pococi","24354664","Rocio Zarate Medina","Fiscal","Secundaria");
+    asignarCapacitacion("Pococi","24354664","Ofimatica");
+    //#7
+    insertarMiembro("Osa","47696804","Henry Flores Castro","Vocal 1","Diplomado");
+    asignarCapacitacion("Osa","47696804","Ofimatica");
+    //#8
+    insertarMiembro("Osa","59986565","Alberto Alvarado Moreira","Vocal 2","Diplomado");
+    asignarCapacitacion("Osa","59986565","Ofimatica");
+    //#9
+    insertarMiembro("Paraiso","3436356","Alejandro Perez Mora","Presidente","Diplomado");
+    //#10
+    insertarMiembro("San Carlos","6898076","Michelle Arce Molina","Presidente","Maestria");
+    asignarCapacitacion("San Carlos","6898076","Ofimatica");
+
+    // CONVENIOS
+    insertarConvenios("CCSS");
+    insertarConvenios("TEC San Carlos");
+    insertarConvenios("Coopelesca");
+    insertarConvenios("ICE");
+    insertarConvenios("TEC Cartago");
+    insertarConvenios("TEC Limon");
+    insertarConvenios("UNA Heredia");
+    insertarConvenios("UCR San Pedro");
+    insertarConvenios("AYA");
+    insertarConvenioNcanton("Sarapiqui","CCSS");
+    insertarConvenioNcanton("Sarapiqui","Coopelesca");
+    insertarConvenioNcanton("Sarapiqui","AYA");
+    insertarConvenioNcanton("Sarapiqui","ICE");
+    insertarConvenioNcanton("Liberia","CCSS");
+    insertarConvenioNcanton("Liberia","Coopelesca");
+    insertarConvenioNcanton("Liberia","AYA");
     //impInfoPersoXcanton();
-    AgregarNuevoMiembro();
-    imprimirMiembro("Sarapiqui","206710961");
+	agregarNuevoConvenio();
+    imprimirConvenioXcanton();
+
+
 
 }
-
 
 void menuAdministracion(){
     int opcion = 0;
