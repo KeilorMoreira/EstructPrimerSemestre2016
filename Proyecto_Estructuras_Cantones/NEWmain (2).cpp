@@ -159,15 +159,7 @@ struct sublistaCapacitaciones{
     }
 };
 //* ------------------------------------Estructura y Metodos sobre lista Capacitaciones (buscar, insertar, pedirDatos, imprimir, otros)
-struct sublista_Infraestructura{// Estructura , sublista de infraestructra de cantones
-    struct sublista_Infraestructura *sig ;
-    struct Infraestructura *enlaceInfraestructura;//enlace con la estructura infraestructura
-    sublista_Infraestructura(){
-	sig = NULL;
-    enlaceInfraestructura = NULL;
-}
-};
-//
+
 struct Capacitaciones{//lista simple
 	string nombre;
 	struct Capacitaciones *sig;
@@ -594,12 +586,12 @@ void agregarNuevoConvenio(){
 // ###################  TERCER ESTRUCTURA RELACIONAL: INFRAESTRUCTURA (VER DIAGRAMA DE RELACCION CANTON - INFRAESTRUCTURAS EN DOC EXTERNA) ##################
 
 // clase estructura de infraestructura con sus respetivos metodos
-struct Infraestructura{//Lista doble con insercion al final
+struct Infraestructuras{//Lista doble con insercion al final
     string nombre;
 	string tipo;
 	string ubicacion;
-	struct Infraestructura *ant, *sig;
-	Infraestructura(string nombre, string tipo,  string ubica){
+	struct Infraestructuras *ant, *sig;
+	Infraestructuras(string nombre, string tipo,  string ubica){
 		nombre = nombre;
 		tipo = tipo;
 		ubicacion = ubica;
@@ -609,11 +601,11 @@ struct Infraestructura{//Lista doble con insercion al final
 	}
 }*PInfraestructura;//Puntero de infraestruc
 
-struct Infraestructura *buscarInfraestructura(string nomb){//Buscar de infraestructura
+struct Infraestructuras *buscarInfraestructura(string nomb){//Buscar de infraestructura
     if(PInfraestructura==NULL){
         return NULL;
     }
-    struct Infraestructura* temp = PInfraestructura;
+    struct Infraestructuras* temp = PInfraestructura;
     do{
         if(temp->nombre == nomb)
             return temp;
@@ -623,9 +615,9 @@ struct Infraestructura *buscarInfraestructura(string nomb){//Buscar de infraestr
 };
 
 //insertar al inicio de la lista doble
-void insertarInfraestructuras(string nom, string tipo,  string ubica){
+void insertarInfraestructura(string nom, string tipo,  string ubica){ //Inserta en la lista infraestructuras
 
-    struct Infraestructura *nn = new Infraestructura(nom, tipo, ubica);
+    struct Infraestructuras *nn = new Infraestructuras(nom, tipo, ubica);
 
     nn->ant = PInfraestructura;
 
@@ -635,38 +627,77 @@ void insertarInfraestructuras(string nom, string tipo,  string ubica){
     PInfraestructura = nn;
 }
 
-void agregarNuevaInfraestructura(){//funcion que pide los datos
-	string nom;
-	string adm;
-	string com;
-	fflush(stdin);
-	cout<<"\nNombre de la infraestructura:\n";
-	getline(cin,nom);
-	fflush(stdin);
-	cout<<"\nNombre de la infraestructura administrada:\n";
-	getline(cin,adm);
-	fflush(stdin);
-	cout<<"\nNombre de la infraestrura compartida:\n";
-	getline(cin,com);
-	fflush(stdin);
-	cout<<"\nInfraestructura agregada correctamente\n";
-	insertarInfraestructuras(nom,adm,com);
+struct sublista_Infraestructura{// Estructura , sublista de infraestructra de cantones
+    struct sublista_Infraestructura *sig ;
+    struct Infraestructuras *enlaceInfraestructura;//enlace con la estructura infraestructura
+    sublista_Infraestructura(){
+	sig = NULL;
+    enlaceInfraestructura = NULL;
 }
+};
+
 
 // ^^^^^  RELACIONES SOBRE INFRAESTRUCTURAS   ^^^^^^
 
 void insertarInfraestructuraNcanton(string nombreCanton, string nombreInfraestructura){
     struct Cantones * cantonBuscado = buscarCanton(nombreCanton);
-    struct Infraestructura * InfraBuscada = buscarInfraestructura(nombreInfraestructura);
+    struct Infraestructuras * InfraBuscada = buscarInfraestructura(nombreInfraestructura);
 
     if((cantonBuscado != NULL) && (InfraBuscada != NULL)){
         struct sublista_Infraestructura * nn = new sublista_Infraestructura();
-        nn->enlaceProgramas = programaBuscado;
-        nn->sig = cantonBuscado->enlaceSublista_Programas;
-        cantonBuscado->enlaceSublista_Programas = nn;
+        nn->enlaceInfraestructura = InfraBuscada;
+        nn->sig = cantonBuscado->enlaceInfraestructura;
+        cantonBuscado->enlaceInfraestructura = nn;
     }
 }
 
+void agregarNuevaInfraestructura(){
+    string opc, nombreCanton, nombreInfra,tipoInfra, UbicacionInfra;
+    cout<<"\nDigite el nombre del canton a agregar la nueva infraestructura. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreCanton);
+    struct Cantones *canton = buscarCanton(nombreCanton);
+    if(canton==NULL){
+        cout<<"\nCanton digitado no se encuentra en lista. Reintentar"<<endl;
+        system("pause");
+        return agregarNuevoConvenio();
+    }
+    cout<<"\nDigite el nombre de la nueva Infraestructura. \n  -:";
+    fflush(stdin);
+    getline(cin,nombreInfra);
+
+    cout<<"\nSeleccione el tipo de la nueva Infraestructura. \n  -:";
+    cout<<"\n[1] Administrada.\n[2] Compartida.\n  -:";
+    fflush(stdin);
+    getline(cin,opc);
+    if(opc == "1"){
+        tipoInfra ="Administrada";
+    }
+    else if(opc == "2"){
+        tipoInfra ="Compartida";
+    }
+    else{
+        cout<<"\nFavor seleccione con 1,2 el tipo de Infraestructura. Dato digitado invalido, Operacion reiniciada.";
+        return agregarNuevaInfraestructura();
+    }
+    opc = "0";
+    cout<<"\nDigite la Ubicación de la nueva Infraestructura. \n  -:";
+    fflush(stdin);
+    getline(cin,UbicacionInfra);
+    struct Infraestructuras *Infra = buscarInfraestructura(nombreInfra);
+    if(Infra==NULL){
+        insertarInfraestructura(nombreInfra,tipoInfra,UbicacionInfra);
+        cout<<"\nInfraestructura insertada: "<<nombreInfra;
+
+        insertarConvenioNcanton(nombreCanton,nombreInfra);
+        cout<<"\nnInfraestructura asignada a:"<<nombreCanton<<endl;
+    }
+    else{
+    cout<<"\nnInfraestructura digitada se encuentra en lista. Operación cancelada."<<endl;
+        system("pause");
+        return agregarNuevoConvenio();
+    }
+}
 
 
 // ###################  CUARTA ESTRUCTURA RELACIONAL: PROGRAMAS (VER DIAGRAMA DE RELACCION CANTON - PROGRAMAS EN DOC EXTERNA) ##################
@@ -738,18 +769,24 @@ void insertarProgramaNcanton(string nombreCanton, string nombrePrograma, string 
     }
 }
 
-void crearEvento(string nombreCanton, string nombrePrograma){
+void asignarPrograma(string nombreCanton, string nombrePrograma){
     string hora,fecha,lugar;
     cout<<"\nDigite la fecha del nuevo evento. \n  -:";
     fflush(stdin);
     getline(cin,fecha);
-    cout<<"\nDigite el lugar del nuevo evento. \n  -:";
+    cout<<"\nDigite el lugar (Infraestructura) del nuevo evento. \n  -:";
     fflush(stdin);
-    getline(cin,lugar);// FALTA VALIDACION DE INFRAESTRUCTURA
+    getline(cin,lugar);
+    struct Infraestructuras* tempInfra = buscarInfraestructura(lugar);
+    if (tempInfra==NULL){
+        cout<<"\nLugar digitado no corresponde a una infraestructura de la lista. Reintentar"<<endl;
+        system("pause");
+        return asignarPrograma(nombreCanton,nombrePrograma);
+    }
     cout<<"\nDigite la hora del nuevo evento. \n  -:";
     fflush(stdin);
     getline(cin,hora);
-    insertarProgramaNcanton(nombreCanton,nombrePrograma,hora,fecha,lugar);
+    insertarProgramaNcanton(nombreCanton,nombrePrograma,hora,fecha,lugar); // Crea el evento (nodo sublista programas)
     cout<<"\nPrograma: "<<nombrePrograma<<" asignado a:"<<nombreCanton<<endl;
 }
 
@@ -794,7 +831,7 @@ void agregarNuevoPrograma(){
         fflush(stdin);
         getline(cin,opc);
         if(opc == "1"){
-                crearEvento(nombreCanton, nombrePrograma);
+                asignarPrograma(nombreCanton, nombrePrograma);
         }
         cout<<"\nNo se creo ningun evento al programa creado.";
     }
@@ -917,7 +954,7 @@ void cargarDatos(){
     insertarFormacion("Maestria");
     insertarFormacion("Doctorado");
     insertarFormacion("Catedratico");
-    insertarFormacion("")
+    insertarFormacion("Sin Formacion");
     //imprimirFormaciones();
 	//  PUESTOS
     insertarPuestos("Presidente");//datos predefinidos de puestos y su identificador
@@ -980,14 +1017,24 @@ void cargarDatos(){
     insertarConvenioNcanton("Liberia","Coopelesca");
     insertarConvenioNcanton("Liberia","AYA");
     //
+    insertarInfraestructura("Piscina TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructura("Cancha TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructura("Sinteca SC","Administrada","Santa Clara, contiguo a TEC");
+    insertarInfraestructura("Edificio ADSC","Administrada","Santa Clara");
+    insertarInfraestructura("Gimnacio TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructura("Cancha Santa Clara","Compartida","Santa Clara centro");
+    insertarInfraestructura("Centro de Futbol SJ","Administrada","San Jose");
+    insertarInfraestructura("Junta Desarrollo L","Administrada","Limon");
+    insertarInfraestructura("Cancha Liberia","Compartida","Liberia,contiguo Mall Liberia");
+    insertarInfraestructura("Cancha Poas","Compartida","Poas");
 
     //
     insertarPrograma("Futbol","Deportivo");
     insertarProgramaNcanton("Liberia","Futbol","10:20","10-12-2016","Cancha TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
     insertarPrograma("Natacion","Deportivo");
     insertarProgramaNcanton("Liberia","Natacion","10:20","10-12-2016","Piscina TEC");
-
-    agregarNuevoPrograma();
+    //
+    //agregarNuevoPrograma();
 
     //impInfoPersoXcanton();
 	//agregarNuevoConvenio();
