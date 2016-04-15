@@ -851,6 +851,27 @@ void agregarNuevoPrograma(){
 
 // #######################################################        CONSULTAS        #######################################################
 
+void puestoFrecuenteXcomite(){
+    string puesto;
+    int mayor;
+    struct Cantones * tempCanton = PCantones;
+    while(tempCanton!=NULL){
+        struct Puestos *tempPuestos = PPuestos;
+        while(tempPuestos!=NULL){
+            struct sublistaMiembros *tempMiembros = tempCanton->enlaceSubMiembros;
+            while(tempMiembros!=NULL){
+                if(tempMiembros->enlacePuesto->nombre==tempPuestos->nombre)
+        }
+
+
+        }
+
+
+
+
+    }
+
+}
 
 
 
