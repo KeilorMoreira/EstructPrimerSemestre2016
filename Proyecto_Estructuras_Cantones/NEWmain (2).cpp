@@ -851,6 +851,7 @@ void agregarNuevoPrograma(){
 
 // #######################################################        CONSULTAS        #######################################################
 
+/*     NO UTILIZADO POR CAMBIO DE METODO.
 struct PuestosOrdXfrecuenciaNcantones{
     string puesto;
     int cantidad;
@@ -897,7 +898,7 @@ void InsertarPuestoXfrecuencia(string nombrePuesto, int cantidad){
                         nn->sig= tempOrdenados;
                         tempOrdenados->ant=nn;
                         tempOrdenados = nn;
-                        /*
+
                         else{
                             struct PuestosOrdXfrecuenciaNcantones * temp1 = tempOrdenados;
                             struct PuestosOrdXfrecuenciaNcantones * temp2;
@@ -918,7 +919,7 @@ void InsertarPuestoXfrecuencia(string nombrePuesto, int cantidad){
                                      //cout<<"Se agrego el Canton"<<endl;
                                 }
                             }
-                        */
+
                         }
                 anterior = tempOrdenados;
                 tempOrdenados=tempOrdenados->sig; // Si el nuevo nodo es
@@ -932,10 +933,16 @@ void InsertarPuestoXfrecuencia(string nombrePuesto, int cantidad){
         }
     }
 }
+*/
 
-void contarPuestosFrecuetes(){
+
+// Consulta #1 Imprimir puesto frecuente por cantones.
+
+
+void puestoMASfrecueteNcantones(){
     string puesto;
     int contador;
+    int mayor=0;
     struct Puestos *tempPuestos = PPuestos; // Creamos un temporal para recorrer la lista de puestos.
     while(tempPuestos != NULL){
 
@@ -945,37 +952,26 @@ void contarPuestosFrecuetes(){
                     struct sublistaMiembros *tempMiembros = tempCanton->enlaceSubMiembros; // Creamos un temporal para recorrer la lista de miembros
                     while(tempMiembros!=NULL){
                          if( tempPuestos->nombre == tempMiembros->enlacePuesto->nombre){ // Si coinciden registro un conteo, se repite para cada miembro dentro de un canton.
-                            puesto = tempPuestos->nombre;
                             contador+=1;
-                            InsertarPuestoXfrecuencia(puesto,contador);
-                            cout<<"Puesto "<<tempPuestos->nombre<<" :    Cantidad: "<<contador<<endl;
+
+                            //InsertarPuestoXfrecuencia(puesto,contador);
+                            //cout<<"Puesto "<<tempPuestos->nombre<<" :    Cantidad: "<<contador<<endl;
+                            if(mayor < contador){
+                            mayor = contador;
+                            puesto = tempPuestos->nombre;
+                            }
                         }
+
                         tempMiembros=tempMiembros->sig;
                     }
+
                 }
             tempCanton=tempCanton->sig;
             }
         tempPuestos=tempPuestos->sig; // Avance al siguiente puesto en la lista
         contador = 0;
         }
-}
-
-
-// Consulta #1 Imprimir puesto frecuente por cantones.
-
-void imprPuestoMASfrecuenteNcantones(){
-    int mayor = 0;
-    string puesto;
-    struct PuestosOrdXfrecuenciaNcantones* temp = PPOrdenados;
-    while(temp!=NULL){
-        if (temp->cantidad < mayor){
-            mayor = temp->cantidad;
-            puesto = temp->puesto;
-            cout<<"\nPuesto"<<temp->puesto<<"Con :"<<temp->cantidad<<endl;
-        }
-        temp = temp->sig;
-    }
-    cout<<"\nPuesto mas frecuente: "<<puesto<<"Con :"<<mayor<<endl;
+        cout<<"El puesto mas frecuente es: "<<puesto<<" con: "<<mayor;
 }
 
 
@@ -1165,8 +1161,7 @@ void cargarDatos(){
     //impInfoPersoXcanton();
 	//agregarNuevoConvenio();
     //imprimirConvenioXcanton();
-    contarPuestosFrecuetes();
-    imprPuestoMASfrecuenteNcantones();
+    puestoMASfrecueteNcantones();
 
 
 }
