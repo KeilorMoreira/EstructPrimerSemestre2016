@@ -948,7 +948,7 @@ void contarPuestosFrecuetes(){
                             puesto = tempPuestos->nombre;
                             contador+=1;
                             InsertarPuestoXfrecuencia(puesto,contador);
-                            //cout<<"Puesto "<<tempPuestos->nombre<<" :    Cantidad: "<<contador<<endl;
+                            cout<<"Puesto "<<tempPuestos->nombre<<" :    Cantidad: "<<contador<<endl;
                         }
                         tempMiembros=tempMiembros->sig;
                     }
@@ -967,16 +967,15 @@ void imprPuestoMASfrecuenteNcantones(){
     int mayor = 0;
     string puesto;
     struct PuestosOrdXfrecuenciaNcantones* temp = PPOrdenados;
-    cout<<PPOrdenados;
     while(temp!=NULL){
         if (temp->cantidad < mayor){
             mayor = temp->cantidad;
             puesto = temp->puesto;
-            cout<<"Puesto"<<temp->puesto<<"Con :"<<temp->cantidad<<endl;
+            cout<<"\nPuesto"<<temp->puesto<<"Con :"<<temp->cantidad<<endl;
         }
         temp = temp->sig;
     }
-    cout<<"Puesto mas frecuente: "<<puesto<<"Con :"<<mayor;
+    cout<<"\nPuesto mas frecuente: "<<puesto<<"Con :"<<mayor<<endl;
 }
 
 
