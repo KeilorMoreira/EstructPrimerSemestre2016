@@ -851,26 +851,132 @@ void agregarNuevoPrograma(){
 
 // #######################################################        CONSULTAS        #######################################################
 
-void puestoFrecuenteXcomite(){
+struct PuestosOrdXfrecuenciaNcantones{
     string puesto;
-    int mayor;
-    struct Cantones * tempCanton = PCantones;
-    while(tempCanton!=NULL){
-        struct Puestos *tempPuestos = PPuestos;
-        while(tempPuestos!=NULL){
-            struct sublistaMiembros *tempMiembros = tempCanton->enlaceSubMiembros;
-            while(tempMiembros!=NULL){
-                if(tempMiembros->enlacePuesto->nombre==tempPuestos->nombre)
+    int cantidad;
+    struct PuestosOrdXfrecuenciaNcantones*ant,*sig;
+    PuestosOrdXfrecuenciaNcantones(string puesto, int cantidad){
+        puesto = puesto;
+        cantidad = cantidad;
+        ant = NULL;
+        sig = NULL;
         }
+}*PPOrdenados;
 
-
+struct PuestosOrdXfrecuenciaNcantones *buscarPuestOrd(string nom){
+    if(PPOrdenados==NULL){
+        return NULL;
+    }
+    else{
+        struct PuestosOrdXfrecuenciaNcantones*temp=PPOrdenados;
+        while(temp!=NULL){
+            if(temp->puesto == nom){
+                return temp;
+            }
+            temp=temp->sig;
         }
+    }
+    return NULL;
+}
 
-
-
+void InsertarPuestoXfrecuencia(string nombrePuesto, int cantidad){
+    struct PuestosOrdXfrecuenciaNcantones * buscado = buscarPuestOrd(nombrePuesto);
+    if (buscado == NULL){
+        struct PuestosOrdXfrecuenciaNcantones * tempOrdenados = PPOrdenados; // Respaldo del primero para
+        if (PPOrdenados==NULL){ //Si el primero es nulo solo lo insertamos.
+                struct PuestosOrdXfrecuenciaNcantones * nn = new PuestosOrdXfrecuenciaNcantones(nombrePuesto,cantidad);//aqui inserta los cantones
+                tempOrdenados = nn;
+                }
+        else{ // Si no es nulo el primero, debemos recorrer la lista para realizar comprobaciones.
+            struct PuestosOrdXfrecuenciaNcantones * anterior; // Nodo para respaldar el anterior, inicia en NULL por constructor.
+            while(tempOrdenados->sig!=NULL){
+                    struct PuestosOrdXfrecuenciaNcantones * nn = new PuestosOrdXfrecuenciaNcantones(nombrePuesto,cantidad);
+                    if (cantidad > tempOrdenados->cantidad){ // Si el nuevo nodo es mayor insertamos al inicio.
+                        anterior->sig = nn;
+                        nn->ant=anterior;
+                        nn->sig= tempOrdenados;
+                        tempOrdenados->ant=nn;
+                        tempOrdenados = nn;
+                        /*
+                        else{
+                            struct PuestosOrdXfrecuenciaNcantones * temp1 = tempOrdenados;
+                            struct PuestosOrdXfrecuenciaNcantones * temp2;
+                            while ((temp1!=NULL) and (cantidad > temp1->cantidad)){
+                                temp2 = temp1;
+                                temp1 = temp1->sig;
+                                }
+                                if (temp1!=NULL){
+                                    nn->sig = temp1;
+                                    nn->ant = temp1->ant;
+                                    temp1->ant->sig = nn;
+                                    temp1->ant= nn;
+                                    // cout<<"Se agrego el Canton"<<endl;
+                                }
+                                else{
+                                    temp2->sig= nn;
+                                    nn->ant= temp2;
+                                     //cout<<"Se agrego el Canton"<<endl;
+                                }
+                            }
+                        */
+                        }
+                anterior = tempOrdenados;
+                tempOrdenados=tempOrdenados->sig; // Si el nuevo nodo es
+                }
+        }
 
     }
+    else{
+        if (buscado->cantidad < cantidad){
+            buscado->cantidad = cantidad;
+        }
+    }
+}
 
+void contarPuestosFrecuetes(){
+    string puesto;
+    int contador;
+    struct Puestos *tempPuestos = PPuestos; // Creamos un temporal para recorrer la lista de puestos.
+    while(tempPuestos != NULL){
+
+            struct Cantones * tempCanton = PCantones;
+            while(tempCanton != NULL){
+                if(tempCanton->enlaceSubMiembros!=NULL){ // Cuando no existe al menos un miembro en el canton se debe pasar al canton siguiente.
+                    struct sublistaMiembros *tempMiembros = tempCanton->enlaceSubMiembros; // Creamos un temporal para recorrer la lista de miembros
+                    while(tempMiembros!=NULL){
+                         if( tempPuestos->nombre == tempMiembros->enlacePuesto->nombre){ // Si coinciden registro un conteo, se repite para cada miembro dentro de un canton.
+                            puesto = tempPuestos->nombre;
+                            contador+=1;
+                            InsertarPuestoXfrecuencia(puesto,contador);
+                            //cout<<"Puesto "<<tempPuestos->nombre<<" :    Cantidad: "<<contador<<endl;
+                        }
+                        tempMiembros=tempMiembros->sig;
+                    }
+                }
+            tempCanton=tempCanton->sig;
+            }
+        tempPuestos=tempPuestos->sig; // Avance al siguiente puesto en la lista
+        contador = 0;
+        }
+}
+
+
+// Consulta #1 Imprimir puesto frecuente por cantones.
+
+void imprPuestoMASfrecuenteNcantones(){
+    int mayor = 0;
+    string puesto;
+    struct PuestosOrdXfrecuenciaNcantones* temp = PPOrdenados;
+    cout<<PPOrdenados;
+    while(temp!=NULL){
+        if (temp->cantidad < mayor){
+            mayor = temp->cantidad;
+            puesto = temp->puesto;
+            cout<<"Puesto"<<temp->puesto<<"Con :"<<temp->cantidad<<endl;
+        }
+        temp = temp->sig;
+    }
+    cout<<"Puesto mas frecuente: "<<puesto<<"Con :"<<mayor;
 }
 
 
@@ -1000,8 +1106,8 @@ void cargarDatos(){
     insertarMiembro("Mora","2222222222","Juan Garro Espinoza","Visepresidente","Maestria");
     asignarCapacitacion("Sarapiqui","206710961","Ofimatica");
     //#4
-    insertarMiembro("Liberia","777777777","Ana Lorena Valerio","Fiscal","Doctorado");
-    asignarCapacitacion("Liberia","777777777","Ofimatica");
+    insertarMiembro("Alajuelita","777777777","Ana Lorena Valerio","Fiscal","Doctorado");
+    asignarCapacitacion("Alajuelita","777777777","Ofimatica");
     //#5
     insertarMiembro("Barva","54678934","Carmen Zalguero","Presidente","Doctorado");
     asignarCapacitacion("Barva","54678934","Ofimatica");
@@ -1060,7 +1166,8 @@ void cargarDatos(){
     //impInfoPersoXcanton();
 	//agregarNuevoConvenio();
     //imprimirConvenioXcanton();
-
+    contarPuestosFrecuetes();
+    imprPuestoMASfrecuenteNcantones();
 
 
 }
