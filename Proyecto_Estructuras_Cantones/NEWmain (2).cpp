@@ -79,7 +79,7 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 		nn->sig= PCantones;
 		PCantones->ant=nn;
 		PCantones = nn;
-		// cout<<"Se agrego el Canton"<<endl;
+		//cout<<"Se agrego el Canton"<<endl;
 	}
 	else
 	{
@@ -96,13 +96,13 @@ void insertarCantones(string nombre, string provincia ){///Funcion que inserta d
 			nn->ant = temp1->ant;
 			temp1->ant->sig = nn;
 			temp1->ant= nn;
-			// cout<<"Se agrego el Canton"<<endl;
+			//cout<<"Se agrego el Canton"<<endl;
 		}
 		else
 		{
 			temp2->sig= nn;
 			nn->ant= temp2;
-			 //cout<<"Se agrego el Canton"<<endl;
+            //cout<<"Se agrego el Canton"<<endl;
 		}
 	}
 }
@@ -120,6 +120,8 @@ void agregarNuevoCanton(){//funcion que pide los datos para agregar un canton y 
 	getline(cin,p);
 	fflush(stdin);
 	insertarCantones(nom , p);//Aqui los atrapa llamado la funcion insertarCantones
+	cout<<"Se agrego el Canton\n"<<endl;
+	system("pause");
 }
 
 void imprimirCantones(){
@@ -213,6 +215,7 @@ void agregarNuevaCapacitacion(){// funcion que pide los datos de capacitacion
 	getline(cin,nom);
 	fflush(stdin);
 	insertarCapacitacion(nom);
+	cout<<"\nCapacitación insertada.\n";
 }
 
 void imprimirCapacitaciones(){
@@ -360,6 +363,8 @@ void agregarNuevoPuesto(){
 	fflush(stdin);
 	cout<<"Puesto agregado\n";
 	insertarPuestos(nom);
+	cout<<"Se agrego el Puesto\n"<<endl;
+	system("pause");
 
 }
 
@@ -520,6 +525,8 @@ void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string 
         return agregarNuevoMiembro();
     }
     insertarMiembro(nombreCanton,identificacion, nombre,  puesto,  formacion);
+    cout<<"Se agrego el miembro.\n"<<endl;
+	system("pause");
 }
 
 
@@ -1004,6 +1011,10 @@ void cantonMASpersonal(){
 
 
 // #######################################################         REPORTES       #######################################################
+
+//Reporte numero 1
+
+// Reporte numero 2
 void impInfoPersoXcanton(){
     int contador = 0;
     struct Cantones * tempCanton = PCantones;
@@ -1031,6 +1042,7 @@ void impInfoPersoXcanton(){
     system("pause");
 }
 
+//Reporte numero 3
 void imprimirConvenioXcanton(){
     string nombreCanton;
     cout<<"\nDigite el nombre del canton. \n  -:";
@@ -1056,6 +1068,11 @@ void imprimirConvenioXcanton(){
 		 }
 
 
+// Reporte numero 6
+void impPorSegunPuesto(){
+
+
+}
 
 // #################################################             CICLO DE  MENUES             ###############################################
 
@@ -1449,7 +1466,7 @@ string opcion;
         cout<<"****                        ****\n";
         cout<<"********************************\n";
 
-        //cout<<"\n [1] Imprimir la información de todas las listas.";
+        cout<<"\n [1] Imprimir la información de todas las listas.";
         cout<<"\n [2] Imprimir la información del personal de un cantón X.";
         cout<<"\n [3] Imprimir los convenios de un cantón X.\n";
 
@@ -1463,7 +1480,10 @@ string opcion;
         getline(cin,opcion);
 
         if(opcion == "1"){// Insertar canton.
-            //
+            cout<<"En el menu de Administración se puede acceder a esta información.\nRedirigiendo.... .\n";
+            system("pause");
+            menuAdministracion();
+            system ("color 1F" );
         }
         else if(opcion == "2"){
                 impInfoPersoXcanton();
