@@ -6,11 +6,18 @@
 #include <cstdlib>
 #include <windows.h>
 #include <stdlib.h>
+#include <stack>
 #include <locale.h> // permite utilizar el idioma local, para acentos u otros.
 
 
 
 using namespace std;
+
+string miembroXcanton [100];
+int miembroXcanton2[100];
+
+
+
 
 // ###################  PRIMER ESTRUCTURA RELACIONAL: CANTONES (VER DIAGRAMA DE RELACCION CANTON - COMITES EN DOC EXTERNA) ##################
 
@@ -18,6 +25,7 @@ using namespace std;
 struct Cantones{ // Lista Doble
 	string nombre;
 	string provincia;
+	int miembros = 0;
 	struct Cantones *ant, *sig;           //Punteros de lista doble
     struct sublistaMiembros *enlaceSubMiembros;
     struct sublista_Convenios *enlaceConvenios;
@@ -123,12 +131,14 @@ void imprimirCantones(){
         }
     system("cls");
     cout<<"\n~~~~~~~~~~~~~~~~  LISTA DE CANTONES ~~~~~~~~~~~~~~~~\n"<<endl;
+    cout<<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"<<endl;
     while(temp != NULL){
             cout<<"Canton:    "<<temp->nombre;
             cout<<", "<<temp->provincia<<endl<<endl;
             temp= temp->sig;
                 }
-    system("pause");
+            cout<<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"<<endl;
+
     return;
 }
 // Estructura, sublista de miebros de un comite cantonal
@@ -373,6 +383,40 @@ void imprimirPuestos(){
 
 // ^^^^^  RELACIONES SOBRE MIEMBROS   ^^^^^^
 
+
+void llenar_miembroXcanton(string nombreCanton){
+    if (miembroXcanton[0]==""){
+        miembroXcanton[0]= nombreCanton;
+        miembroXcanton2[0]= 1;
+        return;
+    }
+    else{
+        int j;
+        for(int k=0;k<100;k++){
+        cout<<"0.1      "<<miembroXcanton[k]<<" : "<<miembroXcanton2[k]<<endl;
+        if(nombreCanton == miembroXcanton[k]){
+            miembroXcanton2[k]= miembroXcanton2[k]+1;
+            cout<<"1      "<<miembroXcanton[k]<<" : "<<miembroXcanton2[k]<<endl;
+            return;
+            }
+        if(nombreCanton != miembroXcanton[k]){
+            cout<<"2      "<<miembroXcanton[j+1]<<" : "<<miembroXcanton2[j+1]<<endl;
+            miembroXcanton[j+1]= nombreCanton;
+            miembroXcanton2[j+1]= 1;
+            return;
+        }
+    }
+
+
+
+    }
+
+
+
+}
+
+
+
 void insertarMiembro(string cant,string ID, string nomb, string puest, string form){
     struct Cantones * cantonBuscado = buscarCanton(cant);
     struct Puestos * puestoBuscado = buscarPuestos(puest);
@@ -393,6 +437,7 @@ void insertarMiembro(string cant,string ID, string nomb, string puest, string fo
             temp=temp->sig;
         }
         if (temp==NULL){
+            //llenar_miembroXcanton(cantonBuscado->nombre);
             struct sublistaMiembros *nuevoMiembro = new sublistaMiembros(ID,nomb);
             nuevoMiembro->enlacePuesto = puestoBuscado;
             nuevoMiembro->enlaceFormacion = formacionBuscada;
@@ -426,8 +471,12 @@ void asignarCapacitacion(string nombreCanton, string ID, string cap){
 }
 
 void agregarNuevoMiembro(){ // pide: string cant,string ID, string nomb, string puesto, string form
+
     string identificacion;
     string nombreCanton, nombre, puesto, formacion, capacitaciones;
+    system("cls");
+    cout<<"Agregando un nuevo integrante de comité.....\n\n";
+    system("pause");
     imprimirCantones();
     cout<<"Digite el nombre del canton a agregar un miembro:"<<endl<<"-:";
     fflush(stdin);
@@ -591,10 +640,10 @@ struct Infraestructuras{//Lista doble con insercion al final
 	string tipo;
 	string ubicacion;
 	struct Infraestructuras *ant, *sig;
-	Infraestructuras(string nombre, string tipo,  string ubica){
-		nombre = nombre;
-		tipo = tipo;
-		ubicacion = ubica;
+	Infraestructuras(string n, string t,  string u){
+		nombre = n;
+		tipo = t;
+		ubicacion = u;
 		sig = NULL;
 		ant = NULL;
 
@@ -615,17 +664,21 @@ struct Infraestructuras *buscarInfraestructura(string nomb){//Buscar de infraest
 };
 
 //insertar al inicio de la lista doble
-void insertarInfraestructura(string nom, string tipo,  string ubica){ //Inserta en la lista infraestructuras
+void insertarInfraestructura(string nom, string tip,  string ubica){ //Inserta en la lista infraestructuras
 
-    struct Infraestructuras *nn = new Infraestructuras(nom, tipo, ubica);
+    struct Infraestructuras *nn = new Infraestructuras(nom, tip, ubica);
 
-    nn->ant = PInfraestructura;
 
-    if (PInfraestructura!= NULL)
-        PInfraestructura->sig = nn;
-
-    PInfraestructura = nn;
+    if(PInfraestructura == NULL)
+            PInfraestructura = nn;
+    else{
+        PInfraestructura->ant = nn;
+        nn->sig = PInfraestructura;
+        PInfraestructura = nn;
+    }
 }
+
+
 
 struct sublista_Infraestructura{// Estructura , sublista de infraestructra de cantones
     struct sublista_Infraestructura *sig ;
@@ -635,6 +688,25 @@ struct sublista_Infraestructura{// Estructura , sublista de infraestructra de ca
     enlaceInfraestructura = NULL;
 }
 };
+
+void imprimirInfraestructuras(){
+    struct Infraestructuras *temp = PInfraestructura;
+    if (temp == NULL){
+        cout<<"La lista de Infraestructuras se encuentra vacia.\n";
+        system("pause");
+        return;
+        }
+    cout<<"\n~~~~~~~~~~~~~~~~  LISTA DE Infraestructuras ~~~~~~~~~~~~~~~~\n"<<endl;
+    while(temp != NULL){
+            cout<<"   Nombre: "<<temp->nombre<<endl;
+            cout<<"     Tipo: "<<temp->tipo<<endl;
+            cout<<"Ubicación: "<<temp->ubicacion<<endl;
+            temp= temp->sig;
+            }
+    system("pause");
+    return;
+
+}
 
 
 // ^^^^^  RELACIONES SOBRE INFRAESTRUCTURAS   ^^^^^^
@@ -660,7 +732,7 @@ void agregarNuevaInfraestructura(){
     if(canton==NULL){
         cout<<"\nCanton digitado no se encuentra en lista. Reintentar"<<endl;
         system("pause");
-        return agregarNuevoConvenio();
+        return agregarNuevaInfraestructura();
     }
     cout<<"\nDigite el nombre de la nueva Infraestructura. \n  -:";
     fflush(stdin);
@@ -689,13 +761,13 @@ void agregarNuevaInfraestructura(){
         insertarInfraestructura(nombreInfra,tipoInfra,UbicacionInfra);
         cout<<"\nInfraestructura insertada: "<<nombreInfra;
 
-        insertarConvenioNcanton(nombreCanton,nombreInfra);
+        insertarInfraestructuraNcanton(nombreCanton,nombreInfra);
         cout<<"\nnInfraestructura asignada a:"<<nombreCanton<<endl;
     }
     else{
-    cout<<"\nnInfraestructura digitada se encuentra en lista. Operación cancelada."<<endl;
+    cout<<"\nnInfraestructura digitada ya se encuentra en lista. Operación cancelada."<<endl;
         system("pause");
-        return agregarNuevoConvenio();
+        return agregarNuevaInfraestructura();
     }
 }
 
@@ -754,6 +826,25 @@ struct sublista_Programas{
         enlaceProgramas = NULL;
     }
 };
+
+void imprimirProgramas(){
+    struct Programas *temp = PProgramas;
+    if (temp == NULL){
+        cout<<"La lista de programas se encuentra vacia.\n";
+        system("pause");
+        return;
+        }
+    cout<<"\n~~~~~~~~~~~~~~~~  LISTA DE Programas ~~~~~~~~~~~~~~~~\n"<<endl;
+    while(temp != NULL){
+            cout<<"Nombre: "<<temp->nombre<<"\n  Tipo: "<<temp->tipoPrograma<<endl<<endl;
+            temp= temp->sig;
+            }
+            system("pause");
+    return;
+
+}
+
+
 
 // ^^^^^  RELACIONES SOBRE PROGRAMAS   ^^^^^^
 
@@ -851,94 +942,8 @@ void agregarNuevoPrograma(){
 
 // #######################################################        CONSULTAS        #######################################################
 
-/*     NO UTILIZADO POR CAMBIO DE METODO.
-struct PuestosOrdXfrecuenciaNcantones{
-    string puesto;
-    int cantidad;
-    struct PuestosOrdXfrecuenciaNcantones*ant,*sig;
-    PuestosOrdXfrecuenciaNcantones(string puesto, int cantidad){
-        puesto = puesto;
-        cantidad = cantidad;
-        ant = NULL;
-        sig = NULL;
-        }
-}*PPOrdenados;
-
-struct PuestosOrdXfrecuenciaNcantones *buscarPuestOrd(string nom){
-    if(PPOrdenados==NULL){
-        return NULL;
-    }
-    else{
-        struct PuestosOrdXfrecuenciaNcantones*temp=PPOrdenados;
-        while(temp!=NULL){
-            if(temp->puesto == nom){
-                return temp;
-            }
-            temp=temp->sig;
-        }
-    }
-    return NULL;
-}
-
-void InsertarPuestoXfrecuencia(string nombrePuesto, int cantidad){
-    struct PuestosOrdXfrecuenciaNcantones * buscado = buscarPuestOrd(nombrePuesto);
-    if (buscado == NULL){
-        struct PuestosOrdXfrecuenciaNcantones * tempOrdenados = PPOrdenados; // Respaldo del primero para
-        if (PPOrdenados==NULL){ //Si el primero es nulo solo lo insertamos.
-                struct PuestosOrdXfrecuenciaNcantones * nn = new PuestosOrdXfrecuenciaNcantones(nombrePuesto,cantidad);//aqui inserta los cantones
-                tempOrdenados = nn;
-                }
-        else{ // Si no es nulo el primero, debemos recorrer la lista para realizar comprobaciones.
-            struct PuestosOrdXfrecuenciaNcantones * anterior; // Nodo para respaldar el anterior, inicia en NULL por constructor.
-            while(tempOrdenados->sig!=NULL){
-                    struct PuestosOrdXfrecuenciaNcantones * nn = new PuestosOrdXfrecuenciaNcantones(nombrePuesto,cantidad);
-                    if (cantidad > tempOrdenados->cantidad){ // Si el nuevo nodo es mayor insertamos al inicio.
-                        anterior->sig = nn;
-                        nn->ant=anterior;
-                        nn->sig= tempOrdenados;
-                        tempOrdenados->ant=nn;
-                        tempOrdenados = nn;
-
-                        else{
-                            struct PuestosOrdXfrecuenciaNcantones * temp1 = tempOrdenados;
-                            struct PuestosOrdXfrecuenciaNcantones * temp2;
-                            while ((temp1!=NULL) and (cantidad > temp1->cantidad)){
-                                temp2 = temp1;
-                                temp1 = temp1->sig;
-                                }
-                                if (temp1!=NULL){
-                                    nn->sig = temp1;
-                                    nn->ant = temp1->ant;
-                                    temp1->ant->sig = nn;
-                                    temp1->ant= nn;
-                                    // cout<<"Se agrego el Canton"<<endl;
-                                }
-                                else{
-                                    temp2->sig= nn;
-                                    nn->ant= temp2;
-                                     //cout<<"Se agrego el Canton"<<endl;
-                                }
-                            }
-
-                        }
-                anterior = tempOrdenados;
-                tempOrdenados=tempOrdenados->sig; // Si el nuevo nodo es
-                }
-        }
-
-    }
-    else{
-        if (buscado->cantidad < cantidad){
-            buscado->cantidad = cantidad;
-        }
-    }
-}
-*/
-
 
 // Consulta #1 Imprimir puesto frecuente por cantones.
-
-
 void puestoMASfrecueteNcantones(){
     string puesto;
     int contador;
@@ -971,9 +976,28 @@ void puestoMASfrecueteNcantones(){
         tempPuestos=tempPuestos->sig; // Avance al siguiente puesto en la lista
         contador = 0;
         }
-        cout<<"El puesto mas frecuente es: "<<puesto<<" con: "<<mayor;
+        cout<<"El puesto mas frecuente es: "<<puesto<<" con: "<<mayor<<endl<<endl;
+        system("pause");
 }
 
+// Consulta #2 2.	¿Cuál es el cantón con más personal en el comité? En caso de empate imprimir todos los comités con la suma de cantidad de personal.
+
+void cantonMASpersonal(){
+    /*
+    struct Cantones *tempCanton = PCantones;
+    while(tempCanton!=NULL){
+        stack <string> copia = miembrosXcanton
+    }
+    if(miembrosXcanton.size()==1){
+
+    }
+    */
+    cout<<"rr";
+    for(int k=0;k<100;k++){
+        cout<<miembroXcanton[k];
+    }
+
+}
 
 
 
@@ -1001,9 +1025,10 @@ void impInfoPersoXcanton(){
             contador = 0;
             tempMiembro=tempMiembro->sig;
         }
-        cout<<"\n____________________________________";
+        cout<<"\n____________________________________\n";
         tempCanton=tempCanton->sig;
     }
+    system("pause");
 }
 
 void imprimirConvenioXcanton(){
@@ -1140,34 +1165,73 @@ void cargarDatos(){
     insertarConvenioNcanton("Liberia","AYA");
     //
     insertarInfraestructura("Piscina TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructuraNcanton("San Carlos","Piscina TEC");
     insertarInfraestructura("Cancha TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructuraNcanton("San Carlos","Cancha TEC");
     insertarInfraestructura("Sinteca SC","Administrada","Santa Clara, contiguo a TEC");
+    insertarInfraestructuraNcanton("San Carlos","Sinteca SC");
     insertarInfraestructura("Edificio ADSC","Administrada","Santa Clara");
+    insertarInfraestructuraNcanton("San Carlos","Edificio ADSC");
     insertarInfraestructura("Gimnacio TEC","Compartida","Santa Clara, Tec San Carlos");
+    insertarInfraestructuraNcanton("San Carlos","Gimnacio TEC");
     insertarInfraestructura("Cancha Santa Clara","Compartida","Santa Clara centro");
+    insertarInfraestructuraNcanton("San Carlos","Cancha Santa Clara");
     insertarInfraestructura("Centro de Futbol SJ","Administrada","San Jose");
+    insertarInfraestructuraNcanton("San Jose","Centro de Futbol SJ");
     insertarInfraestructura("Junta Desarrollo L","Administrada","Limon");
+    insertarInfraestructuraNcanton("Limon","Junta Desarrollo L");
     insertarInfraestructura("Cancha Liberia","Compartida","Liberia,contiguo Mall Liberia");
+    insertarInfraestructuraNcanton("Liberia","Cancha Liberia");
     insertarInfraestructura("Cancha Poas","Compartida","Poas");
-
+    insertarInfraestructuraNcanton("Poas","Cancha Poas");
     //
     insertarPrograma("Futbol","Deportivo");
     insertarProgramaNcanton("Liberia","Futbol","10:20","10-12-2016","Cancha TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
     insertarPrograma("Natacion","Deportivo");
     insertarProgramaNcanton("Liberia","Natacion","10:20","10-12-2016","Piscina TEC");
-    //
-    //agregarNuevoPrograma();
 
-    //impInfoPersoXcanton();
-	//agregarNuevoConvenio();
-    //imprimirConvenioXcanton();
-    puestoMASfrecueteNcantones();
+    insertarPrograma("Ajedrez","Deportivo");
+    insertarProgramaNcanton("Liberia","Ajedrez","10:20","10-12-2016","Gimnacio TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
+    insertarPrograma("Voleibol","Deportivo");
+    insertarProgramaNcanton("San Carlos","Voleibol","10:20","10-12-2016","Gimnacio TEC");
+
+    insertarPrograma("Badminton","Deportivo");
+    insertarProgramaNcanton("San Carlos","Badminton","10:20","10-12-2016","Cancha TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
+    insertarPrograma("Maraton","Deportivo");
+    insertarProgramaNcanton("Poas","Natacion","10:20","10-12-2016","Cancha Poas");
+
+    insertarPrograma("YOGA y SALUD","Recreativo");
+    insertarProgramaNcanton("San Carlos","YOGA y SALUD","10:20","10-12-2016","Edificio ADSC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
+    insertarPrograma("Aire Limpio","Recreativo");
+    insertarProgramaNcanton("Liberia","Aire Limpio","10:20","10-12-2016","Sinteca SC");
+
+    insertarPrograma("NutriCamp","Recreativo");
+    insertarProgramaNcanton("Poas","NutriCamp","10:20","10-12-2016","Cancha Poas"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
+    insertarPrograma("Drogas y Adolescencia","Preventivo");
+    insertarProgramaNcanton("Santa Clara","Drogas y Adolescencia","10:20","10-12-2016","Edificio ADSC");
+
+    insertarPrograma("Prevencion de incendios","Preventivo");
+    insertarProgramaNcanton("San Carlos","Prevencion de incendios","10:20","10-12-2016","Cancha TEC"); // Falta validaciones de lugar(infraestructura), fecha y hora.
+
+    insertarPrograma("Contra Drogas","Preventivo");
+    insertarProgramaNcanton("Santa Clara","Contra Drogas","10:20","10-12-2016","Edificio ADSC");
+
+    //
+    //llenar_miembroXcanton("Sarapiqui");
+    //llenar_miembroXcanton("Liberia");
+    //llenar_miembroXcanton("Sarapiqui");
+    //llenar_miembroXcanton("Sarapiqui");
 
 
 }
 
 void menuAdministracion(){
-    int opcion = 0;
+    string opcion;
         /* Tabla de colores.
         0 = Negro
         1 = Azul
@@ -1186,7 +1250,7 @@ void menuAdministracion(){
         E = Amarillo claro
         F = Blanco brillante
         */
-        system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
+    system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
     while(true){
         system("cls");
         cout<<"********************************\n";
@@ -1229,82 +1293,101 @@ void menuAdministracion(){
 
         cout<<"\n[-1] Atras.\n________________________________\n\n>>> ";
 
-        cin>>opcion;
+        fflush(stdin);
+        getline(cin,opcion);
 
-        if(opcion == 1){
-            //datosCantones();
+        if(opcion == "1"){// Insertar canton.
+            agregarNuevoCanton();
         }
-        else if(opcion == 2){
+        else if(opcion == "2"){
             // eliminar cantones
         }
-        else if(opcion == 3){
+        else if(opcion == "3"){
                 // imprimir Catones
+                imprimirCantones();
          }
-        else if(opcion == 4){
+        else if(opcion == "4"){
         	//datosPuestos();
+        	agregarNuevoPuesto();
         }
-        else if(opcion == 5){
+        else if(opcion == "5"){
         	//eliminar un puesto
         }
-        else if(opcion == 6){
+        else if(opcion == "6"){
         	//imprimirPuestos();
+        	imprimirPuestos();
 		}
-		else if(opcion ==7){
+		else if(opcion =="7"){
             //datosCapacitacion();
+            agregarNuevaCapacitacion();
 		}
-		else if(opcion ==8){
+		else if(opcion =="8"){
 			// eliminar capacitacion
 	    }
-		else if(opcion == 9){
+		else if(opcion == "9"){
             //imprimirCapacitaciones();
+            imprimirCapacitaciones();
 
         }
-        else if(opcion == 10){
-        	//
+        else if(opcion == "10"){
+        	//agregar miembros.
+        	agregarNuevoMiembro();
 		}
-		else if(opcion == 11){
+		else if(opcion == "11"){
             //eliminar miembro
 		}
-		else if(opcion == 12){
+		else if(opcion == "12"){
             //imprimir("miembros");
+            impInfoPersoXcanton();
 		}
-		else if(opcion == 13){
+		else if(opcion == "13"){
             //datosProgramas();
+            agregarNuevoPrograma();
 		}
-		else if(opcion == 14){
+		else if(opcion == "14"){
             // eliminar programa
 		}
-		else if(opcion == 15){
+		else if(opcion == "15"){
             //imprimir("programas");
+            imprimirProgramas();
+
 		}
-		else if(opcion == 16){
+		else if(opcion == "16"){
             //datosFormacion();
+            agregarNuevaFormacion();
 		}
-		else if(opcion == 17){
+		else if(opcion == "17"){
             // eliminar formacion
 		}
-		else if(opcion == 18){
+		else if(opcion == "18"){
             //imprimir("formaciones");
+            imprimirFormaciones();
 		}
-		else if(opcion == 19){
+		else if(opcion == "19"){
             //datosConvenios();
+            agregarNuevoConvenio();
 		}
-		else if(opcion == 20){
+		else if(opcion == "20"){
             //eliminar convenio
 		}
-		else if(opcion == 21){
+		else if(opcion == "21"){
             //imprimir("convenios");
+            imprimirConvenios();
 		}
-		else if(opcion == 22){
+		else if(opcion == "22"){
             //datosInfraestructura();
+            agregarNuevaInfraestructura();
 		}
-		else if(opcion == 23){
+		else if(opcion == "23"){
             //eliminar infraestructura
 		}
-		else if(opcion == 24){
+		else if(opcion == "24"){
             //imprimir("infraestructuras");
+            imprimirInfraestructuras();
+
 		}
-		else if(opcion == -1){
+		else if(opcion == "-1"){
+            system ("color 0F" ); // primer digito cambia pantalla, segundo cambia letra.
             system("cls");
             return ;
 		}
@@ -1312,15 +1395,94 @@ void menuAdministracion(){
 }
 
 void menuConsultas(){
+    string opcion;
+    system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
+    while(true){
+        system("cls");
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"****   Menu de Consultas    ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
 
+        cout<<"\n [1] Imprimir puesto más frecuente de los comités cantonales.";
+        //cout<<"\n [2] Imprimir cantón con más personal en el comité";
+        //cout<<"\n [3] Imprimir Cantones.\n";
+
+        //cout<<"\n [4] Insertar Puesto.";
+        //cout<<"\n [5] Eliminar Puesto.";
+        //cout<<"\n [6] Imprimir Puestos.\n";
+
+        cout<<"\n[-1] Atras.\n________________________________\n\n>>> ";
+
+        fflush(stdin);
+        getline(cin,opcion);
+
+        if(opcion == "1"){// Insertar canton.
+            puestoMASfrecueteNcantones();
+        }
+        else if(opcion == "2"){
+                //
+
+        }
+        else if(opcion == "3"){
+                // imprimir Catones
+
+         }
+         else if(opcion == "-1"){
+            system ("color 0F" ); // primer digito cambia pantalla, segundo cambia letra.
+            system("cls");
+            return ;
+        }
+    }
 }
 
-void menuReportes(){
 
+void menuReportes(){
+string opcion;
+    system ("color 1F" ); // primer digito cambia pantalla, segundo cambia letra.
+    while(true){
+        system("cls");
+        cout<<"********************************\n";
+        cout<<"****                        ****\n";
+        cout<<"****    Menu de Reportes    ****\n";
+        cout<<"****                        ****\n";
+        cout<<"********************************\n";
+
+        //cout<<"\n [1] Imprimir la información de todas las listas.";
+        cout<<"\n [2] Imprimir la información del personal de un cantón X.";
+        cout<<"\n [3] Imprimir los convenios de un cantón X.\n";
+
+        //cout<<"\n [4] Imprimir la infraestructura de un cantón X.";
+        //cout<<"\n [5] Imprimir los programas segun tipo de un cantón X";
+        //cout<<"\n [6] Imprimir % según los puestos del personal de los comités.";
+
+        cout<<"\n\n[-1] Atras.\n________________________________\n\n>>> ";
+
+        fflush(stdin);
+        getline(cin,opcion);
+
+        if(opcion == "1"){// Insertar canton.
+            //
+        }
+        else if(opcion == "2"){
+                impInfoPersoXcanton();
+
+        }
+        else if(opcion == "3"){
+                imprimirConvenioXcanton();
+
+         }
+         else if(opcion == "-1"){
+            system ("color 0F" ); // primer digito cambia pantalla, segundo cambia letra.
+            system("cls");
+            return ;
+        }
+    }
 }
 
 void menu(){//funcion del menu aqui se maneja lo que el usuario desea realizar
-    int opcion = 0;
+    string opcion;
     while(true){
         cout<<"********************************\n";
         cout<<"****                        ****\n";
@@ -1331,18 +1493,20 @@ void menu(){//funcion del menu aqui se maneja lo que el usuario desea realizar
         cout<<"\n[2]  Menu de Consultas.";
         cout<<"\n[3]  Menu de Reportes.\n";
         cout<<"\n[-1] Salir del Programa.\n________________________________\n\n>>> ";
-        cin >> opcion;
 
-        if(opcion == 1){
+        fflush(stdin);
+        getline(cin,opcion);
+
+        if(opcion == "1"){
             menuAdministracion();
         }
-        else if(opcion == 2){
+        else if(opcion == "2"){
             menuConsultas();
         }
-        else if(opcion == 3){
+        else if(opcion == "3"){
             menuReportes();
         }
-        else if(opcion == -1){
+        else if(opcion == "-1"){
             return;
         }
     }
@@ -1352,6 +1516,6 @@ void menu(){//funcion del menu aqui se maneja lo que el usuario desea realizar
 int main(){
     setlocale(LC_CTYPE, "Spanish"); // para que se reconozcan las tildes.
 	cargarDatos();
-    //menu();
+    menu();
 	return 0;
 }
